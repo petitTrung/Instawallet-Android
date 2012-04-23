@@ -7,9 +7,18 @@ import com.actionbarsherlock.view.MenuItem;
 import android.os.Bundle;
 
 
-public class InstawalletActivity extends SherlockActivity 
+public class WalletsActivity extends SherlockActivity 
 {
-	@Override
+    @Override
+    protected void onCreate(Bundle savedInstanceState) 
+    {
+        setTheme(SampleList.THEME); //Used for theme switching in samples
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.wallets);
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) 
 	{
         //Used to put dark icons on light action bar
@@ -21,14 +30,4 @@ public class InstawalletActivity extends SherlockActivity
 
         return true;
     }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) 
-    {
-        setTheme(SampleList.THEME); //Used for theme switching in samples
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-
-    }
-
 }
