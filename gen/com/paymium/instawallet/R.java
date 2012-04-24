@@ -814,15 +814,17 @@ containing a value of this type.
         public static final int border=0x7f020058;
         public static final int divider=0x7f020059;
         public static final int divider2=0x7f02005a;
-        public static final int ic_launcher=0x7f02005b;
-        public static final int ic_refresh=0x7f02005c;
-        public static final int launcher_icon=0x7f02005d;
-        public static final int sablier=0x7f02005e;
-        public static final int share_via_barcode=0x7f02005f;
-        public static final int shopper_icon=0x7f020060;
-        public static final int toolbar_add=0x7f020061;
-        public static final int toolbar_export=0x7f020062;
-        public static final int toolbar_share=0x7f020063;
+        public static final int error=0x7f02005b;
+        public static final int ic_launcher=0x7f02005c;
+        public static final int ic_refresh=0x7f02005d;
+        public static final int launcher_icon=0x7f02005e;
+        public static final int ok=0x7f02005f;
+        public static final int sablier=0x7f020060;
+        public static final int share_via_barcode=0x7f020061;
+        public static final int shopper_icon=0x7f020062;
+        public static final int toolbar_add=0x7f020063;
+        public static final int toolbar_export=0x7f020064;
+        public static final int toolbar_share=0x7f020065;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f09002c;
@@ -1039,6 +1041,7 @@ containing a value of this type.
         public static final int contents_phone=0x7f060022;
         public static final int contents_sms=0x7f060023;
         public static final int contents_text=0x7f060024;
+        public static final int fail=0x7f060083;
         public static final int hello=0x7f060000;
         public static final int history_clear_one_history_text=0x7f060026;
         public static final int history_clear_text=0x7f060025;

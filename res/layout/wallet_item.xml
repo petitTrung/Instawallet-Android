@@ -8,22 +8,23 @@
         android:layout_width="227dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
-        android:orientation="vertical" >
+        android:orientation="vertical" android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30px"
+            android:textSize="15px"
 	        android:textStyle="bold"
 	        android:textColor="#000000"
-            android:text="TextView" />
+            android:text="TextView" android:layout_marginLeft="10dp"/>
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:textSize="10px"
+            android:text="TextView" android:layout_marginLeft="10dp"/>
 
     </LinearLayout>
 
@@ -31,9 +32,9 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30px"
+        android:textSize="15px"
 	    android:textStyle="bold"
 	    android:textColor="#000000"
-        android:text="TextView" />
+        android:text="TextView" android:layout_marginRight="10dp" android:layout_marginTop="10dp"/>
 
 </LinearLayout>

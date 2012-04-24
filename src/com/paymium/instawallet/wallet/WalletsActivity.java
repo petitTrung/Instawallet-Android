@@ -1,14 +1,21 @@
 package com.paymium.instawallet.wallet;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.paymium.instawallet.R;
+import com.paymium.instawallet.dialog.AlertingDialog;
 import com.paymium.instawallet.dialog.LoadingDialog;
+import com.paymium.instawallet.exception.ConnectionNotInitializedException;
 import com.paymium.instawallet.flip.AnimationFactory;
 import com.paymium.instawallet.flip.AnimationFactory.FlipDirection;
+import com.paymium.instawallet.json.NewWallet;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +31,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	private WalletsAdapter walletsAdapter;
 	
 	private ViewAnimator viewAnimator;
+	
+	private Connection connection;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) 
@@ -46,6 +55,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         this.walletsList = (ListView) findViewById(R.id.listView1);
         this.walletsAdapter = new WalletsAdapter(this);
         this.walletsList.setAdapter(this.walletsAdapter);
+        
+        this.connection = Connection.getInstance().initialize();
    
     }
 
@@ -94,10 +105,130 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 
 	public void onClick(View view) 
 	{
-		AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
-		Toast.makeText(WalletsActivity.this, "Side B Touched", Toast.LENGTH_SHORT).show();
+		if (view.getId() == R.id.imageButton1)
+		{
+			new addWallet().execute();
+		}
+		else if (view.getId() == R.id.imageButton2)
+		{
+			AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
+			Toast.makeText(WalletsActivity.this, "Side B Touched", Toast.LENGTH_SHORT).show();
+		}
+		else if (view.getId() == R.id.imageButton3)
+		{
+			AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
+			Toast.makeText(WalletsActivity.this, "Side B Touched", Toast.LENGTH_SHORT).show();
+		}
+		
 		
 	}
+	
+	
+	private AlertingDialog alertingDialog;
+	private LoadingDialog loadingDialog;
+	
+	
+	public class addWallet extends AsyncTask<String, Integer, Object>
+	{
+		@Override
+		protected void onPreExecute() 
+		{ 
+			super.onPreExecute();
+			
+			loadingDialog = LoadingDialog.newInstance("Please wait", "Loading ...");			  									
+			loadingDialog.show(getSupportFragmentManager(), "loading dialog");
+	    } 
+
+		@Override
+		protected Object doInBackground(String... arg0) 
+		{
+			// TODO Auto-generated method stub
+			NewWallet newWallet;
+			Wallet wallet = null;
+			
+			try 
+			{
+				newWallet = connection.createNewWallet();
+				
+				String wallet_id = newWallet.getWallet_id();
+				String wallet_address = connection.getAddressJson(wallet_id).getAddress();
+				BigDecimal wallet_balance = connection.getBalanceJson(wallet_id).getBalance();
+				
+				if (notEmpty(wallet_id) && notEmpty(wallet_address) && notEmpty(wallet_balance.toString()))
+				{
+					wallet = new Wallet();
+					wallet.setWallet_id(wallet_id);
+					wallet.setWallet_address(wallet_address);
+					wallet.setWallet_balance(wallet_balance);
+					
+					return wallet;
+				}
+	
+			} 
+			catch (IOException e) 
+			{
+				// If there is no connection
+				e.printStackTrace();
+				
+				return "no connection";
+			} 
+			
+			catch (ConnectionNotInitializedException e) 
+			{
+				// If the connection is too slow
+				e.printStackTrace();
+				
+				return "slow connection";
+			}	
+			
+			return "fail";
+		}
+		
+		@Override
+		protected void onPostExecute(Object result) 
+		{
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			
+			loadingDialog.dismiss();
+			
+			
+			
+			if (result.getClass().getSimpleName().equals("Wallet"))
+			{
+				Wallet a = (Wallet) result;
+				walletsAdapter.addItem(a);
+				
+				alertingDialog = AlertingDialog.newInstance("Successful !!", "A wallet has been added", R.drawable.ok);
+				alertingDialog.show(getSupportFragmentManager(), "ok alerting dialog");
+			}
+			else if (result.getClass().getSimpleName().equals("String"))
+			{
+				if (result.equals("no connection"))
+				{
+					alertingDialog = AlertingDialog.newInstance("Fail !!", "No connection, no wallet has been created", R.drawable.error);
+					alertingDialog.show(getSupportFragmentManager(), "error 1 alerting dialog");
+				}
+				else if (result.equals("slow connection"))
+				{
+					alertingDialog = AlertingDialog.newInstance("Fail !!", "Slow connection, no wallet has been created", R.drawable.error);
+					alertingDialog.show(getSupportFragmentManager(), "error 2 alerting dialog");
+				}
+				else if (result.equals("fail"))
+				{
+					alertingDialog = AlertingDialog.newInstance("Fail !!", "Error unknown", R.drawable.error);
+					alertingDialog.show(getSupportFragmentManager(), "error 3 alerting dialog");
+				}
+			}
+		}
+		
+	}
+	
+	public boolean notEmpty(String s) 
+	{
+		return (s != null && s.length() > 0);
+	}
+	
     
     
 }

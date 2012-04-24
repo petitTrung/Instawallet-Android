@@ -3,5 +3,6 @@
 
     <string name="hello">Hello World, InstawalletActivity!</string>
     <string name="app_name">Instawallet</string>
+    <string name="fail">fail</string>
 
 </resources>

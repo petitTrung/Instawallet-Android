@@ -121,7 +121,7 @@ public class WalletsAdapter extends BaseAdapter
 		wallet_address.setText(wallet.getWallet_address());
 		wallet_balance.setText(this.decimalFormat.format(wallet.getWallet_balance()));
 
-		return null;
+		return convertView;
 	}
 
 }
