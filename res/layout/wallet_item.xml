@@ -1,41 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    >
- 
-    <ImageView
-		android:id="@+id/img"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-	   	android:layout_gravity="center_vertical"
-	   	android:padding="10px"
-	   	android:src="@drawable/bitcoin"
-		/>
- 
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:orientation="vertical"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	   	android:layout_gravity="center_vertical"
-	   	android:paddingLeft="10px"
-	    android:layout_weight="1"
-	    >
- 
-	    <TextView android:id="@+id/option"
-	         android:layout_width="fill_parent"
-	         android:layout_height="fill_parent"
-	         android:textSize="30px"
-	         android:textStyle="bold"
-	         android:textColor="#000000"
-	         />
- 
-	    <TextView android:id="@+id/description"
-	         android:layout_width="fill_parent"
-	         android:layout_height="fill_parent"
-	         />
- 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="227dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30px"
+	        android:textStyle="bold"
+	        android:textColor="#000000"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
     </LinearLayout>
- 
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30px"
+	    android:textStyle="bold"
+	    android:textColor="#000000"
+        android:text="TextView" />
+
 </LinearLayout>

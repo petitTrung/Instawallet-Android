@@ -12,72 +12,97 @@
         android:layout_gravity="center_horizontal"
         android:text="Your accounts" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ViewFlipper
+        android:id="@+id/viewFlipper"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:orientation="vertical"
-        android:background="@drawable/border"  >
+        android:layout_gravity="center_horizontal" >
+		
+	    <LinearLayout
+	        android:id="@+id/flip1"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:background="@drawable/border"  >
+	
+	        <ListView
+	            android:id="@+id/listView1"
+	            android:layout_width="match_parent"
+	            android:layout_height="250dp" >
+	        </ListView>
+	
+	        <LinearLayout
+	            android:id="@+id/seperator1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/divider2"
+	            android:orientation="horizontal" >
+	        </LinearLayout>
+	
+	        <ScrollView
+	            android:id="@+id/scrollView1"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content" >
+	
+	            <LinearLayout
+	                android:layout_width="match_parent"
+	                android:layout_height="match_parent"
+	                android:orientation="vertical" >
+	
+	                <TextView
+	                    android:id="@+id/textView2"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_gravity="center_horizontal"
+	                    android:text="Market Prices" />
+		
+	                <TextView
+	                    android:id="@+id/textView3"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_gravity="center"
+	                    android:text="Small Text"
+	                    android:textAppearance="?android:attr/textAppearanceSmall" />
+		
+	                <TextView
+	                    android:id="@+id/textView5"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_gravity="center_horizontal"
+	                    android:text="Small Text"
+	                    android:textAppearance="?android:attr/textAppearanceSmall" />
+		
+	                <TextView
+	                    android:id="@+id/textView4"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_gravity="center_horizontal"
+	                    android:text="Small Text"
+	                    android:textAppearance="?android:attr/textAppearanceSmall" />
+	
+	            </LinearLayout>
+	            
+	        </ScrollView>
+	        
+	    </LinearLayout>
+	    
+	    <LinearLayout
+	        android:id="@+id/flip2"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:background="@drawable/border" >
 
-        <ListView
-            android:id="@+id/listView1"
-            android:layout_width="match_parent"
-            android:layout_height="250dp" >
-        </ListView>
+	        <ImageView
+	            android:id="@+id/imageView1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/app_icon" 
+	            android:layout_gravity="center_horizontal"
+	            />
 
-        <LinearLayout
-            android:id="@+id/seperator1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/divider2"
-            android:orientation="horizontal" >
-        </LinearLayout>
-
-        <ScrollView
-            android:id="@+id/scrollView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Market Prices" />
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Small Text"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Small Text"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Small Text"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
+	    </LinearLayout>
+	</ViewFlipper>      
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -99,6 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:background="@null"
                 android:layout_marginRight="30dp"
                 
                 android:src="@drawable/toolbar_add" />
@@ -117,7 +143,9 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:src="@drawable/toolbar_share" />
+            
         </LinearLayout>
+        
     </RelativeLayout>
 
 </LinearLayout>
