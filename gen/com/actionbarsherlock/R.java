@@ -787,15 +787,14 @@ containing a value of this type.
         public static final int background=0x7f020056;
         public static final int bitcoin=0x7f020057;
         public static final int border=0x7f020058;
-        public static final int divider2=0x7f020059;
-        public static final int ic_compose=0x7f02005a;
-        public static final int ic_compose_inverse=0x7f02005b;
-        public static final int ic_launcher=0x7f02005c;
-        public static final int ic_refresh=0x7f02005d;
-        public static final int ic_refresh_inverse=0x7f02005e;
-        public static final int toolbar_add=0x7f02005f;
-        public static final int toolbar_export=0x7f020060;
-        public static final int toolbar_share=0x7f020061;
+        public static final int divider=0x7f020059;
+        public static final int divider2=0x7f02005a;
+        public static final int ic_launcher=0x7f02005b;
+        public static final int ic_refresh=0x7f02005c;
+        public static final int sablier=0x7f02005d;
+        public static final int toolbar_add=0x7f02005e;
+        public static final int toolbar_export=0x7f02005f;
+        public static final int toolbar_share=0x7f020060;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f050022;
@@ -827,28 +826,29 @@ containing a value of this type.
         public static final int abs__title=0x7f05001b;
         public static final int abs__titleDivider=0x7f05001c;
         public static final int abs__up=0x7f05000b;
-        public static final int description=0x7f05002b;
+        public static final int description=0x7f05002c;
         public static final int disableHome=0x7f050009;
         public static final int homeAsUp=0x7f050006;
-        public static final int imageButton1=0x7f050032;
-        public static final int imageButton2=0x7f050033;
-        public static final int imageButton3=0x7f050034;
-        public static final int img=0x7f050029;
+        public static final int imageButton1=0x7f050033;
+        public static final int imageButton2=0x7f050034;
+        public static final int imageButton3=0x7f050035;
+        public static final int img=0x7f05002a;
         public static final int listMode=0x7f050002;
-        public static final int listView1=0x7f05002c;
+        public static final int listView1=0x7f05002d;
         public static final int normal=0x7f050001;
-        public static final int option=0x7f05002a;
+        public static final int option=0x7f05002b;
+        public static final int progressBar1=0x7f050029;
         public static final int scrollView1=0x7f050027;
-        public static final int seperator1=0x7f05002d;
+        public static final int seperator1=0x7f05002e;
         public static final int showCustom=0x7f050008;
         public static final int showHome=0x7f050005;
         public static final int showTitle=0x7f050007;
         public static final int tabMode=0x7f050003;
         public static final int textView1=0x7f050028;
-        public static final int textView2=0x7f05002e;
-        public static final int textView3=0x7f05002f;
-        public static final int textView4=0x7f050031;
-        public static final int textView5=0x7f050030;
+        public static final int textView2=0x7f05002f;
+        public static final int textView3=0x7f050030;
+        public static final int textView4=0x7f050032;
+        public static final int textView5=0x7f050031;
         public static final int useLogo=0x7f050004;
         public static final int wrap_content=0x7f050000;
     }
@@ -877,10 +877,11 @@ containing a value of this type.
         public static final int abs__screen_simple=0x7f030012;
         public static final int abs__screen_simple_overlay_action_mode=0x7f030013;
         public static final int main=0x7f030014;
-        public static final int sherlock_spinner_dropdown_item=0x7f030015;
-        public static final int sherlock_spinner_item=0x7f030016;
-        public static final int wallet_item=0x7f030017;
-        public static final int wallets=0x7f030018;
+        public static final int progress_dialog=0x7f030015;
+        public static final int sherlock_spinner_dropdown_item=0x7f030016;
+        public static final int sherlock_spinner_item=0x7f030017;
+        public static final int wallet_item=0x7f030018;
+        public static final int wallets=0x7f030019;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 

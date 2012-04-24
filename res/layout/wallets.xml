@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Instawallet" />
+        android:text="Your accounts" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
         <ListView
             android:id="@+id/listView1"
             android:layout_width="match_parent"
-            android:layout_height="252dp" >
+            android:layout_height="250dp" >
         </ListView>
 
         <LinearLayout
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginRight="30dp"
-                android:background="@null"
+                
                 android:src="@drawable/toolbar_add" />
 
             <ImageButton
