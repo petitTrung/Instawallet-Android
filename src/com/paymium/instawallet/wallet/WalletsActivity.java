@@ -3,6 +3,20 @@ package com.paymium.instawallet.wallet;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.Toast;
+import android.widget.ViewAnimator;
+
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -15,20 +29,6 @@ import com.paymium.instawallet.exception.ConnectionNotInitializedException;
 import com.paymium.instawallet.flip.AnimationFactory;
 import com.paymium.instawallet.flip.AnimationFactory.FlipDirection;
 import com.paymium.instawallet.json.NewWallet;
-
-
-
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.Toast;
-import android.widget.ViewAnimator;
 
 
 public class WalletsActivity extends SherlockFragmentActivity implements OnClickListener 
@@ -49,6 +49,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         setTheme(R.style.Theme_Sherlock_ForceOverflow);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wallets);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         
         ImageButton add = (ImageButton) findViewById(R.id.imageButton1);
         add.setOnClickListener(this);
@@ -316,25 +317,25 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	    		refresh.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
 	    	}
 	    	
-	    	MenuItem send = menu.add(0,0,1,"Send");
+	    	MenuItem send = menu.add(0,0,1,"Send coins");
 	    	{
 	    		send.setIcon(R.drawable.send);
 	    		send.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
 	    	}
 	    	
-	    	MenuItem rename = menu.add(0,0,2,"Rename");
+	    	MenuItem rename = menu.add(0,0,2,"Change Wallet Name");
 	    	{
 	    		rename.setIcon(R.drawable.remane);
 	    		rename.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
 	    	}
 	    	
-	    	MenuItem delete = menu.add(0,0,3,"Delete");
+	    	MenuItem delete = menu.add(0,0,3,"Release this Wallet");
 	    	{
 	    		delete.setIcon(R.drawable.delete);
 	    		delete.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
 	    	}
 	    	
-	    	
+	    	Context context = Context.getSupportActionBar().getThemedContext();
 		}
 	}
 	
