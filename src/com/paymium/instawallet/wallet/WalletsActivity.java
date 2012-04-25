@@ -3,7 +3,9 @@ package com.paymium.instawallet.wallet;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,6 +44,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	
 	private Fragment menuWalletsList;
 	private Fragment menuSingleWallet;
+	
+	private static final int REQUEST_CODE = 1;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) 
@@ -89,42 +93,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         changeMenu();
     }
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) 
-	{
-    	super.onCreateOptionsMenu(menu);
-    	CreateMenu(menu);
-    	return true;
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) 
-    {
-    	// TODO Auto-generated method stub
-    	return MenuChoice(item);
-    }
-    
-    private void CreateMenu(Menu menu)
-    {
-    	MenuItem refresh = menu.add(0,0,0,"Refresh");
-    	{
-    		refresh.setIcon(R.drawable.ic_refresh);
-    		refresh.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
-    	}
-    }
-    
-    private boolean MenuChoice(MenuItem item) 
-    {
-    	switch (item.getItemId()) 
-    	{
-		case 0:
-			
-			Toast.makeText(this, "Refresh ...", Toast.LENGTH_LONG).show();
-			Refresh();
-			break;
-		}
-    	return false;
-    }*/
     
     public void Refresh()
     {
@@ -136,7 +104,32 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	{
 		if (view.getId() == R.id.imageButton1)
 		{
-			new addWallet().execute();
+			final CharSequence[] items = { "Create a new wallet", "Scan existing wallet ID" , "Cancel" };
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Add a wallet");
+			builder.setIcon(R.drawable.add);
+			builder.setItems(items, new DialogInterface.OnClickListener() 
+			{
+				public void onClick(DialogInterface dialog, int item) 
+				{
+					if (items[item].equals("Create a new wallet"))
+					{
+						new addWallet().execute();
+					}
+					else if (items[item].equals("Scan existing wallet ID"))
+					{
+						Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+						intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+
+						startActivityForResult(intent, REQUEST_CODE);
+					}
+				
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();		
+			
 		}
 		else if (view.getId() == R.id.imageButton2)
 		{
@@ -154,11 +147,35 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		}
 		else if (view.getId() == R.id.imageButton3)
 		{
-			AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
-			Toast.makeText(WalletsActivity.this, "Side B Touched", Toast.LENGTH_SHORT).show();
+			if (this.currentView() == R.id.flip1)
+			{
+				alertingDialog = AlertingDialog.newInstance("Warning", "Please select a wallet to share" ,R.drawable.warning);			  									
+				alertingDialog.show(getSupportFragmentManager(), "no selecting wallet");
+			}
+			else if (this.currentView() == R.id.flip2)
+			{
+				Toast.makeText(WalletsActivity.this, "copy qr code to clip board", Toast.LENGTH_SHORT).show();
+			}
 		}
 		changeMenu();
 		
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) 
+	{
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, intent);
+		if (requestCode == REQUEST_CODE) 
+		{
+			if (resultCode == RESULT_OK) 
+			{
+				String link = intent.getStringExtra("SCAN_RESULT");
+				//String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+				
+				System.out.println("String result : " + link);
+			}
+		}
 	}
 	
 	public int currentView()
@@ -334,8 +351,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	    		delete.setIcon(R.drawable.delete);
 	    		delete.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
 	    	}
-	    	
-	    	Context context = Context.getSupportActionBar().getThemedContext();
 		}
 	}
 	
