@@ -111,8 +111,17 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		}
 		else if (view.getId() == R.id.imageButton2)
 		{
+			
+			if (this.currentView() == R.id.flip1)
+			{
+				Toast.makeText(WalletsActivity.this, "list", Toast.LENGTH_SHORT).show();
+			}
+			else if (this.currentView() == R.id.flip2)
+			{
+				Toast.makeText(WalletsActivity.this, "qr code", Toast.LENGTH_SHORT).show();
+			}
 			AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
-			Toast.makeText(WalletsActivity.this, "Side B Touched", Toast.LENGTH_SHORT).show();
+			
 		}
 		else if (view.getId() == R.id.imageButton3)
 		{
@@ -123,6 +132,10 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		
 	}
 	
+	public int currentView()
+	{
+		return this.viewAnimator.getCurrentView().getId(); 
+	}
 	
 	private AlertingDialog alertingDialog;
 	private LoadingDialog loadingDialog;
