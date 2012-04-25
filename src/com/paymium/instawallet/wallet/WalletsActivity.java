@@ -3,8 +3,10 @@ package com.paymium.instawallet.wallet;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.paymium.instawallet.R;
 import com.paymium.instawallet.dialog.AlertingDialog;
@@ -15,8 +17,12 @@ import com.paymium.instawallet.flip.AnimationFactory.FlipDirection;
 import com.paymium.instawallet.json.NewWallet;
 
 
+
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -34,10 +40,13 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	
 	private Connection connection;
 	
+	private Fragment menuWalletsList;
+	private Fragment menuSingleWallet;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) 
     {
-        setTheme(R.style.Theme_Sherlock);
+        setTheme(R.style.Theme_Sherlock_ForceOverflow);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wallets);
         
@@ -57,10 +66,29 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         this.walletsList.setAdapter(this.walletsAdapter);
         
         this.connection = Connection.getInstance().initialize();
+        
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        
+        this.menuWalletsList = fm.findFragmentByTag("f1");
+        if (this.menuWalletsList == null)
+        {
+        	this.menuWalletsList= new MenuWalletsList();
+        	ft.add(this.menuWalletsList, "f1");
+        }
+        
+        this.menuSingleWallet = fm.findFragmentByTag("f2");
+        if (this.menuSingleWallet == null)
+        {
+        	this.menuSingleWallet = new MenuSingleWallet();
+        	ft.add(this.menuSingleWallet, "f2");
+        }
+        ft.commit();
    
+        changeMenu();
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) 
 	{
     	super.onCreateOptionsMenu(menu);
@@ -95,7 +123,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			break;
 		}
     	return false;
-    }
+    }*/
     
     public void Refresh()
     {
@@ -128,7 +156,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
 			Toast.makeText(WalletsActivity.this, "Side B Touched", Toast.LENGTH_SHORT).show();
 		}
-		
+		changeMenu();
 		
 	}
 	
@@ -236,6 +264,114 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		}
 		
 	}
+	
+	public static class MenuWalletsList extends SherlockFragment
+	{
+		@Override
+		public void onCreate(Bundle savedInstanceState) 
+		{
+			// TODO Auto-generated method stub
+			super.onCreate(savedInstanceState);
+			setHasOptionsMenu(true);
+		}
+		
+		@Override
+		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) 
+		{
+			// TODO Auto-generated method stub
+			super.onCreateOptionsMenu(menu, inflater);
+			MenuItem refresh = menu.add(0,0,0,"Refresh");
+	    	{
+	    		refresh.setIcon(R.drawable.ic_refresh);
+	    		refresh.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
+	    	}
+	    	
+	    	MenuItem about = menu.add(0,0,1,"About");
+	    	{
+	    		about.setIcon(R.drawable.about);
+	    		about.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
+	    	}
+		}
+	}
+	
+	public static class MenuSingleWallet extends SherlockFragment
+	{
+		@Override
+		public void onCreate(Bundle savedInstanceState) 
+		{
+			// TODO Auto-generated method stub
+			super.onCreate(savedInstanceState);
+			setHasOptionsMenu(true);
+		}
+		
+		@Override
+		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) 
+		{
+			// TODO Auto-generated method stub
+			super.onCreateOptionsMenu(menu, inflater);
+			
+			MenuItem refresh = menu.add(0,0,0,"Refresh");
+	    	{
+	    		refresh.setIcon(R.drawable.ic_refresh);
+	    		refresh.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
+	    	}
+	    	
+	    	MenuItem send = menu.add(0,0,1,"Send");
+	    	{
+	    		send.setIcon(R.drawable.send);
+	    		send.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
+	    	}
+	    	
+	    	MenuItem rename = menu.add(0,0,2,"Rename");
+	    	{
+	    		rename.setIcon(R.drawable.remane);
+	    		rename.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
+	    	}
+	    	
+	    	MenuItem delete = menu.add(0,0,3,"Delete");
+	    	{
+	    		delete.setIcon(R.drawable.delete);
+	    		delete.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
+	    	}
+	    	
+	    	
+		}
+	}
+	
+	
+	@Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) 
+	{
+        super.onRestoreInstanceState(savedInstanceState);
+        // Make sure fragments are updated after check box view state is restored.
+        changeMenu();
+    }
+	
+	
+	public void changeMenu()
+	{
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		
+		if (this.currentView() == R.id.flip1)
+		{
+			ft.show(this.menuWalletsList);
+		}
+		else
+		{
+			ft.hide(menuWalletsList);
+		}
+		
+		if (this.currentView() == R.id.flip2)
+		{
+			ft.show(menuSingleWallet);
+		}
+		else
+		{
+			ft.hide(menuSingleWallet);
+		}
+		ft.commit();
+	}
+	
 	
 	public boolean notEmpty(String s) 
 	{
