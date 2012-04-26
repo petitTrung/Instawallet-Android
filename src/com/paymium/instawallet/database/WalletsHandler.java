@@ -35,7 +35,7 @@ public class WalletsHandler
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_WALLETS + "(" + KEY_ID + " TEXT PRIMARY KEY,"								 
 																						+ KEY_ADDRESS + " TEXT NOT NULL,"
 																						+ KEY_BALANCE + " TEXT NOT NULL"
-																						+ ")";	
+																				  + ")";	
 	private DatabaseHelper DBHelper;
     private SQLiteDatabase db;
 	

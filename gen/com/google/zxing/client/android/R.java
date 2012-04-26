@@ -921,9 +921,9 @@ containing a value of this type.
         public static final int history_title=0x7f090049;
         public static final int homeAsUp=0x7f090010;
         public static final int image=0x7f090058;
-        public static final int imageButton1=0x7f09006f;
-        public static final int imageButton2=0x7f090070;
-        public static final int imageButton3=0x7f090071;
+        public static final int imageButton1=0x7f090071;
+        public static final int imageButton2=0x7f090072;
+        public static final int imageButton3=0x7f090073;
         public static final int imageView1=0x7f09006e;
         public static final int image_view=0x7f090045;
         public static final int launch_product_query=0x7f090004;
@@ -965,8 +965,10 @@ containing a value of this type.
         public static final int textView1=0x7f090057;
         public static final int textView2=0x7f090064;
         public static final int textView3=0x7f090065;
-        public static final int textView4=0x7f09006c;
-        public static final int textView5=0x7f09006b;
+        public static final int textView4=0x7f09006b;
+        public static final int textView5=0x7f09006c;
+        public static final int textView6=0x7f09006f;
+        public static final int textView7=0x7f090070;
         public static final int thumbnail=0x7f09004b;
         public static final int time_text_view=0x7f09003c;
         public static final int time_text_view_label=0x7f09003b;

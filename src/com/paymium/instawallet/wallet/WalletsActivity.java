@@ -19,7 +19,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 import android.widget.AdapterView.OnItemClickListener;
@@ -31,12 +33,14 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.paymium.instawallet.R;
+import com.paymium.instawallet.database.WalletsHandler;
 import com.paymium.instawallet.dialog.AlertingDialog;
 import com.paymium.instawallet.dialog.LoadingDialog;
 import com.paymium.instawallet.exception.ConnectionNotInitializedException;
 import com.paymium.instawallet.flip.AnimationFactory;
 import com.paymium.instawallet.flip.AnimationFactory.FlipDirection;
 import com.paymium.instawallet.json.NewWallet;
+import com.paymium.instawallet.qrcode.QrCode;
 
 
 public class WalletsActivity extends SherlockFragmentActivity implements OnClickListener 
@@ -52,6 +56,16 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	private Fragment menuSingleWallet;
 	
 	private static final int REQUEST_CODE = 1;
+	
+	private WalletsHandler wallets_db;
+	
+	private int pos;
+	private Wallet wa;
+	private QuickActionBar qab;
+	
+	private ImageView qr;
+	private TextView btcAddress;
+	private TextView clickCopy;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) 
@@ -69,6 +83,11 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         
         ImageButton share = (ImageButton) findViewById(R.id.imageButton3);
         share.setOnClickListener(this);
+        
+        this.qr = (ImageView) findViewById(R.id.imageView1);
+        this.btcAddress = (TextView) findViewById(R.id.textView7);
+        this.clickCopy = (TextView) findViewById(R.id.textView6);
+        this.clickCopy.setText("Click on image to copy your BTC address");
         
         this.viewAnimator = (ViewAnimator) findViewById(R.id.viewFlipper);
         
@@ -95,6 +114,9 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         	ft.add(this.menuSingleWallet, "f2");
         }
         ft.commit();
+        
+        this.wallets_db = new WalletsHandler(this);
+        this.load();
    
         changeMenu();
         
@@ -105,7 +127,9 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         {
         	public void onClick(View v) 
         	{
-        		Toast.makeText(WalletsActivity.this,"Detail wallet",Toast.LENGTH_SHORT).show();
+				wa = (Wallet) walletsAdapter.getItem(pos);
+				flipToQrCode(wa);
+				qab.dismiss();
         	}
 
         });
@@ -119,6 +143,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         	public void onClick(View v) 
         	{
         		Toast.makeText(WalletsActivity.this,"Delete wallet",Toast.LENGTH_SHORT).show();
+        		walletsAdapter.removeItem(wa);
+        		qab.dismiss();
         	}
 
         });
@@ -127,27 +153,50 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		this.walletsList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
 			{
-				QuickActionBar qab = new QuickActionBar(view);
-				
-				qab.addItem(detail);
-				qab.addItem(delete);
-				qab.setAnimationStyle(QuickActionBar.GROW_FROM_LEFT);
-				
-				qab.show();
-
+				pos = position;
+				wa = (Wallet) walletsAdapter.getItem(pos);
+				flipToQrCode(wa);
 			}
 		});
+		
 		
 		
 		this.walletsList.setOnItemLongClickListener(new OnItemLongClickListener() {
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) 
 			{
+				qab = new QuickActionBar(view);
+				
+				qab.addItem(detail);
+				qab.addItem(delete);
+				qab.setAnimationStyle(QuickActionBar.GROW_FROM_LEFT);
+				
+				pos = position;
+				wa = (Wallet) walletsAdapter.getItem(pos);
+				
+				qab.show();
 
 				return false;
 			}
 		});
     }
 
+    public void flipToQrCode(Wallet wallet)
+    {
+    	AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
+    	this.qr.setImageBitmap(QrCode.generateQrCode(wallet.getWallet_address(), 450, 450));
+    	this.btcAddress.setText(wallet.getWallet_address());
+    	changeMenu();
+    }
+    
+    
+    public void load()
+    {
+    	if (this.wallets_db.getAllWallets().size() > 0)
+    	{
+    		this.walletsAdapter.addItems(this.wallets_db.getAllWallets());
+    	}
+    	
+    }
     
     public void Refresh()
     {
@@ -449,6 +498,12 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		return (s != null && s.length() > 0);
 	}
 	
-    
+    @Override
+    protected void onPause() 
+    {
+    	// TODO Auto-generated method stub
+    	super.onPause();
+    	
+    }
     
 }

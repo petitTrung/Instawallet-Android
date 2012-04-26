@@ -1,6 +1,7 @@
 package com.paymium.instawallet.wallet;
 
 import java.text.DecimalFormat;
+import java.util.LinkedList;
 
 import com.paymium.instawallet.R;
 import com.paymium.instawallet.database.WalletsHandler;
@@ -37,6 +38,12 @@ public class WalletsAdapter extends BaseAdapter
 		this.walletsList.add(wallet);
 		this.notifyDataSetChanged();
 		this.db.addWallet(wallet);
+	}
+	
+	public void addItems(LinkedList<Wallet> walletsList)
+	{
+		this.walletsList.addAll(walletsList);
+		this.notifyDataSetChanged();
 	}
 	
 	public void updateItem(Wallet wallet)
