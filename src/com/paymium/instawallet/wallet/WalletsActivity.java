@@ -3,8 +3,8 @@ package com.paymium.instawallet.wallet;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-import xor.com.qpkg.QuickActionBar;
-import xor.com.qpkg.QuickActionIcons;
+import net.londatiga.android.ActionItem;
+import net.londatiga.android.QuickAction;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -58,10 +58,12 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	private static final int REQUEST_CODE = 1;
 	
 	private WalletsHandler wallets_db;
-	
-	private int pos;
-	private Wallet wa;
-	private QuickActionBar qab;
+
+	private static final int ID_DETAIL = 1;
+	private static final int ID_DELETE = 2;
+	private static final int ID_SAVE = 3;
+	private static final int ID_SHARE = 4;
+	private Wallet wl;
 	
 	private ImageView qr;
 	private TextView btcAddress;
@@ -120,42 +122,68 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
    
         changeMenu();
         
-        final QuickActionIcons detail = new QuickActionIcons();
-		detail.setTitle("Detail");
-		detail.setIcon(getResources().getDrawable(R.drawable.detail_dark));
-		detail.setOnClickListener(new OnClickListener()
-        {
-        	public void onClick(View v) 
-        	{
-				wa = (Wallet) walletsAdapter.getItem(pos);
-				flipToQrCode(wa);
-				qab.dismiss();
-        	}
+        ActionItem detail = new ActionItem();
+        detail.setActionId(ID_DETAIL);
+        detail.setIcon(getResources().getDrawable(R.drawable.detail_dark));
+        detail.setTitle("Detail");
+        
+        ActionItem delete = new ActionItem();
+        delete.setActionId(ID_DELETE);
+        delete.setIcon(getResources().getDrawable(R.drawable.delete_dark));
+        delete.setTitle("Delete");
+        
+        ActionItem save = new ActionItem();
+        save.setActionId(ID_SAVE);
+        save.setIcon(getResources().getDrawable(R.drawable.email));
+        save.setTitle("Save");
+        
+        ActionItem send = new ActionItem();
+        send.setActionId(ID_SHARE);
+        send.setIcon(getResources().getDrawable(R.drawable.share));
+        send.setTitle("Share");
+        
+        final QuickAction mQuickAction  = new QuickAction(this);
+        
+        mQuickAction.addActionItem(detail);
+        mQuickAction.addActionItem(delete);
+        mQuickAction.addActionItem(save);
+        mQuickAction.addActionItem(send);
 
+         
+        //setup the action item click listener
+        mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
+        	
+        	@Override
+			public void onItemClick(QuickAction source, int pos, int actionId) 
+			{			
+				// TODO Auto-generated method stub
+				if (actionId == 1)
+				{
+					Toast.makeText(WalletsActivity.this, "Detail item selected", Toast.LENGTH_SHORT).show();
+					flipToQrCode(wl);
+				}
+				else if (actionId == 2)
+				{
+					Toast.makeText(WalletsActivity.this, "Delete item selected", Toast.LENGTH_SHORT).show();
+					walletsAdapter.removeItem(wl);
+				}
+				else if (actionId == 3)
+				{
+					
+				}
+				else if (actionId == 4)
+				{
+					
+				}
+					
+			}
         });
-		
-		
-		final QuickActionIcons delete = new QuickActionIcons();
-		delete.setTitle("Delete");
-		delete.setIcon(getResources().getDrawable(R.drawable.delete_dark));
-		delete.setOnClickListener(new OnClickListener()
-        {
-        	public void onClick(View v) 
-        	{
-        		Toast.makeText(WalletsActivity.this,"Delete wallet",Toast.LENGTH_SHORT).show();
-        		walletsAdapter.removeItem(wa);
-        		qab.dismiss();
-        	}
 
-        });
-		
 		
 		this.walletsList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
 			{
-				pos = position;
-				wa = (Wallet) walletsAdapter.getItem(pos);
-				flipToQrCode(wa);
+				flipToQrCode((Wallet)walletsAdapter.getItem(position));
 			}
 		});
 		
@@ -164,17 +192,9 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		this.walletsList.setOnItemLongClickListener(new OnItemLongClickListener() {
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) 
 			{
-				qab = new QuickActionBar(view);
+				wl = (Wallet) walletsAdapter.getItem(position);
 				
-				qab.addItem(detail);
-				qab.addItem(delete);
-				qab.setAnimationStyle(QuickActionBar.GROW_FROM_LEFT);
-				
-				pos = position;
-				wa = (Wallet) walletsAdapter.getItem(pos);
-				
-				qab.show();
-
+				mQuickAction.show(view);
 				return false;
 			}
 		});
@@ -204,6 +224,32 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     	dialog.show(getSupportFragmentManager(), "dialog");
     }
 
+    public void export()
+    {
+    	/*StringBuilder wallets = new StringBuilder();
+		
+		
+		if (wallets_db.getAllWallets().size() > 0)
+		{
+			
+			wallets.append("Your Instawallets : ");
+			wallets.append("\n");
+			
+			
+			for (int i = 0 ; i < wallets_db.getAllWallets().size() ; i++)
+			{
+				wallets.append("Wallet ID " + (i+1) +" : " + wallets_db.getAllWallets().get(i).getWallet_id());
+				wallets.append("\n");
+			}
+			
+			Intent email = new Intent(Intent.ACTION_SEND);
+			email.putExtra(Intent.EXTRA_SUBJECT, "Your Instawallets");
+			email.putExtra(Intent.EXTRA_TEXT, wallets.toString());
+			email.setType("text/plain");
+			startActivity(Intent.createChooser(email, "Save Instawallets IDs"));
+		}*/
+    }
+    
 	public void onClick(View view) 
 	{
 		if (view.getId() == R.id.imageButton1)
