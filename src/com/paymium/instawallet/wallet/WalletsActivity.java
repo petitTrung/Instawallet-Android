@@ -3,6 +3,9 @@ package com.paymium.instawallet.wallet;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import xor.com.qpkg.QuickActionBar;
+import xor.com.qpkg.QuickActionIcons;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,10 +17,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -70,7 +76,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         this.walletsAdapter = new WalletsAdapter(this);
         this.walletsList.setAdapter(this.walletsAdapter);
         
-        this.connection = Connection.getInstance().initialize();
+        this.connection = Connection.getInstance().initialize(this);
         
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
@@ -91,6 +97,55 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         ft.commit();
    
         changeMenu();
+        
+        final QuickActionIcons detail = new QuickActionIcons();
+		detail.setTitle("Detail");
+		detail.setIcon(getResources().getDrawable(R.drawable.detail_dark));
+		detail.setOnClickListener(new OnClickListener()
+        {
+        	public void onClick(View v) 
+        	{
+        		Toast.makeText(WalletsActivity.this,"Detail wallet",Toast.LENGTH_SHORT).show();
+        	}
+
+        });
+		
+		
+		final QuickActionIcons delete = new QuickActionIcons();
+		delete.setTitle("Delete");
+		delete.setIcon(getResources().getDrawable(R.drawable.delete_dark));
+		delete.setOnClickListener(new OnClickListener()
+        {
+        	public void onClick(View v) 
+        	{
+        		Toast.makeText(WalletsActivity.this,"Delete wallet",Toast.LENGTH_SHORT).show();
+        	}
+
+        });
+		
+		
+		this.walletsList.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
+			{
+				QuickActionBar qab = new QuickActionBar(view);
+				
+				qab.addItem(detail);
+				qab.addItem(delete);
+				qab.setAnimationStyle(QuickActionBar.GROW_FROM_LEFT);
+				
+				qab.show();
+
+			}
+		});
+		
+		
+		this.walletsList.setOnItemLongClickListener(new OnItemLongClickListener() {
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) 
+			{
+
+				return false;
+			}
+		});
     }
 
     
