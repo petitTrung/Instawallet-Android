@@ -266,6 +266,11 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 					if (items[item].equals("Create a new wallet"))
 					{
 						new addWallet().execute();
+						if(currentView() == R.id.flip2)
+						{
+							AnimationFactory.flipTransition(viewAnimator, FlipDirection.RIGHT_LEFT);
+							changeMenu();
+						}
 					}
 					else if (items[item].equals("Scan existing wallet ID"))
 					{
@@ -524,16 +529,16 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		}
 		else
 		{
-			ft.hide(menuWalletsList);
+			ft.hide(this.menuWalletsList);
 		}
 		
 		if (this.currentView() == R.id.flip2)
 		{
-			ft.show(menuSingleWallet);
+			ft.show(this.menuSingleWallet);
 		}
 		else
 		{
-			ft.hide(menuSingleWallet);
+			ft.hide(this.menuSingleWallet);
 		}
 		ft.commit();
 	}

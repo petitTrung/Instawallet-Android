@@ -902,6 +902,7 @@ containing a value of this type.
         public static final int abs__title=0x7f090025;
         public static final int abs__titleDivider=0x7f090026;
         public static final int abs__up=0x7f09000b;
+        public static final int add=0x7f090071;
         public static final int arrow_down=0x7f090059;
         public static final int arrow_up=0x7f090055;
         /**  Messages IDs 
@@ -921,6 +922,7 @@ containing a value of this type.
         public static final int disableHome=0x7f090009;
         public static final int done_button=0x7f09004d;
         public static final int encode_view=0x7f090046;
+        public static final int export=0x7f090074;
         public static final int flip1=0x7f090067;
         public static final int flip2=0x7f09006d;
         public static final int footer=0x7f090058;
@@ -932,9 +934,9 @@ containing a value of this type.
         public static final int history_title=0x7f09004e;
         public static final int homeAsUp=0x7f090006;
         public static final int i_more=0x7f090050;
-        public static final int imageButton1=0x7f090071;
-        public static final int imageButton2=0x7f090072;
-        public static final int imageButton3=0x7f090073;
+        public static final int imageButton1=0x7f090072;
+        public static final int imageButton2=0x7f090075;
+        public static final int imageButton3=0x7f090078;
         public static final int imageView1=0x7f09006e;
         public static final int image_view=0x7f090047;
         public static final int iv_icon=0x7f090031;
@@ -961,6 +963,7 @@ containing a value of this type.
         public static final int search_book_contents_failed=0x7f090018;
         public static final int search_book_contents_succeeded=0x7f090019;
         public static final int seperator1=0x7f090069;
+        public static final int share=0x7f090077;
         public static final int share_app_button=0x7f09005f;
         public static final int share_bookmark_button=0x7f090060;
         public static final int share_clipboard_button=0x7f090062;
@@ -975,12 +978,15 @@ containing a value of this type.
         public static final int t_name=0x7f090051;
         public static final int tabMode=0x7f090003;
         public static final int textView1=0x7f090053;
+        public static final int textView10=0x7f090079;
         public static final int textView2=0x7f090064;
         public static final int textView3=0x7f090065;
         public static final int textView4=0x7f09006b;
         public static final int textView5=0x7f09006c;
         public static final int textView6=0x7f09006f;
         public static final int textView7=0x7f090070;
+        public static final int textView8=0x7f090073;
+        public static final int textView9=0x7f090076;
         public static final int time_text_view=0x7f09003e;
         public static final int time_text_view_label=0x7f09003d;
         public static final int tracks=0x7f090057;
