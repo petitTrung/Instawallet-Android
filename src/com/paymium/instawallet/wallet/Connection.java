@@ -186,7 +186,6 @@ public class Connection
 			else
 			{
 				DefaultHttpClient http_client = new MyHttpClient(context);
-	        	http_client.getParams().setParameter("http.protocol.version",HttpVersion.HTTP_1_0);
 	        	
 				HttpPost http_post = new HttpPost(url);
 				http_post.setHeader("Accept", "application/json");

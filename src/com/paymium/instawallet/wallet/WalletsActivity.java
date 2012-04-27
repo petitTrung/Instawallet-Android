@@ -2,6 +2,7 @@ package com.paymium.instawallet.wallet;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.LinkedList;
 
 import net.londatiga.android.ActionItem;
 import net.londatiga.android.QuickAction;
@@ -18,8 +19,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.paymium.instawallet.R;
 import com.paymium.instawallet.database.WalletsHandler;
 import com.paymium.instawallet.dialog.AlertingDialog;
+import com.paymium.instawallet.dialog.AlertingDialogOneButton;
 import com.paymium.instawallet.dialog.LoadingDialog;
 import com.paymium.instawallet.exception.ConnectionNotInitializedException;
 import com.paymium.instawallet.flip.AnimationFactory;
@@ -65,9 +67,15 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	private static final int ID_SHARE = 4;
 	private Wallet wl;
 	
+	private FragmentManager fragmentManager;
+	
+	private LinearLayout add,export,share;
+	
 	private ImageView qr;
 	private TextView btcAddress;
 	private TextView clickCopy;
+	
+	private LinkedList<String> walletsIdList;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) 
@@ -77,14 +85,14 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         setContentView(R.layout.wallets);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         
-        ImageButton add = (ImageButton) findViewById(R.id.imageButton1);
-        add.setOnClickListener(this);
+        this.add = (LinearLayout) findViewById(R.id.add);
+        this.add.setOnClickListener(this);
         
-        ImageButton export = (ImageButton) findViewById(R.id.imageButton2);
-        export.setOnClickListener(this);
+        this.export = (LinearLayout) findViewById(R.id.export);
+        this.export.setOnClickListener(this);
         
-        ImageButton share = (ImageButton) findViewById(R.id.imageButton3);
-        share.setOnClickListener(this);
+        this.share = (LinearLayout) findViewById(R.id.share);
+        this.share.setOnClickListener(this);
         
         this.qr = (ImageView) findViewById(R.id.imageView1);
         this.btcAddress = (TextView) findViewById(R.id.textView7);
@@ -99,17 +107,17 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         
         this.connection = Connection.getInstance().initialize(this);
         
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
+        fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
         
-        this.menuWalletsList = fm.findFragmentByTag("f1");
+        this.menuWalletsList = fragmentManager.findFragmentByTag("f1");
         if (this.menuWalletsList == null)
         {
         	this.menuWalletsList= new MenuWalletsList();
         	ft.add(this.menuWalletsList, "f1");
         }
         
-        this.menuSingleWallet = fm.findFragmentByTag("f2");
+        this.menuSingleWallet = fragmentManager.findFragmentByTag("f2");
         if (this.menuSingleWallet == null)
         {
         	this.menuSingleWallet = new MenuSingleWallet();
@@ -195,11 +203,74 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				wl = (Wallet) walletsAdapter.getItem(position);
 				
 				mQuickAction.show(view);
+				
 				return false;
 			}
 		});
+
+		this.walletIdExtractor = new WalletIdExtractor();
+		
+		
+		Object retained = getLastCustomNonConfigurationInstance();
+	    if ( retained instanceof addWallet ) 
+	    {
+	        addWallet = (addWallet) retained;
+	        addWallet.setActivity(this);
+	    }
+	    else
+	    {
+	    	addWallet = new addWallet(this);
+	    	addWallet.setActivity(this);
+	    }
     }
 
+    @Override
+    protected void onPause() 
+    {
+
+    	if(addWallet != null)
+    	{
+    		addWallet.setActivity(null);
+    	}
+    	
+    	// TODO Auto-generated method stub
+    	super.onPause();
+    	
+    }
+    
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() 
+    {
+    	if(addWallet != null) 
+    	{
+            addWallet.setActivity(null);
+            return addWallet;
+        }
+        return null;
+    }
+    
+    @Override
+    protected void onResume() 
+    {
+    	if(addWallet != null) 
+    	{
+    		addWallet.setActivity(this);
+        }
+    	// TODO Auto-generated method stub
+    	super.onResume();
+    }
+    
+    
+    public void onTaskCompleted()
+	{
+    	LoadingDialog dialogFragment = (LoadingDialog) getSupportFragmentManager().findFragmentByTag("loading dialog add");
+        if(dialogFragment != null) 
+        {
+            dialogFragment.dismiss();
+        }
+	}
+    
+    
     public void flipToQrCode(Wallet wallet)
     {
     	AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
@@ -252,7 +323,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     
 	public void onClick(View view) 
 	{
-		if (view.getId() == R.id.imageButton1)
+		if (view.getId() == R.id.add)
 		{
 			final CharSequence[] items = { "Create a new wallet", "Scan existing wallet ID" , "Cancel" };
 			
@@ -265,7 +336,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				{
 					if (items[item].equals("Create a new wallet"))
 					{
-						new addWallet().execute();
+						new createWallet().execute();
 						if(currentView() == R.id.flip2)
 						{
 							AnimationFactory.flipTransition(viewAnimator, FlipDirection.RIGHT_LEFT);
@@ -286,7 +357,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			alert.show();		
 			
 		}
-		else if (view.getId() == R.id.imageButton2)
+		else if (view.getId() == R.id.export)
 		{
 			
 			if (this.currentView() == R.id.flip1)
@@ -300,7 +371,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
 			
 		}
-		else if (view.getId() == R.id.imageButton3)
+		else if (view.getId() == R.id.share)
 		{
 			if (this.currentView() == R.id.flip1)
 			{
@@ -316,6 +387,10 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		
 	}
 	
+	
+	private WalletIdExtractor walletIdExtractor;
+	
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) 
 	{
@@ -329,8 +404,45 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				//String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 				
 				System.out.println("String result : " + link);
+				
+				walletsIdList = new LinkedList<String>();
+				
+ 	           	this.walletIdExtractor = new WalletIdExtractor();
+ 	           	walletsIdList = this.walletIdExtractor.extract(link);				
 			}
 		}
+	}
+	
+	@Override
+	protected void onStart() 
+	{
+		// TODO Auto-generated method stub
+		super.onStart();
+		if (walletsIdList != null)
+		{
+			for (int i = 0 ; i < walletsIdList.size();i++)
+			{
+	    		System.out.println( walletsIdList.get(i).toString());
+	    	}	
+	        	
+			
+			if (walletsIdList.size() == 0)
+			{
+				alertingDialogOneButton = AlertingDialogOneButton.newInstance("Warning", "No wallet id found", R.drawable.warning);
+				alertingDialogOneButton.show(getSupportFragmentManager(), "No id found");
+			}
+			else if (walletsIdList.size() > 1)
+			{
+				alertingDialogOneButton = AlertingDialogOneButton.newInstance("Warning", "There are more than one wallet id found", R.drawable.warning);
+				alertingDialogOneButton.show(getSupportFragmentManager(), "More than one ids found");
+			}
+			else
+			{
+				String[] data = new String[]{walletsIdList.get(0)}; 
+				addWallet.execute(data);
+			}
+		}
+				
 	}
 	
 	public int currentView()
@@ -338,11 +450,139 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		return this.viewAnimator.getCurrentView().getId(); 
 	}
 	
+	
+	
+	
+	
 	private AlertingDialog alertingDialog;
+	private AlertingDialogOneButton alertingDialogOneButton;
 	private LoadingDialog loadingDialog;
 	
+	private addWallet addWallet;
 	
 	public class addWallet extends AsyncTask<String, Integer, Object>
+	{
+		private WalletsActivity walletsActivity;
+		private boolean complete;
+		
+		public addWallet(WalletsActivity walletsActivity) 
+		{
+			// TODO Auto-generated constructor stub
+			this.walletsActivity = walletsActivity;
+		}
+		
+		public void setActivity(WalletsActivity walletsActivity) 
+		{
+			this.walletsActivity = walletsActivity;
+			
+			if (complete)
+			{
+				notifiyActivityTaskCompleted();
+			}
+			
+		}
+		
+		private void notifiyActivityTaskCompleted() 
+		{
+	        if(walletsActivity != null) 
+	        {
+	        	walletsActivity.onTaskCompleted();
+	        }
+	    }
+		
+		@Override
+		protected void onPreExecute() 
+		{ 
+			super.onPreExecute();
+			
+			loadingDialog = LoadingDialog.newInstance("Please wait", "Loading ...");			  									
+			loadingDialog.show(getSupportFragmentManager(), "loading dialog add");
+	    } 
+
+		@Override
+		protected Object doInBackground(String... data) 
+		{
+			// TODO Auto-generated method stub
+			Wallet wallet = null;
+			System.out.println("data : " + data[0]);
+			try 
+			{
+				String wallet_id = data[0];
+				String wallet_address = connection.getAddressJson(wallet_id).getAddress();
+				BigDecimal wallet_balance = connection.getBalanceJson(wallet_id).getBalance();
+				
+				if (notEmpty(wallet_id) && notEmpty(wallet_address) && notEmpty(wallet_balance.toString()))
+				{
+					wallet = new Wallet();
+					wallet.setWallet_id(wallet_id);
+					wallet.setWallet_address(wallet_address);
+					wallet.setWallet_balance(wallet_balance);
+					
+					return wallet;
+				}
+	
+			} 
+			catch (IOException e) 
+			{
+				// If there is no connection
+				e.printStackTrace();
+				
+				return "no connection";
+			} 
+			
+			catch (ConnectionNotInitializedException e) 
+			{
+				// If the connection is too slow
+				e.printStackTrace();
+				
+				return "slow connection";
+			}	
+			
+			return "fail";
+		}
+		
+		@Override
+		protected void onPostExecute(Object result) 
+		{
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			
+			//loadingDialog.dismiss();
+			
+			complete = true;
+			notifiyActivityTaskCompleted();
+			
+			if (result.getClass().getSimpleName().equals("Wallet"))
+			{
+				Wallet a = (Wallet) result;
+				walletsAdapter.addItem(a);
+				
+				alertingDialog = AlertingDialog.newInstance("Successful !!", "A wallet has been added", R.drawable.ok);
+				alertingDialog.show(getSupportFragmentManager(), "ok alerting dialog");
+			}
+			else if (result.getClass().getSimpleName().equals("String"))
+			{
+				if (result.equals("no connection"))
+				{
+					alertingDialog = AlertingDialog.newInstance("Fail !!", "No connection, no wallet has been created", R.drawable.error);
+					alertingDialog.show(getSupportFragmentManager(), "error 1 alerting dialog");
+				}
+				else if (result.equals("slow connection"))
+				{
+					alertingDialog = AlertingDialog.newInstance("Fail !!", "Slow connection, no wallet has been created", R.drawable.error);
+					alertingDialog.show(getSupportFragmentManager(), "error 2 alerting dialog");
+				}
+				else if (result.equals("fail"))
+				{
+					alertingDialog = AlertingDialog.newInstance("Fail !!", "Error unknown", R.drawable.error);
+					alertingDialog.show(getSupportFragmentManager(), "error 3 alerting dialog");
+				}
+			}
+		}
+	}
+	
+	
+	public class createWallet extends AsyncTask<String, Integer, Object>
 	{
 		@Override
 		protected void onPreExecute() 
@@ -510,13 +750,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	}
 	
 	
-	@Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) 
-	{
-        super.onRestoreInstanceState(savedInstanceState);
-        // Make sure fragments are updated after check box view state is restored.
-        changeMenu();
-    }
+	
 	
 	
 	public void changeMenu()
@@ -549,12 +783,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		return (s != null && s.length() > 0);
 	}
 	
-    @Override
-    protected void onPause() 
-    {
-    	// TODO Auto-generated method stub
-    	super.onPause();
-    	
-    }
+    
     
 }

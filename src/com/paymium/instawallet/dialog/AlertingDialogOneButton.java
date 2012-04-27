@@ -4,16 +4,15 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 
 
-public class AlertingDialog extends SherlockDialogFragment
+public class AlertingDialogOneButton extends SherlockDialogFragment
 {
-	public static AlertingDialog newInstance(String title, String message, int icon)
+	public static AlertingDialogOneButton newInstance(String title, String message, int icon)
 	{
-		AlertingDialog frag = new AlertingDialog();
+		AlertingDialogOneButton frag = new AlertingDialogOneButton();
 		Bundle args = new Bundle();
 		args.putString("title", title);
 		args.putString("message", message);
@@ -42,14 +41,7 @@ public class AlertingDialog extends SherlockDialogFragment
 			}
 		});
 		
-		aldg.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) 
-			{
-				//Toast.makeText(getActivity(), "click on Cancel", Toast.LENGTH_LONG);
-			}
-		});	
 		
 		return aldg.create();
 	}
-	
 }

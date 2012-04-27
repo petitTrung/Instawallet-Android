@@ -1,19 +1,20 @@
 package com.paymium.instawallet.connection;
 
-import java.io.InputStream;
-import java.security.KeyStore;
-
+import org.apache.http.HttpVersion;
 import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.params.ConnManagerPNames;
+import org.apache.http.conn.params.ConnPerRouteBean;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.SingleClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
 
 import android.content.Context;
 
-import com.paymium.instawallet.R;
 
 public class MyHttpClient extends DefaultHttpClient 
 {
@@ -30,42 +31,15 @@ public class MyHttpClient extends DefaultHttpClient
     {
         SchemeRegistry registry = new SchemeRegistry();
         registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-        // Register for port 443 our SSLSocketFactory with our keystore
-        // to the ConnectionManager
-        registry.register(new Scheme("https", newSslSocketFactory(), 443));
-        return new SingleClientConnManager(getParams(), registry);
-    }
- 
-    private SSLSocketFactory newSslSocketFactory() 
-    {
-        try 
-        {
-            // Get an instance of the Bouncy Castle KeyStore format
-            KeyStore trusted = KeyStore.getInstance("BKS");
-            // Get the raw resource, which contains the keystore with
-            // your trusted certificates (root and any intermediate certs)
-            InputStream in = context.getResources().openRawResource(R.raw.my_instawalle_certificate);
-            try 
-            {
-                // Initialize the keystore with the provided trusted certificates
-                // Also provide the password of the keystore
-                trusted.load(in, "trung.paymium.david".toCharArray());
-            } 
-            finally 
-            {
-                in.close();
-            }
-            // Pass the keystore to the SSLSocketFactory. The factory is responsible
-            // for the verification of the server certificate.
-            SSLSocketFactory sf = new SSLSocketFactory(trusted);
-            // Hostname verification from certificate
-            // http://hc.apache.org/httpcomponents-client-ga/tutorial/html/connmgmt.html#d4e506
-            sf.setHostnameVerifier(SSLSocketFactory.STRICT_HOSTNAME_VERIFIER);
-            return sf;
-        } 
-        catch (Exception e) 
-        {
-            throw new AssertionError(e);
-        }
+        registry.register(new Scheme("https", new EasySSLSocketFactory(), 443));
+        
+        HttpParams params = new BasicHttpParams();
+        params.setParameter(ConnManagerPNames.MAX_TOTAL_CONNECTIONS, 30);
+        params.setParameter(ConnManagerPNames.MAX_CONNECTIONS_PER_ROUTE, new ConnPerRouteBean(30));
+        params.setParameter(HttpProtocolParams.USE_EXPECT_CONTINUE, false);
+        HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+        
+        
+        return new SingleClientConnManager(params, registry);
     }
 }
