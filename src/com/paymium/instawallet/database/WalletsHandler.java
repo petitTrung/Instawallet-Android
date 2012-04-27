@@ -185,6 +185,18 @@ public class WalletsHandler
 	}
 	
 	
+	public LinkedList<String> getAllWalletsID()
+	{
+		LinkedList<String> walletsIDList = new LinkedList<String>();
+		LinkedList<Wallet> walletsList = this.getAllWallets();
+		for (int i = 0 ; i < walletsList.size() ; i++)
+		{
+			walletsIDList.add(walletsList.get(i).getWallet_address());
+		}
+		
+		return walletsIDList;
+	}
+	
     // Updating a wallet
 	public void updateWallet(Wallet wallet) 
 	{ 

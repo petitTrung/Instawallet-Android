@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import net.londatiga.android.ActionItem;
 import net.londatiga.android.QuickAction;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.ClipboardManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -152,9 +154,10 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         final QuickAction mQuickAction  = new QuickAction(this);
         
         mQuickAction.addActionItem(detail);
-        mQuickAction.addActionItem(delete);
         mQuickAction.addActionItem(save);
         mQuickAction.addActionItem(send);
+        mQuickAction.addActionItem(delete);
+        
 
          
         //setup the action item click listener
@@ -164,25 +167,25 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			public void onItemClick(QuickAction source, int pos, int actionId) 
 			{			
 				// TODO Auto-generated method stub
-				if (actionId == 1)
+				if (actionId == ID_DETAIL)
 				{
 					Toast.makeText(WalletsActivity.this, "Detail item selected", Toast.LENGTH_SHORT).show();
 					flipToQrCode(wl);
 				}
-				else if (actionId == 2)
+				else if (actionId == ID_SAVE)
+				{
+					exportItem();
+				}
+				else if (actionId == ID_SHARE)
+				{
+					shareItem();
+				}
+				else if (actionId == ID_DELETE)
 				{
 					Toast.makeText(WalletsActivity.this, "Delete item selected", Toast.LENGTH_SHORT).show();
 					walletsAdapter.removeItem(wl);
 				}
-				else if (actionId == 3)
-				{
-					
-				}
-				else if (actionId == 4)
-				{
-					
-				}
-					
+				
 			}
         });
 
@@ -190,7 +193,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		this.walletsList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
 			{
-				flipToQrCode((Wallet)walletsAdapter.getItem(position));
+				wl = (Wallet) walletsAdapter.getItem(position);
+				flipToQrCode(wl);
 			}
 		});
 		
@@ -216,8 +220,10 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     public void flipToQrCode(Wallet wallet)
     {
     	AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
+    	
     	this.qr.setImageBitmap(QrCode.generateQrCode(wallet.getWallet_address(), 450, 450));
     	this.btcAddress.setText(wallet.getWallet_address());
+    	
     	changeMenu();
     }
     
@@ -233,118 +239,238 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     
     public void refresh()
     {
-    	LoadingDialog dialog = LoadingDialog.newInstance("Waiting","Loading...");
-    	dialog.show(getSupportFragmentManager(), "dialog");
+    	if (this.currentView() == R.id.flip1)
+    	{
+    		new refreshAllWallets().execute(this.wallets_db.getAllWalletsID());
+    	}
+    	else if (this.currentView() == R.id.flip2)
+    	{
+    		new refreshWallet().execute(wl);
+    	}
+    
     }
     
-    public void refreshWallet()
+    public class refreshAllWallets extends AsyncTask<Object, Integer, Object>
     {
+    	@Override
+    	protected void onPreExecute() 
+    	{
+    		// TODO Auto-generated method stub
+    		super.onPreExecute();
+    	}
+
+		@Override
+		protected Object doInBackground(Object... params) 
+		{
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+    }
+    
+    public class refreshWallet extends AsyncTask<Wallet, Integer, Object>
+    {
+
+    	@Override
+    	protected void onPreExecute() 
+    	{
+    		// TODO Auto-generated method stub
+    		super.onPreExecute();
+    	}
+    	
+		@Override
+		protected Object doInBackground(Wallet... params) 
+		{
+			// TODO Auto-generated method stub
+			return null;
+		}
     	
     }
 
-    public void export()
-    {
-    	/*StringBuilder wallets = new StringBuilder();
-		
-		
-		if (wallets_db.getAllWallets().size() > 0)
-		{
-			
-			wallets.append("Your Instawallets : ");
-			wallets.append("\n");
-			
-			
-			for (int i = 0 ; i < wallets_db.getAllWallets().size() ; i++)
-			{
-				wallets.append("Wallet ID " + (i+1) +" : " + wallets_db.getAllWallets().get(i).getWallet_id());
-				wallets.append("\n");
-			}
-			
-			Intent email = new Intent(Intent.ACTION_SEND);
-			email.putExtra(Intent.EXTRA_SUBJECT, "Your Instawallets");
-			email.putExtra(Intent.EXTRA_TEXT, wallets.toString());
-			email.setType("text/plain");
-			startActivity(Intent.createChooser(email, "Save Instawallets IDs"));
-		}*/
-    }
-    
-    public void exportWallet()
-    {
-    	
-    }
-    
-	public void onClick(View view) 
+    public void onClick(View view) 
 	{
 		if (view.getId() == R.id.add)
-		{
-			final CharSequence[] items = { "Create a new wallet", "Scan an existing wallet ID" };
-			
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("Add a wallet");
-			builder.setIcon(R.drawable.wallet);
-			builder.setItems(items, new DialogInterface.OnClickListener() 
-			{
-				public void onClick(DialogInterface dialog, int item) 
-				{
-					if (items[item].equals("Create a new wallet"))
-					{
-						new createWallet().execute();
-						if(currentView() == R.id.flip2)
-						{
-							AnimationFactory.flipTransition(viewAnimator, FlipDirection.RIGHT_LEFT);
-							changeMenu();
-						}
-					}
-					else if (items[item].equals("Scan existing wallet ID"))
-					{
-						Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-						intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-
-						startActivityForResult(intent, REQUEST_CODE);
-					}
-				
-				}
-			});
-			
-			builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) 
-				{
-					//Toast.makeText(getActivity(), "click on Cancel", Toast.LENGTH_LONG);
-				}
-			});	
-			
-			AlertDialog alert = builder.create();
-			alert.show();		
-			
+		{		
+			add();
 		}
 		else if (view.getId() == R.id.export)
-		{
-			
-			if (this.currentView() == R.id.flip1)
-			{
-				Toast.makeText(WalletsActivity.this, "list", Toast.LENGTH_SHORT).show();
-			}
-			else if (this.currentView() == R.id.flip2)
-			{
-				Toast.makeText(WalletsActivity.this, "qr code", Toast.LENGTH_SHORT).show();
-			}
-			AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
-			
+		{		
+			export();		
 		}
 		else if (view.getId() == R.id.share)
 		{
-			if (this.currentView() == R.id.flip1)
-			{
-				alertingDialog = AlertingDialog.newInstance("Warning", "Please select a wallet to share" ,R.drawable.warning);			  									
-				alertingDialog.show(getSupportFragmentManager(), "no selecting wallet");
-			}
-			else if (this.currentView() == R.id.flip2)
-			{
-				Toast.makeText(WalletsActivity.this, "copy qr code to clip board", Toast.LENGTH_SHORT).show();
-			}
+			share();
 		}
-		changeMenu();
 		
+		changeMenu();	
+	}
+    
+    public void add()
+    {
+    	final CharSequence[] items = { "Create a new wallet", "Scan an existing wallet ID" };
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Add a wallet");
+		builder.setIcon(R.drawable.wallet);
+		builder.setItems(items, new DialogInterface.OnClickListener() 
+		{
+			public void onClick(DialogInterface dialog, int item) 
+			{
+				if (items[item].equals("Create a new wallet"))
+				{
+					new createWallet().execute();
+					if(currentView() == R.id.flip2)
+					{
+						AnimationFactory.flipTransition(viewAnimator, FlipDirection.RIGHT_LEFT);
+						changeMenu();
+					}
+				}
+				else if (items[item].equals("Scan existing wallet ID"))
+				{
+					Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+					intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+
+					startActivityForResult(intent, REQUEST_CODE);
+				}
+			
+			}
+		});
+		
+		builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) 
+			{
+				//Toast.makeText(getActivity(), "click on Cancel", Toast.LENGTH_LONG);
+			}
+		});	
+		
+		AlertDialog alert = builder.create();
+		alert.show();
+    }
+    
+    public void export()
+    {
+    	if (this.currentView() == R.id.flip1)
+    	{
+    		StringBuilder wallets = new StringBuilder();
+	
+    		if (wallets_db.getAllWallets().size() > 0)
+    		{
+    			
+    			wallets.append("Your Instawallets IDs : ");
+    			wallets.append("\n");
+    			
+    			
+    			for (int i = 0 ; i < wallets_db.getAllWallets().size() ; i++)
+    			{
+    				wallets.append("Wallet ID " + (i+1) +" : " + wallets_db.getAllWallets().get(i).getWallet_id());
+    				wallets.append("\n");
+    			}
+    			
+    			Intent email = new Intent(Intent.ACTION_SEND);
+    			email.putExtra(Intent.EXTRA_SUBJECT, "Your Instawallets");
+    			email.putExtra(Intent.EXTRA_TEXT, wallets.toString());
+    			email.setType("text/plain");
+    			startActivity(Intent.createChooser(email, "Save Instawallets IDs"));
+    		}
+    	}
+    	
+    	else if (this.currentView() == R.id.flip2)
+    	{
+    		exportItem();
+    	}
+    	
+    }
+    public void exportItem()
+    {
+    	StringBuilder wallets = new StringBuilder();
+		
+		wallets.append("Your Instawallet ID : ");
+		wallets.append("\n"); 		
+		wallets.append(wl.getWallet_id());
+		wallets.append("\n");
+		
+		Intent email = new Intent(Intent.ACTION_SEND);
+		email.putExtra(Intent.EXTRA_SUBJECT, "Your Instawallet");
+		email.putExtra(Intent.EXTRA_TEXT, wallets.toString());
+		email.setType("text/plain");
+		startActivity(Intent.createChooser(email, "Save Instawallets IDs"));
+    }
+    
+    
+    public void share()
+    {
+    	if (this.currentView() == R.id.flip1)
+		{
+			alertingDialog = AlertingDialog.newInstance("Warning", "Please select a wallet to share" ,R.drawable.warning);			  									
+			alertingDialog.show(getSupportFragmentManager(), "no selecting wallet");
+		}
+		else if (this.currentView() == R.id.flip2)
+		{
+			shareItem();
+		}
+    }
+	public void shareItem()
+	{
+		final CharSequence[] items = { "Send via Email", "Send via SMS", "Copy to clipboard" };
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Send bitcoin address");
+		builder.setIcon(R.drawable.share_bitcoin_address);
+		builder.setItems(items, new DialogInterface.OnClickListener() 
+		{
+			public void onClick(DialogInterface dialog, int item) 
+			{
+				if (items[item].equals("Send via Email"))
+				{
+					StringBuilder wallets = new StringBuilder();
+		    		
+		    		wallets.append("Please send your bitcoins to this address : ");
+		    		wallets.append("\n"); 		
+		    		wallets.append(wl.getWallet_address());
+		    		wallets.append("\n");
+		    		
+		    		Intent email = new Intent(Intent.ACTION_SEND);
+					email.putExtra(Intent.EXTRA_SUBJECT, "Request bitcoins");
+					email.putExtra(Intent.EXTRA_TEXT, wallets.toString());
+					email.setType("text/plain");
+					startActivity(Intent.createChooser(email, "Request bitcoins"));
+				}
+				else if (items[item].equals("Send via SMS"))
+				{
+					StringBuilder wallets = new StringBuilder();
+		    		
+		    		wallets.append("Please send your bitcoins to this address : ");
+		    		wallets.append("\n"); 		
+		    		wallets.append(wl.getWallet_address());
+		    		wallets.append("\n");
+		    		
+					Intent sms = new Intent(android.content.Intent.ACTION_VIEW);
+					sms.putExtra("address","");
+					sms.putExtra("sms_body", wallets.toString());
+					sms.setType("vnd.android-dir/mms-sms");
+					startActivity(sms);
+				}
+				else if (items[item].equals("Copy to clipboard"))
+				{					
+					ClipboardManager clipboard = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+					clipboard.setText(wl.getWallet_address());
+					
+					Toast.makeText(WalletsActivity.this, "The bitcoin address of this wallet is copied to clipboard", Toast.LENGTH_LONG).show();
+					
+				}
+			
+			}
+		});
+		
+		builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) 
+			{
+				//Toast.makeText(getActivity(), "click on Cancel", Toast.LENGTH_LONG);
+			}
+		});	
+		
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 	
 	
