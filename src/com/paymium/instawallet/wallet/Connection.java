@@ -10,7 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -148,18 +147,11 @@ public class Connection
 					String jsonString = jsonData.toString();
 		        	
 		        	DefaultHttpClient http_client = new MyHttpClient(context);
-		        	http_client.getParams().setParameter("http.protocol.version",HttpVersion.HTTP_1_0);
 		        	
 					HttpPost http_post = new HttpPost(url);
 					http_post.setHeader("Accept", "application/json");
 					http_post.setHeader("Content-Type", "application/json");
 					
-					/*List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-					nameValuePairs.add(new BasicNameValuePair("address","1CSNnXR5sKnYiVszLpTki22UHqA3j1XJWT"));
-					nameValuePairs.add(new BasicNameValuePair("amount","0.00000005"));	
-					http_post.setEntity(new UrlEncodedFormEntity(nameValuePairs));*/
-
-					//http_post.setHeader("Content-Length", Integer.toString(jsonString.getBytes().length));
 					StringEntity s = new StringEntity(jsonString);
 					s.setContentType("application/json");
 					http_post.setEntity(s);

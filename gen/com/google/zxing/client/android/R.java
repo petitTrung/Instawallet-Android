@@ -870,7 +870,8 @@ containing a value of this type.
         public static final int toolbar_add=0x7f020081;
         public static final int toolbar_export=0x7f020082;
         public static final int toolbar_share=0x7f020083;
-        public static final int warning=0x7f020084;
+        public static final int wallet=0x7f020084;
+        public static final int warning=0x7f020085;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f09002c;

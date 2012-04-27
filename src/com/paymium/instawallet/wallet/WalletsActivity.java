@@ -6,7 +6,6 @@ import java.util.LinkedList;
 
 import net.londatiga.android.ActionItem;
 import net.londatiga.android.QuickAction;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,14 +18,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -209,67 +208,10 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		});
 
 		this.walletIdExtractor = new WalletIdExtractor();
-		
-		
-		Object retained = getLastCustomNonConfigurationInstance();
-	    if ( retained instanceof addWallet ) 
-	    {
-	        addWallet = (addWallet) retained;
-	        addWallet.setActivity(this);
-	    }
-	    else
-	    {
-	    	addWallet = new addWallet(this);
-	    	addWallet.setActivity(this);
-	    }
-    }
 
-    @Override
-    protected void onPause() 
-    {
-
-    	if(addWallet != null)
-    	{
-    		addWallet.setActivity(null);
-    	}
-    	
-    	// TODO Auto-generated method stub
-    	super.onPause();
-    	
-    }
-    
-    @Override
-    public Object onRetainCustomNonConfigurationInstance() 
-    {
-    	if(addWallet != null) 
-    	{
-            addWallet.setActivity(null);
-            return addWallet;
-        }
-        return null;
-    }
-    
-    @Override
-    protected void onResume() 
-    {
-    	if(addWallet != null) 
-    	{
-    		addWallet.setActivity(this);
-        }
-    	// TODO Auto-generated method stub
-    	super.onResume();
-    }
-    
-    
-    public void onTaskCompleted()
-	{
-    	LoadingDialog dialogFragment = (LoadingDialog) getSupportFragmentManager().findFragmentByTag("loading dialog add");
-        if(dialogFragment != null) 
-        {
-            dialogFragment.dismiss();
-        }
 	}
     
+
     
     public void flipToQrCode(Wallet wallet)
     {
@@ -289,10 +231,15 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     	
     }
     
-    public void Refresh()
+    public void refresh()
     {
     	LoadingDialog dialog = LoadingDialog.newInstance("Waiting","Loading...");
     	dialog.show(getSupportFragmentManager(), "dialog");
+    }
+    
+    public void refreshWallet()
+    {
+    	
     }
 
     public void export()
@@ -321,15 +268,20 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		}*/
     }
     
+    public void exportWallet()
+    {
+    	
+    }
+    
 	public void onClick(View view) 
 	{
 		if (view.getId() == R.id.add)
 		{
-			final CharSequence[] items = { "Create a new wallet", "Scan existing wallet ID" , "Cancel" };
+			final CharSequence[] items = { "Create a new wallet", "Scan an existing wallet ID" };
 			
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Add a wallet");
-			builder.setIcon(R.drawable.add);
+			builder.setIcon(R.drawable.wallet);
 			builder.setItems(items, new DialogInterface.OnClickListener() 
 			{
 				public void onClick(DialogInterface dialog, int item) 
@@ -353,6 +305,14 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				
 				}
 			});
+			
+			builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) 
+				{
+					//Toast.makeText(getActivity(), "click on Cancel", Toast.LENGTH_LONG);
+				}
+			});	
+			
 			AlertDialog alert = builder.create();
 			alert.show();		
 			
@@ -439,7 +399,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			else
 			{
 				String[] data = new String[]{walletsIdList.get(0)}; 
-				addWallet.execute(data);
+				walletsIdList.clear();
+				new addWallet().execute(data);
 			}
 		}
 				
@@ -449,46 +410,14 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	{
 		return this.viewAnimator.getCurrentView().getId(); 
 	}
-	
-	
-	
-	
-	
+
 	private AlertingDialog alertingDialog;
 	private AlertingDialogOneButton alertingDialogOneButton;
 	private LoadingDialog loadingDialog;
 	
-	private addWallet addWallet;
-	
 	public class addWallet extends AsyncTask<String, Integer, Object>
 	{
-		private WalletsActivity walletsActivity;
-		private boolean complete;
 		
-		public addWallet(WalletsActivity walletsActivity) 
-		{
-			// TODO Auto-generated constructor stub
-			this.walletsActivity = walletsActivity;
-		}
-		
-		public void setActivity(WalletsActivity walletsActivity) 
-		{
-			this.walletsActivity = walletsActivity;
-			
-			if (complete)
-			{
-				notifiyActivityTaskCompleted();
-			}
-			
-		}
-		
-		private void notifiyActivityTaskCompleted() 
-		{
-	        if(walletsActivity != null) 
-	        {
-	        	walletsActivity.onTaskCompleted();
-	        }
-	    }
 		
 		@Override
 		protected void onPreExecute() 
@@ -547,10 +476,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			
-			//loadingDialog.dismiss();
-			
-			complete = true;
-			notifiyActivityTaskCompleted();
+			loadingDialog.dismiss();
+
 			
 			if (result.getClass().getSimpleName().equals("Wallet"))
 			{
