@@ -22,8 +22,8 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,7 +70,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	
 	private FragmentManager fragmentManager;
 	
-	private LinearLayout add,export,share;
+	//private LinearLayout add,export,share;
+	private ImageButton add,export,share;
 	
 	private ImageView qr;
 	private TextView btcAddress;
@@ -86,15 +87,24 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         setContentView(R.layout.wallets);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         
-        this.add = (LinearLayout) findViewById(R.id.add);
+        /*this.add = (LinearLayout) findViewById(R.id.add);
         this.add.setOnClickListener(this);
         
         this.export = (LinearLayout) findViewById(R.id.export);
         this.export.setOnClickListener(this);
         
         this.share = (LinearLayout) findViewById(R.id.share);
-        this.share.setOnClickListener(this);
+        this.share.setOnClickListener(this);*/
         
+        this.add = (ImageButton) findViewById(R.id.imageButton1);
+        this.add.setOnClickListener(this);
+        
+        this.export = (ImageButton) findViewById(R.id.imageButton2);
+        this.export.setOnClickListener(this);
+        
+        this.share = (ImageButton) findViewById(R.id.imageButton3);
+        this.share.setOnClickListener(this);
+            
         this.qr = (ImageView) findViewById(R.id.imageView1);
         this.btcAddress = (TextView) findViewById(R.id.textView7);
         this.clickCopy = (TextView) findViewById(R.id.textView6);
@@ -125,6 +135,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         	ft.add(this.menuSingleWallet, "f2");
         }
         ft.commit();
+
         
         this.wallets_db = new WalletsHandler(this);
         this.load();
@@ -169,7 +180,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				// TODO Auto-generated method stub
 				if (actionId == ID_DETAIL)
 				{
-					Toast.makeText(WalletsActivity.this, "Detail item selected", Toast.LENGTH_SHORT).show();
 					flipToQrCode(wl);
 				}
 				else if (actionId == ID_SAVE)
@@ -182,8 +192,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				}
 				else if (actionId == ID_DELETE)
 				{
-					Toast.makeText(WalletsActivity.this, "Delete item selected", Toast.LENGTH_SHORT).show();
-					walletsAdapter.removeItem(wl);
+					deleteItem();
 				}
 				
 			}
@@ -194,6 +203,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
 			{
 				wl = (Wallet) walletsAdapter.getItem(position);
+				
 				flipToQrCode(wl);
 			}
 		});
@@ -241,34 +251,96 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     {
     	if (this.currentView() == R.id.flip1)
     	{
-    		new refreshAllWallets().execute(this.wallets_db.getAllWalletsID());
+    		String[] data = new String[this.wallets_db.getAllWalletsID().size()];
+    		this.wallets_db.getAllWalletsID().toArray(data);
+    		
+    		new refreshAllWallets().execute(data);
     	}
     	else if (this.currentView() == R.id.flip2)
     	{
-    		new refreshWallet().execute(wl);
+    		String[] data = new String[]{wl.getWallet_id()};
+    		
+    		new refreshWallet().execute(data);
     	}
     
     }
     
-    public class refreshAllWallets extends AsyncTask<Object, Integer, Object>
+    public class refreshAllWallets extends AsyncTask<String, Integer, String>
     {
     	@Override
     	protected void onPreExecute() 
     	{
     		// TODO Auto-generated method stub
     		super.onPreExecute();
+    		loadingDialog = LoadingDialog.newInstance("Please wait", "Loading ...");			  									
+			loadingDialog.show(getSupportFragmentManager(), "loading dialog all refresh");
     	}
 
 		@Override
-		protected Object doInBackground(Object... params) 
+		protected String doInBackground(String... params) 
 		{
 			// TODO Auto-generated method stub
-			return null;
+			for (int i = 0 ; i < params.length ; i++)
+			{
+				System.out.println(params[i]);
+			}
+			
+			
+			String[] walletsIDList = params;
+			for(int i = 0 ; i < walletsIDList.length ; i++ )
+			{
+				try 
+				{
+					walletsAdapter.updateItem(connection.getWallet(walletsIDList[i]));
+				} 
+				catch (IOException e) 
+				{
+					// If there is no connection
+					e.printStackTrace();
+					
+					return "no connection";
+				} 
+				
+				catch (ConnectionNotInitializedException e) 
+				{
+					// If the connection is too slow
+					e.printStackTrace();
+					
+					return "slow connection";
+				}	
+			}
+			
+			return "OK";
+		}
+		
+		@Override
+		protected void onPostExecute(String result) 
+		{
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			
+			loadingDialog.dismiss();
+			
+			if (result.equals("no connection"))
+			{
+				alertingDialog = AlertingDialog.newInstance("Fail !!", "No connection, no wallet has been created", R.drawable.error);
+				alertingDialog.show(getSupportFragmentManager(), "error 1 alerting dialog");
+			}
+			else if(result.equals("slow connection"))
+			{
+				alertingDialog = AlertingDialog.newInstance("Fail !!", "Slow connection, no wallet has been created", R.drawable.error);
+				alertingDialog.show(getSupportFragmentManager(), "error 2 alerting dialog");
+			}
+			else if (result.equals("OK"))
+			{
+				alertingDialog = AlertingDialog.newInstance("Successful !!", "All of wallets have been updated !", R.drawable.ok);
+				alertingDialog.show(getSupportFragmentManager(), "ok alerting dialog");
+			}
 		}
 
     }
     
-    public class refreshWallet extends AsyncTask<Wallet, Integer, Object>
+    public class refreshWallet extends AsyncTask<String, Integer, String>
     {
 
     	@Override
@@ -276,28 +348,79 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     	{
     		// TODO Auto-generated method stub
     		super.onPreExecute();
+    		loadingDialog = LoadingDialog.newInstance("Please wait", "Loading ...");			  									
+			loadingDialog.show(getSupportFragmentManager(), "loading dialog refresh");
     	}
     	
 		@Override
-		protected Object doInBackground(Wallet... params) 
+		protected String doInBackground(String... params) 
 		{
 			// TODO Auto-generated method stub
-			return null;
+			String wallet_id = params[0];
+			
+			try 
+			{
+				walletsAdapter.updateItem(connection.getWallet(wallet_id));
+			} 
+			catch (IOException e) 
+			{
+				// If there is no connection
+				e.printStackTrace();
+				
+				return "no connection";
+			} 
+			
+			catch (ConnectionNotInitializedException e) 
+			{
+				// If the connection is too slow
+				e.printStackTrace();
+				
+				return "slow connection";
+			}	
+			
+			
+			return "OK";
+		}
+		
+		@Override
+		protected void onPostExecute(String result) 
+		{
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			
+			loadingDialog.dismiss();
+			
+			if (result.equals("no connection"))
+			{
+				alertingDialog = AlertingDialog.newInstance("Fail !!", "No connection, no wallet has been created", R.drawable.error);
+				alertingDialog.show(getSupportFragmentManager(), "error 1 alerting dialog");
+			}
+			else if(result.equals("slow connection"))
+			{
+				alertingDialog = AlertingDialog.newInstance("Fail !!", "Slow connection, no wallet has been created", R.drawable.error);
+				alertingDialog.show(getSupportFragmentManager(), "error 2 alerting dialog");
+			}
+			else if (result.equals("OK"))
+			{
+				alertingDialog = AlertingDialog.newInstance("Successful !!", "This wallet has been updated !", R.drawable.ok);
+				alertingDialog.show(getSupportFragmentManager(), "ok alerting dialog");
+			}
 		}
     	
     }
-
+    
+  
     public void onClick(View view) 
 	{
-		if (view.getId() == R.id.add)
+		if (view.getId() == R.id.imageButton1)
 		{		
 			add();
 		}
-		else if (view.getId() == R.id.export)
+		else if (view.getId() == R.id.imageButton2)
 		{		
 			export();		
 		}
-		else if (view.getId() == R.id.share)
+		else if (view.getId() == R.id.imageButton3)
 		{
 			share();
 		}
@@ -471,6 +594,11 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		
 		AlertDialog alert = builder.create();
 		alert.show();
+	}
+	
+	public void deleteItem()
+	{
+		walletsAdapter.removeItem(wl);
 	}
 	
 	
@@ -698,9 +826,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			super.onPostExecute(result);
 			
 			loadingDialog.dismiss();
-			
-			
-			
+					
 			if (result.getClass().getSimpleName().equals("Wallet"))
 			{
 				Wallet a = (Wallet) result;
@@ -731,7 +857,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		
 	}
 	
-	public static class MenuWalletsList extends SherlockFragment
+	public class MenuWalletsList extends SherlockFragment
 	{
 		@Override
 		public void onCreate(Bundle savedInstanceState) 
@@ -752,22 +878,49 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	    		refresh.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
 	    	}
 	    	
-	    	MenuItem about = menu.add(0,0,1,"About");
+	    	MenuItem about = menu.add(0,1,1,"About");
 	    	{
 	    		about.setIcon(R.drawable.about);
 	    		about.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
 	    	}
 		}
+		
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) 
+		{
+			return MenuChoice(item);
+		}
+		
+		public boolean MenuChoice(MenuItem item)
+		{
+			switch (item.getItemId()) 
+			{
+				case 0:
+					
+					refresh(); 
+					
+					return true;
+					
+				case 1:
+					
+					
+					
+					return true;
+					
+			};
+			
+			return false;
+		}
 	}
 	
-	public static class MenuSingleWallet extends SherlockFragment
+	public class MenuSingleWallet extends SherlockFragment
 	{
 		@Override
 		public void onCreate(Bundle savedInstanceState) 
 		{
 			// TODO Auto-generated method stub
 			super.onCreate(savedInstanceState);
-			setHasOptionsMenu(true);
+			setHasOptionsMenu(true);	
 		}
 		
 		@Override
@@ -782,23 +935,71 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	    		refresh.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
 	    	}
 	    	
-	    	MenuItem send = menu.add(0,0,1,"Send coins");
+	    	MenuItem send = menu.add(0,1,1,"Send coins");
 	    	{
 	    		send.setIcon(R.drawable.send);
 	    		send.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
 	    	}
 	    	
-	    	MenuItem rename = menu.add(0,0,2,"Change Wallet Name");
+	    	MenuItem rename = menu.add(0,2,2,"Change Wallet Name");
 	    	{
 	    		rename.setIcon(R.drawable.remane);
 	    		rename.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
 	    	}
 	    	
-	    	MenuItem delete = menu.add(0,0,3,"Release this Wallet");
+	    	MenuItem delete = menu.add(0,3,3,"Release this Wallet");
 	    	{
 	    		delete.setIcon(R.drawable.delete);
 	    		delete.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
 	    	}
+
+		}
+		
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) 
+		{
+			return MenuChoice(item);
+		}
+		
+		public boolean MenuChoice(MenuItem item)
+		{
+			switch (item.getItemId()) 
+			{
+				case 0:
+					
+					refresh();
+					
+					return true;
+					
+				case 1:
+					
+					return true;
+					
+				case 2:
+					
+					return true;
+					
+				case 3:
+					
+					AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
+					
+					changeMenu();
+					
+					deleteItem();
+					
+					return true;
+					
+				case android.R.id.home:
+					
+					AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
+					
+					changeMenu();
+					
+					return true;
+					
+			};
+			
+			return false;
 		}
 	}
 	
@@ -810,9 +1011,11 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	{
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		
+				
 		if (this.currentView() == R.id.flip1)
 		{
 			ft.show(this.menuWalletsList);
+			getSupportActionBar().setDisplayHomeAsUpEnabled(false);	
 		}
 		else
 		{
@@ -822,6 +1025,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		if (this.currentView() == R.id.flip2)
 		{
 			ft.show(this.menuSingleWallet);
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);	
 		}
 		else
 		{
