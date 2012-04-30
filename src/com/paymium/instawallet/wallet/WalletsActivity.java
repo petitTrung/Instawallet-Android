@@ -489,18 +489,18 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			
 			if (result.equals("no connection"))
 			{
-				alertingDialog = AlertingDialog.newInstance("Fail !!", "No connection, no wallet has been created", R.drawable.error);
-				alertingDialog.show(getSupportFragmentManager(), "error 1 alerting dialog");
+				alertingDialogOneButton = AlertingDialogOneButton.newInstance("Fail !!", "No connection, no wallet has been created", R.drawable.error);
+				alertingDialogOneButton.show(getSupportFragmentManager(), "error 1 alerting dialog");
 			}
 			else if(result.equals("slow connection"))
 			{
-				alertingDialog = AlertingDialog.newInstance("Fail !!", "Slow connection, no wallet has been created", R.drawable.error);
-				alertingDialog.show(getSupportFragmentManager(), "error 2 alerting dialog");
+				alertingDialogOneButton = AlertingDialogOneButton.newInstance("Fail !!", "Slow connection, no wallet has been created", R.drawable.error);
+				alertingDialogOneButton.show(getSupportFragmentManager(), "error 2 alerting dialog");
 			}
 			else if (result.equals("OK"))
 			{
-				alertingDialog = AlertingDialog.newInstance("Successful !!", "This wallet has been updated !", R.drawable.ok);
-				alertingDialog.show(getSupportFragmentManager(), "ok alerting dialog");
+				alertingDialogOneButton = AlertingDialogOneButton.newInstance("Successful !!", "This wallet has been updated !", R.drawable.ok);
+				alertingDialogOneButton.show(getSupportFragmentManager(), "ok alerting dialog");
 			}
 		}
     	
@@ -621,8 +621,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     {
     	if (this.currentView() == R.id.flip1)
 		{
-			alertingDialog = AlertingDialog.newInstance("Warning", "Please select a wallet to share" ,R.drawable.warning);			  									
-			alertingDialog.show(getSupportFragmentManager(), "no selecting wallet");
+    		alertingDialogOneButton = AlertingDialogOneButton.newInstance("Warning", "Please select a wallet to share" ,R.drawable.warning);			  									
+    		alertingDialogOneButton.show(getSupportFragmentManager(), "no selecting wallet");
 		}
 		else if (this.currentView() == R.id.flip2)
 		{
@@ -762,7 +762,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		return this.viewAnimator.getCurrentView().getId(); 
 	}
 
-	private AlertingDialog alertingDialog;
 	private AlertingDialogOneButton alertingDialogOneButton;
 	private LoadingDialog loadingDialog;
 	
@@ -835,25 +834,25 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				Wallet a = (Wallet) result;
 				walletsAdapter.addItem(a);
 				
-				alertingDialog = AlertingDialog.newInstance("Successful !!", "A wallet has been added", R.drawable.ok);
-				alertingDialog.show(getSupportFragmentManager(), "ok alerting dialog");
+				alertingDialogOneButton = AlertingDialogOneButton.newInstance("Successful !!", "A wallet has been added", R.drawable.ok);
+				alertingDialogOneButton.show(getSupportFragmentManager(), "ok alerting dialog");
 			}
 			else if (result.getClass().getSimpleName().equals("String"))
 			{
 				if (result.equals("no connection"))
 				{
-					alertingDialog = AlertingDialog.newInstance("Fail !!", "No connection, no wallet has been created", R.drawable.error);
-					alertingDialog.show(getSupportFragmentManager(), "error 1 alerting dialog");
+					alertingDialogOneButton = AlertingDialogOneButton.newInstance("Fail !!", "No connection, no wallet has been created", R.drawable.error);
+					alertingDialogOneButton.show(getSupportFragmentManager(), "error 1 alerting dialog");
 				}
 				else if (result.equals("slow connection"))
 				{
-					alertingDialog = AlertingDialog.newInstance("Fail !!", "Slow connection, no wallet has been created", R.drawable.error);
-					alertingDialog.show(getSupportFragmentManager(), "error 2 alerting dialog");
+					alertingDialogOneButton = AlertingDialogOneButton.newInstance("Fail !!", "Slow connection, no wallet has been created", R.drawable.error);
+					alertingDialogOneButton.show(getSupportFragmentManager(), "error 2 alerting dialog");
 				}
 				else if (result.equals("fail"))
 				{
-					alertingDialog = AlertingDialog.newInstance("Fail !!", "Error unknown", R.drawable.error);
-					alertingDialog.show(getSupportFragmentManager(), "error 3 alerting dialog");
+					alertingDialogOneButton = AlertingDialogOneButton.newInstance("Fail !!", "Error unknown", R.drawable.error);
+					alertingDialogOneButton.show(getSupportFragmentManager(), "error 3 alerting dialog");
 				}
 			}
 		}
@@ -929,25 +928,25 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				Wallet a = (Wallet) result;
 				walletsAdapter.addItem(a);
 				
-				alertingDialog = AlertingDialog.newInstance("Successful !!", "A wallet has been added", R.drawable.ok);
-				alertingDialog.show(getSupportFragmentManager(), "ok alerting dialog");
+				alertingDialogOneButton = AlertingDialogOneButton.newInstance("Successful !!", "A wallet has been added", R.drawable.ok);
+				alertingDialogOneButton.show(getSupportFragmentManager(), "ok alerting dialog");
 			}
 			else if (result.getClass().getSimpleName().equals("String"))
 			{
 				if (result.equals("no connection"))
 				{
-					alertingDialog = AlertingDialog.newInstance("Fail !!", "No connection, no wallet has been created", R.drawable.error);
-					alertingDialog.show(getSupportFragmentManager(), "error 1 alerting dialog");
+					alertingDialogOneButton = AlertingDialogOneButton.newInstance("Fail !!", "No connection, no wallet has been created", R.drawable.error);
+					alertingDialogOneButton.show(getSupportFragmentManager(), "error 1 alerting dialog");
 				}
 				else if (result.equals("slow connection"))
 				{
-					alertingDialog = AlertingDialog.newInstance("Fail !!", "Slow connection, no wallet has been created", R.drawable.error);
-					alertingDialog.show(getSupportFragmentManager(), "error 2 alerting dialog");
+					alertingDialogOneButton = AlertingDialogOneButton.newInstance("Fail !!", "Slow connection, no wallet has been created", R.drawable.error);
+					alertingDialogOneButton.show(getSupportFragmentManager(), "error 2 alerting dialog");
 				}
 				else if (result.equals("fail"))
 				{
-					alertingDialog = AlertingDialog.newInstance("Fail !!", "Error unknown", R.drawable.error);
-					alertingDialog.show(getSupportFragmentManager(), "error 3 alerting dialog");
+					alertingDialogOneButton = AlertingDialogOneButton.newInstance("Fail !!", "Error unknown", R.drawable.error);
+					alertingDialogOneButton.show(getSupportFragmentManager(), "error 3 alerting dialog");
 				}
 			}
 		}
