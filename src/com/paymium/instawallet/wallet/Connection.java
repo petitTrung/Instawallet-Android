@@ -28,6 +28,7 @@ import com.paymium.instawallet.json.Address;
 import com.paymium.instawallet.json.Balance;
 import com.paymium.instawallet.json.NewWallet;
 import com.paymium.instawallet.json.Payment;
+import com.paymium.instawallet.market.MarketPrices;
 
 
 public class Connection 
@@ -378,4 +379,43 @@ public class Connection
 		this.isPayment = isPayment;
 	}
 
+	
+	public MarketPrices getMarketPrices() throws IOException, ConnectionNotInitializedException 
+	{
+		
+		System.setProperty("http.keepAlive", "false");
+        System.out.println("Android version <= 2.2");
+        
+        DefaultHttpClient http_client = new MyHttpClient(context);
+    	
+        HttpGet http_get = new HttpGet("http://bitcoincharts.com/t/weighted_prices.json");
+        http_get.setHeader("Accept", "application/json");
+
+        
+        HttpResponse response = http_client.execute(http_get);
+		InputStream content = response.getEntity().getContent();
+		
+		BufferedReader responseReader = new BufferedReader(new InputStreamReader(content));
+		
+		StringBuilder responseBuilder = new StringBuilder();
+		String line = null;
+		
+		while ((line = responseReader.readLine()) != null) 
+		{
+			responseBuilder.append(line);
+		}
+		
+		//System.out.println("Result : " + responseBuilder.toString());
+		String result = responseBuilder.toString();
+		MarketPrices marketPrices = new MarketPrices();
+		
+		
+		marketPrices = gson.fromJson(result, MarketPrices.class);
+
+		System.out.println(marketPrices);
+		
+		return marketPrices;
+		
+		
+	}
 }
