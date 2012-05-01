@@ -42,7 +42,6 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.paymium.instawallet.R;
 import com.paymium.instawallet.database.WalletsHandler;
-import com.paymium.instawallet.dialog.AlertingDialog;
 import com.paymium.instawallet.dialog.AlertingDialogOneButton;
 import com.paymium.instawallet.dialog.LoadingDialog;
 import com.paymium.instawallet.exception.ConnectionNotInitializedException;
@@ -539,13 +538,14 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				if (items[item].equals("Create a new wallet"))
 				{
 					new createWallet().execute();
+					
 					if(currentView() == R.id.flip2)
 					{
 						AnimationFactory.flipTransition(viewAnimator, FlipDirection.RIGHT_LEFT);
 						changeMenu();
 					}
 				}
-				else if (items[item].equals("Scan existing wallet ID"))
+				else if (items[item].equals("Scan an existing wallet ID"))
 				{
 					Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 					intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
@@ -714,7 +714,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				String link = intent.getStringExtra("SCAN_RESULT");
 				//String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 				
-				System.out.println("String result : " + link);
+				//System.out.println("String result : " + link);
 				
 				walletsIdList = new LinkedList<String>();
 				
@@ -729,6 +729,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	{
 		// TODO Auto-generated method stub
 		super.onStart();
+		
 		if (walletsIdList != null)
 		{
 			for (int i = 0 ; i < walletsIdList.size();i++)
@@ -749,13 +750,33 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			}
 			else
 			{
-				String[] data = new String[]{walletsIdList.get(0)}; 
-				walletsIdList.clear();
-				new addWallet().execute(data);
+				if (this.walletsAdapter.isIncluded(walletsIdList.get(0)))
+				{
+					alertingDialogOneButton = AlertingDialogOneButton.newInstance("Warning", "This wallet was already existed in your list !!", R.drawable.warning);
+					alertingDialogOneButton.show(getSupportFragmentManager(), "This wallet is existed in DB");
+				}
+				else
+				{
+					String[] data = new String[]{walletsIdList.get(0)}; 
+					walletsIdList.clear();
+					new addWallet().execute(data);
+				}
+				
 			}
 		}
 				
 	}
+	
+	public void send()
+	{
+		
+	}
+	
+	public void changeName()
+	{
+		
+	}
+	
 	
 	public int currentView()
 	{
@@ -788,7 +809,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			{
 				String wallet_id = data[0];
 				String wallet_address = connection.getAddressJson(wallet_id).getAddress();
-				BigDecimal wallet_balance = connection.getBalanceJson(wallet_id).getBalance();
+				BigDecimal wallet_balance = connection.getBalanceJson(wallet_id).getBalance().divide(new BigDecimal(Math.pow(10, 8)));
 				
 				if (notEmpty(wallet_id) && notEmpty(wallet_address) && notEmpty(wallet_balance.toString()))
 				{

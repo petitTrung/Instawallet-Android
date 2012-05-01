@@ -130,5 +130,19 @@ public class WalletsAdapter extends BaseAdapter
 
 		return convertView;
 	}
+	
+	public boolean isIncluded(String wallet_id)
+	{
+		LinkedList<String> walletsIDList = this.db.getAllWalletsID();
+		
+		for (int i = 0 ; i < walletsIDList.size() ; i++ )
+		{
+			if (walletsIDList.get(i).equals(wallet_id))
+			{
+				return true;
+			}			
+		}
+		return false;
+	}
 
 }
