@@ -257,7 +257,7 @@ public class Connection
 		
 		if(successful && address)
 		{
-			System.out.println("Get an address !!");
+			//System.out.println("Get an address !!");
 			
 			Address a = gson.fromJson(response, Address.class);
 			
@@ -291,7 +291,7 @@ public class Connection
 		
 		if(successful && balance)
 		{
-			System.out.println("Get a balance !!");
+			//System.out.println("Get a balance !!");
 			
 			Balance a = gson.fromJson(response, Balance.class);
 			

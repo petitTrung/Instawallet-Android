@@ -345,6 +345,14 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     
     public class refreshAllWallets extends AsyncTask<String, Integer, String>
     {
+    	private LinkedList<Wallet> update;
+    	
+    	public refreshAllWallets() 
+    	{
+			// TODO Auto-generated constructor stub
+    		this.update = new LinkedList<Wallet>();
+		}
+    	
     	@Override
     	protected void onPreExecute() 
     	{
@@ -365,11 +373,12 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			
 			
 			String[] walletsIDList = params;
+			
 			for(int i = 0 ; i < walletsIDList.length ; i++ )
 			{
 				try 
 				{
-					walletsAdapter.updateItem(connection.getWallet(walletsIDList[i]));
+					this.update.add(connection.getWallet(walletsIDList[i]));
 					
 					if (i == 0)
 					{
@@ -427,7 +436,13 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			{
 				usd.setText("1 BTC = " + USD + " USD");
 				eur.setText("1 BTC = " + EUR + " EUR");
-				gbp.setText("1 BTC = " + GBP + " GBP");
+				gbp.setText("1 BTC = " + GBP + " GBP");			
+				
+				for (int i = 0 ; i < this.update.size() ; i++ )
+				{
+					walletsAdapter.updateItem(this.update.get(i));
+				}
+				
 				
 				alertingDialogOneButton = AlertingDialogOneButton.newInstance("Successful !!", "All of wallets have been updated !", R.drawable.ok);
 				alertingDialogOneButton.show(getSupportFragmentManager(), "ok alerting dialog");
@@ -438,6 +453,13 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     
     public class refreshWallet extends AsyncTask<String, Integer, String>
     {
+    	private Wallet wallet;
+    	
+    	public refreshWallet() 
+    	{
+			// TODO Auto-generated constructor stub
+    		this.wallet = new Wallet();
+		}
 
     	@Override
     	protected void onPreExecute() 
@@ -456,7 +478,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			
 			try 
 			{
-				walletsAdapter.updateItem(connection.getWallet(wallet_id));
+				wallet = connection.getWallet(wallet_id);
 			} 
 			catch (IOException e) 
 			{
@@ -473,8 +495,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				
 				return "slow connection";
 			}	
-			
-			
+	
 			return "OK";
 		}
 		
@@ -498,6 +519,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			}
 			else if (result.equals("OK"))
 			{
+				walletsAdapter.updateItem(wallet);
+				
 				alertingDialogOneButton = AlertingDialogOneButton.newInstance("Successful !!", "This wallet has been updated !", R.drawable.ok);
 				alertingDialogOneButton.show(getSupportFragmentManager(), "ok alerting dialog");
 			}

@@ -49,10 +49,9 @@ public class WalletsAdapter extends BaseAdapter
 	public void updateItem(Wallet wallet)
 	{
 		int index = -1;
-		
 		for (int i = 0 ; i < this.walletsList.size() ; i++ )
 		{
-			if (this.walletsList.get(i).equals(wallet))
+			if (this.walletsList.get(i).getWallet_id().equals(wallet.getWallet_id()))
 			{
 				index = i;
 				break;
@@ -62,6 +61,9 @@ public class WalletsAdapter extends BaseAdapter
 		if (index >= 0)
 		{
 			this.walletsList.set(index, wallet);
+			
+			System.out.println("update : " + wallet);
+			
 			this.notifyDataSetChanged();
 			this.db.updateWallet(wallet);
 		}
