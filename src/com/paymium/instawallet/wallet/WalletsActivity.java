@@ -209,7 +209,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         	@Override
 			public void onItemClick(QuickAction source, int pos, int actionId) 
 			{			
-				// TODO Auto-generated method stub
 				if (actionId == ID_DETAIL)
 				{
 					flipToQrCode(wl);
@@ -319,12 +318,10 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				} 
 				catch (IOException e) 
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} 
 				catch (ConnectionNotInitializedException e) 
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -362,14 +359,12 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     	
     	public refreshAllWallets() 
     	{
-			// TODO Auto-generated constructor stub
     		this.update = new LinkedList<Wallet>();
 		}
     	
     	@Override
     	protected void onPreExecute() 
     	{
-    		// TODO Auto-generated method stub
     		super.onPreExecute();
     		loadingDialog = LoadingDialog.newInstance("Please wait", "Loading ...");			  									
 			loadingDialog.show(getSupportFragmentManager(), "loading dialog all refresh");
@@ -378,7 +373,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		@Override
 		protected String doInBackground(String... params) 
 		{
-			// TODO Auto-generated method stub
 			for (int i = 0 ; i < params.length ; i++)
 			{
 				System.out.println(params[i]);
@@ -430,7 +424,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		@Override
 		protected void onPostExecute(String result) 
 		{
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			
 			loadingDialog.dismiss();
@@ -470,14 +463,12 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     	
     	public refreshWallet() 
     	{
-			// TODO Auto-generated constructor stub
     		this.wallet = new Wallet();
 		}
 
     	@Override
     	protected void onPreExecute() 
     	{
-    		// TODO Auto-generated method stub
     		super.onPreExecute();
     		loadingDialog = LoadingDialog.newInstance("Please wait", "Loading ...");			  									
 			loadingDialog.show(getSupportFragmentManager(), "loading dialog refresh");
@@ -486,7 +477,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		@Override
 		protected String doInBackground(String... params) 
 		{
-			// TODO Auto-generated method stub
 			String wallet_id = params[0];
 			
 			try 
@@ -515,7 +505,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		@Override
 		protected void onPostExecute(String result) 
 		{
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			
 			loadingDialog.dismiss();
@@ -741,7 +730,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) 
 	{
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, intent);
 		if (requestCode == REQUEST_CODE) 
 		{
@@ -763,7 +751,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	@Override
 	protected void onStart() 
 	{
-		// TODO Auto-generated method stub
 		super.onStart();
 		
 		if (walletsIdList != null)
@@ -868,7 +855,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		@Override
 		protected Object doInBackground(String... data) 
 		{
-			// TODO Auto-generated method stub
 			Wallet wallet = null;
 			System.out.println("data : " + data[0]);
 			try 
@@ -910,7 +896,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		@Override
 		protected void onPostExecute(Object result) 
 		{
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			
 			loadingDialog.dismiss();
@@ -960,7 +945,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		@Override
 		protected Object doInBackground(String... arg0) 
 		{
-			// TODO Auto-generated method stub
 			NewWallet newWallet;
 			Wallet wallet = null;
 			
@@ -1005,7 +989,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		@Override
 		protected void onPostExecute(Object result) 
 		{
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			
 			loadingDialog.dismiss();
@@ -1045,7 +1028,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		@Override
 		public void onCreate(Bundle savedInstanceState) 
 		{
-			// TODO Auto-generated method stub
 			super.onCreate(savedInstanceState);
 			setHasOptionsMenu(true);
 		}
@@ -1053,7 +1035,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		@Override
 		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) 
 		{
-			// TODO Auto-generated method stub
 			super.onCreateOptionsMenu(menu, inflater);
 			MenuItem refresh = menu.add(0,0,0,"Refresh");
 	    	{
@@ -1101,7 +1082,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		@Override
 		public void onCreate(Bundle savedInstanceState) 
 		{
-			// TODO Auto-generated method stub
 			super.onCreate(savedInstanceState);
 			setHasOptionsMenu(true);	
 		}
@@ -1109,7 +1089,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		@Override
 		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) 
 		{
-			// TODO Auto-generated method stub
 			super.onCreateOptionsMenu(menu, inflater);
 			
 			MenuItem refresh = menu.add(0,0,0,"Refresh");
@@ -1187,7 +1166,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		@Override
 		public void onActivityResult(int requestCode, int resultCode, Intent intent) 
 		{
-			// TODO Auto-generated method stub
 			super.onActivityResult(requestCode, resultCode, intent);
 			
 			ExtractAddressBitcoin extractAddressBitcoin = new ExtractAddressBitcoin();
@@ -1258,14 +1236,12 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				} 
 	    		catch (IOException e) 
 	    		{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					
 					return;
 				} 
 	    		catch (ConnectionNotInitializedException e) 
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					
 					return;

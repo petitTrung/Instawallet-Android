@@ -103,7 +103,6 @@ public class SendActivity extends SherlockFragmentActivity implements OnClickLis
 		@Override
 		protected void onPreExecute() 
 		{
-			// TODO Auto-generated method stub
 			super.onPreExecute();
 			
 			loadingDialog = LoadingDialog.newInstance("Please wait", "Loading ...");			  									
@@ -113,7 +112,6 @@ public class SendActivity extends SherlockFragmentActivity implements OnClickLis
 		@Override
 		protected String doInBackground(String... params) 
 		{
-			// TODO Auto-generated method stub
 			try 
 			{
 				payment = Connection.getInstance().postPayment(extras.getString("wallet_id"), extras.getString("address"), new BigDecimal(amount.getText().toString()));
@@ -140,7 +138,6 @@ public class SendActivity extends SherlockFragmentActivity implements OnClickLis
 		@Override
 		protected void onPostExecute(String result) 
 		{
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			
 			loadingDialog.dismiss();
