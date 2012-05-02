@@ -28,6 +28,8 @@
         <activity android:name=".send.SendActivity">
         </activity>
         
+        <activity android:name=".wallet.About" android:theme="@style/Theme.Sherlock.Dialog"></activity>
+        
         <activity android:name="com.google.zxing.client.android.CaptureActivity"
 	              android:screenOrientation="landscape"
 	              android:configChanges="orientation|keyboardHidden"

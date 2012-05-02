@@ -21,7 +21,7 @@
     <string name="wallet_updated">Ce wallet est mis à jour</string>
     
     <string name="refresh_all">Rafraîchir tous les wallets ...</string>
-    <string name="refresh">Rafraîchir ce wallet ...</string>
+    <string name="refresh_one">Rafraîchir ce wallet ...</string>
     
     <string name="no_connection_no_update_wallet">Problème de connexion, ce wallet n\'a pu être mis à jour</string>
     <string name="slow_connection_no_update_wallet">La connexion est trop lente, ce wallet n\'a pu être mis à jour</string>
@@ -100,5 +100,8 @@
     <string name="eight">Validation du montant est impossible</string>
     <string name="minus_four">Désolé, cela ne ressemble pas à une adresse valide Bitcoin</string>
     <string name="minus_six">Vous n\'avez pas assez de BTC pour effectuer cette opération </string>
+    
+    <string name="about">Instawallet est conçu pour être utilisé comme une portefeuille temporaire pour vos bitcoins. Nous vous déconseillons d\'utiliser Instawallets pour stocker une grande quantité de bitcoins accessibles à partir de vos téléphones qui peuvent être perdus ou volés. Assurez-vous de sauvegarder votre ID unique d\'Instawallet (via l\'onglet EXPORTER dessous) ou transférer vos bitcoins à une plus grande portefeuille tel que Paytunia.com</string>
+    <string name="confirm">Assurez-vous d\'enregistrer l\'id du wallet avant de l\'enlever. Supprimer ce wallet ?</string>
     
 </resources>

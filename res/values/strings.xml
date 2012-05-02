@@ -21,7 +21,7 @@
     <string name="wallet_updated">This wallet has been updated</string>
     
     <string name="refresh_all">Refreshing all of wallets ...</string>
-    <string name="refresh">Refreshing this wallet ...</string>
+    <string name="refresh_one">Refreshing this wallet ...</string>
     
     <string name="no_connection_no_update_wallet">Connection problems, this wallet can\'t be updated</string>
     <string name="slow_connection_no_update_wallet">Connection is too slow, this wallet can\'t be updated</string>
@@ -100,5 +100,8 @@
     <string name="eight">Unable to validate the Bitcoin address</string>
     <string name="minus_four">Sorry, this does not seem to be a valid Bitcoin address</string>
     <string name="minus_six">Account has insufficient funds (or not enough confirmations) to complete this action</string>
+    
+    <string name="about">Instawallets are designed to serve as temporary wallets for your bitcoins. We DO NOT recommend using Instawallets to store large amounts of bitcoins accessible from devices that can be lost or stolen. Make sure you backup your Instawallet Unique ID or transfer or transfer your coins to a super wallet such as Paytunia.com</string>
 
+    <string name="confirm">Please save your wallet ID before removing. Remove this wallet anyway ?</string>
 </resources>

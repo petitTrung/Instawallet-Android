@@ -9,6 +9,7 @@ import net.londatiga.android.ActionItem;
 import net.londatiga.android.QuickAction;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
+import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -46,6 +48,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.paymium.instawallet.R;
 import com.paymium.instawallet.database.WalletsHandler;
+import com.paymium.instawallet.dialog.AlertingDialog;
 import com.paymium.instawallet.dialog.AlertingDialogOneButton;
 import com.paymium.instawallet.dialog.LoadingDialog;
 import com.paymium.instawallet.exception.ConnectionNotInitializedException;
@@ -60,7 +63,7 @@ import com.paymium.instawallet.send.SendActivity;
 public class WalletsActivity extends SherlockFragmentActivity implements OnClickListener 
 {
 	private ListView walletsList;
-	private WalletsAdapter walletsAdapter;
+	private static WalletsAdapter walletsAdapter;
 	
 	private ViewAnimator viewAnimator;
 	
@@ -78,7 +81,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	private static final int ID_DELETE = 2;
 	private static final int ID_SAVE = 3;
 	private static final int ID_SHARE = 4;
-	private Wallet wl;
+	private static Wallet wl;
 	
 	private FragmentManager fragmentManager;
 	
@@ -486,7 +489,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     	{
     		super.onPreExecute();
     		loadingDialog = LoadingDialog.newInstance(getResources().getString(R.string.please_wait),
-    												getResources().getString(R.string.refresh));
+    												getResources().getString(R.string.refresh_one));
     		
 			loadingDialog.show(getSupportFragmentManager(), "loading dialog refresh");
     	}
@@ -748,7 +751,10 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	
 	public void deleteItem()
 	{
-		this.walletsAdapter.removeItem(wl);
+		alertingDialogDelete = AlertingDialogDelete.newInstance(getResources().getString(R.string.warning), 
+																getResources().getString(R.string.confirm),
+																R.drawable.warning);			  									
+		alertingDialogDelete.show(getSupportFragmentManager(), "alert dialog delete");
 	}
 	
 	
@@ -1118,7 +1124,10 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 					return true;
 					
 				case 1:
-						
+					
+					Intent about = new Intent(getActivity(), About.class);
+					startActivity(about);
+					
 					return true;
 					
 			};
@@ -1189,8 +1198,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				case 2:
 					
 					AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
-					
-					changeMenu();
+						
+					//changeMenu();
 					
 					deleteItem();
 					
@@ -1311,6 +1320,53 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		return (s != null && s.length() > 0);
 	}
 	
-    
+	
+	private AlertingDialogDelete alertingDialogDelete;
+	
+	public static class AlertingDialogDelete extends SherlockDialogFragment
+	{
+		public static AlertingDialogDelete newInstance(String title, String message, int icon)
+		{
+			AlertingDialogDelete frag = new AlertingDialogDelete();
+			Bundle args = new Bundle();
+			args.putString("title", title);
+			args.putString("message", message);
+			args.putInt("icon", icon);
+			frag.setArguments(args);
+			
+			return frag;
+		}
+		
+		public Dialog onCreateDialog(Bundle savedInstanceState)
+		{
+			String title = getArguments().getString("title");
+			String message = getArguments().getString("message");
+			int icon = getArguments().getInt("icon");
+			
+			AlertDialog.Builder aldg = new AlertDialog.Builder(getActivity());
+			
+			aldg.setIcon(getActivity().getResources().getDrawable(icon));
+			aldg.setTitle(title);
+			aldg.setMessage(message);
+			
+			aldg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) 
+				{
+					//Toast.makeText(getActivity(), "click on OK", Toast.LENGTH_LONG);
+					walletsAdapter.removeItem(wl);
+				}
+			});
+			
+			aldg.setNegativeButton(getActivity().getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) 
+				{
+					//Toast.makeText(getActivity(), "click on Cancel", Toast.LENGTH_LONG);
+				}
+			});	
+			
+			return aldg.create();
+		}
+		
+	}
     
 }
