@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -101,7 +102,7 @@ public class Connection
 			System.setProperty("http.keepAlive", "false");
 	        System.out.println("Android version <= 2.2");
 	        
-	        DefaultHttpClient http_client = new MyHttpClient(context);
+	        DefaultHttpClient http_client = new DefaultHttpClient();
         	
 	        HttpGet http_get = new HttpGet(url);
 	        http_get.setHeader("Accept", "application/json");
@@ -147,7 +148,7 @@ public class Connection
 				{
 					String jsonString = jsonData.toString();
 		        	
-		        	DefaultHttpClient http_client = new MyHttpClient(context);
+		        	DefaultHttpClient http_client = new DefaultHttpClient();
 		        	
 					HttpPost http_post = new HttpPost(url);
 					http_post.setHeader("Accept", "application/json");
@@ -387,7 +388,7 @@ public class Connection
 		System.setProperty("http.keepAlive", "false");
         System.out.println("Android version <= 2.2");
         
-        DefaultHttpClient http_client = new MyHttpClient(context);
+        HttpClient http_client = new DefaultHttpClient();
     	
         HttpGet http_get = new HttpGet("http://bitcoincharts.com/t/weighted_prices.json");
         http_get.setHeader("Accept", "application/json");

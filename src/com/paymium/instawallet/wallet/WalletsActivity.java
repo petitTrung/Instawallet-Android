@@ -20,7 +20,9 @@ import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -108,6 +110,12 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         setContentView(R.layout.wallets);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         
+        if (android.os.Build.VERSION.SDK_INT >= 11)
+        {
+        	StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        	StrictMode.setThreadPolicy(policy);
+        }
+
         this.intentFilter = new IntentFilter();
         this.intentFilter.addAction("SENT");
         
@@ -1103,7 +1111,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	    		send.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
 	    	}
 	    	
-	    	MenuItem delete = menu.add(0,3,3,"Release this Wallet");
+	    	MenuItem delete = menu.add(0,2,2,"Release this Wallet");
 	    	{
 	    		delete.setIcon(R.drawable.delete);
 	    		delete.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
@@ -1135,12 +1143,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 					startActivityForResult(intent, REQUEST_SEND);
 					
 					return true;
-					
+
 				case 2:
-					
-					return true;
-					
-				case 3:
 					
 					AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
 					
