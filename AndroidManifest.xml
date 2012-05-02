@@ -25,6 +25,8 @@
             </intent-filter>
         </activity>
         
+        <activity android:name=".send.SendActivity">
+        </activity>
         
         <activity android:name="com.google.zxing.client.android.CaptureActivity"
 	              android:screenOrientation="landscape"

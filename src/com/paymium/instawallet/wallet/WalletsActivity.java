@@ -2,6 +2,7 @@ package com.paymium.instawallet.wallet;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import net.londatiga.android.ActionItem;
@@ -50,6 +51,7 @@ import com.paymium.instawallet.flip.AnimationFactory.FlipDirection;
 import com.paymium.instawallet.json.NewWallet;
 import com.paymium.instawallet.market.MarketPrices;
 import com.paymium.instawallet.qrcode.QrCode;
+import com.paymium.instawallet.send.SendActivity;
 
 
 public class WalletsActivity extends SherlockFragmentActivity implements OnClickListener 
@@ -65,6 +67,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	private Fragment menuSingleWallet;
 	
 	private static final int REQUEST_CODE = 1;
+	private static final int REQUEST_SEND = 2;
 	
 	private WalletsHandler wallets_db;
 
@@ -84,6 +87,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	private TextView clickCopy;
 	
 	private LinkedList<String> walletsIdList;
+	private ArrayList<String> addressBitcoin;
 	
 	private MarketPrices marketPrices;
 	private TextView usd,eur,gbp;
@@ -755,10 +759,10 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		
 		if (walletsIdList != null)
 		{
-			for (int i = 0 ; i < walletsIdList.size();i++)
+			/*for (int i = 0 ; i < walletsIdList.size();i++)
 			{
 	    		System.out.println( walletsIdList.get(i).toString());
-	    	}	
+	    	}	*/
 	        	
 			
 			if (walletsIdList.size() == 0)
@@ -787,13 +791,40 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				
 			}
 		}
+		
+		if (addressBitcoin != null)
+		{
+			if (addressBitcoin.size() == 0)
+			{
+				alertingDialogOneButton = AlertingDialogOneButton.newInstance("Warning", "No bitcoin address found", R.drawable.warning);
+				alertingDialogOneButton.show(getSupportFragmentManager(), "No bitcoin address found");
+			}
+			else if (addressBitcoin.size() > 1)
+			{
+				alertingDialogOneButton = AlertingDialogOneButton.newInstance("Warning", "There are more than one bitcoin address found", R.drawable.warning);
+				alertingDialogOneButton.show(getSupportFragmentManager(), "More than one btc address found");
+			}
+			else
+			{
+				AddressBitcoinValidator addressBitcoinValidator = new AddressBitcoinValidator();
+				if (addressBitcoinValidator.validate(addressBitcoin.get(0)))
+				{
+					Intent send  = new Intent(this, SendActivity.class);
+					send.putExtra("address", addressBitcoin.get(0));
+					
+					startActivity(send);
+
+				}
+				else
+				{
+					alertingDialogOneButton = AlertingDialogOneButton.newInstance("Warning", "This address is invalid !!", R.drawable.warning);
+					alertingDialogOneButton.show(getSupportFragmentManager(), "Invalid btc address");
+				}
+			}
+		}
 				
 	}
 	
-	public void send()
-	{
-		
-	}
 	
 	public void changeName()
 	{
@@ -1113,6 +1144,11 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 					
 				case 1:
 					
+					Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+					intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+
+					startActivityForResult(intent, REQUEST_SEND);
+					
 					return true;
 					
 				case 2:
@@ -1140,6 +1176,30 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			};
 			
 			return false;
+		}
+		
+		@Override
+		public void onActivityResult(int requestCode, int resultCode, Intent intent) 
+		{
+			// TODO Auto-generated method stub
+			super.onActivityResult(requestCode, resultCode, intent);
+			
+			ExtractAddressBitcoin extractAddressBitcoin = new ExtractAddressBitcoin();
+			
+			if (requestCode == REQUEST_SEND) 
+			{
+				if (resultCode == RESULT_OK) 
+				{
+					String address = intent.getStringExtra("SCAN_RESULT");
+					//String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+
+					System.out.println("Bitcoin Address : " + address);
+					
+					addressBitcoin = new ArrayList<String>();
+
+					addressBitcoin = extractAddressBitcoin.extract(address);
+				}
+			}
 		}
 	}
 	
