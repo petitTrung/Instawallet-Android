@@ -84,7 +84,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	
 	private ImageView qr;
 	private TextView btcAddress;
-	private TextView clickCopy;
+	private TextView balance;
 	
 	private LinkedList<String> walletsIdList;
 	private ArrayList<String> addressBitcoin;
@@ -124,8 +124,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
             
         this.qr = (ImageView) findViewById(R.id.imageView1);
         this.btcAddress = (TextView) findViewById(R.id.textView7);
-        this.clickCopy = (TextView) findViewById(R.id.textView6);
-        this.clickCopy.setText("Click on image to copy your BTC address");
+        this.balance = (TextView) findViewById(R.id.textView6);
         
         this.viewAnimator = (ViewAnimator) findViewById(R.id.viewFlipper);
         
@@ -259,6 +258,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     	
     	this.qr.setImageBitmap(QrCode.generateQrCode(wallet.getWallet_address(), 450, 450));
     	this.btcAddress.setText(wallet.getWallet_address());
+    	this.balance.setText("Balance : " + wallet.getWallet_balance().toString() + " BTC");
     	
     	changeMenu();
     }
@@ -811,6 +811,9 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				{
 					Intent send  = new Intent(this, SendActivity.class);
 					send.putExtra("address", addressBitcoin.get(0));
+					send.putExtra("wallet_id", wl.getWallet_id());
+					
+					addressBitcoin = null;
 					
 					startActivity(send);
 
@@ -1110,12 +1113,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	    	{
 	    		send.setIcon(R.drawable.send);
 	    		send.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
-	    	}
-	    	
-	    	MenuItem rename = menu.add(0,2,2,"Change Wallet Name");
-	    	{
-	    		rename.setIcon(R.drawable.remane);
-	    		rename.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
 	    	}
 	    	
 	    	MenuItem delete = menu.add(0,3,3,"Release this Wallet");

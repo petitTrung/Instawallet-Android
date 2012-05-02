@@ -320,7 +320,7 @@ public class Connection
 	
 	private DecimalFormat decimalFormat;
 	
-	public Object postPayment(String wallet_id, String address, BigDecimal amount) throws IOException, ConnectionNotInitializedException
+	public Payment postPayment(String wallet_id, String address, BigDecimal amount) throws IOException, ConnectionNotInitializedException
 	{
 		this.setPayment(true);		
 		
@@ -336,22 +336,23 @@ public class Connection
 		jsonData.add("address", addressJson);
 		jsonData.add("amount", amountJson);;
 		
-		System.out.println(jsonData.toString());
+		/*System.out.println(jsonData.toString());
 		
 		Pattern pattern;
 		Matcher matcher;
-		boolean successful;
+		boolean successful;*/
 		
 		String response = postMethod(Constant.paymentUrl(wallet_id), jsonData);
 		
-		System.out.println("Payment result : " + response);
+		/*System.out.println("Payment result : " + response);
 		
 		pattern = Pattern.compile("true");
 		matcher = pattern.matcher(response);
-		successful = matcher.find();
+		successful = matcher.find();*/
 
 		
-		if(successful)
+		return this.gson.fromJson(response, Payment.class);
+		/*if(successful)
 		{
 			return (this.gson.fromJson(response, Payment.class));
 		}
@@ -365,7 +366,7 @@ public class Connection
 			
 			return a.getMessage();
 
-		}
+		}*/
 	}
 	
 
