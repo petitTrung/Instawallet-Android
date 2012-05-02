@@ -3,6 +3,102 @@
 
     <string name="hello">Hello World, InstawalletActivity!</string>
     <string name="app_name">Instawallet</string>
-    <string name="fail">fail</string>
+    
+    <string name="detail">Detail</string>
+    <string name="remove">Remove</string>
+    <string name="save">Save</string>
+    <string name="share_item">Share</string>
+    <string name="prices">Market Prices</string>
+    <string name="please_wait">Please wait</string>
+    <string name="loading">Loading ...</string>
+    
+    <string name="balance">Balance</string>
+    
+    <string name="fail">Fail !!</string>
+    
+    <string name="successful">Successful !!</string>
+    <string name="all_wallets_updated">All of wallets have been updated</string>
+    <string name="wallet_updated">This wallet has been updated</string>
+    
+    <string name="refresh_all">Refreshing all of wallets ...</string>
+    <string name="refresh">Refreshing this wallet ...</string>
+    
+    <string name="no_connection_no_update_wallet">Connection problems, this wallet can\'t be updated</string>
+    <string name="slow_connection_no_update_wallet">Connection is too slow, this wallet can\'t be updated</string>
+    
+    <string name="no_connection_no_update_all_wallets">Connection problems, all of wallets can\'t be updated</string>
+    <string name="slow_connection_no_update_all_wallets">Connection is too slow, all of wallets can\'t be updated</string>
+    
+    <string name="create_wallet">Create a new wallet</string>
+    <string name="scan_id">Scan an existing wallet ID</string>
+    <string name="add_wallet">Add a wallet</string>
+    
+    <string name="cancel">Cancel</string>
+    
+    <string name="your_wallets_ids">Your Instawallets IDs : </string>
+    <string name="your_wallet_id">Your Instawallets IDs : </string>
+    <string name="save_wallets_ids">Save your Instawallets IDs</string>
+    <string name="save_wallet_id">Save your Instawallet ID</string>
+    
+    <string name="warning">Warning</string>
+    <string name="please_select_wallet">Please select a wallet to share</string>
+    
+    <string name="send_via_email">Send via E-mail</string>
+    <string name="send_via_sms">Send via SMS</string>
+    <string name="copy_to_clipboard">Copy to clipboard</string>
+    <string name="send_btc_address">Send Bitcoin Address</string>
+    
+    <string name="please_send_to_address">Please send your bitcoins to this address : </string>
+    <string name="is_copied_to_clipboard">This Bitcoin address of this wallet is copied to clipboard</string>
+    
+    <string name="no_id_found">There isn\'t any wallet id was found</string>
+    <string name="more_than_one_id">There are more than one wallet id found</string>
+    <string name="wallet_existed">This wallet was already existed in your list !!</string>
+    
+    <string name="no_address_found">There isn\'t any BTC address was found</string>
+    <string name="more_than_one_address">"There are more than one bitcoin address found</string>
+    <string name="invalid_address">This BTC address is invalid</string>
+    
+    <string name="add_wallet">Analysing QR code ...</string>
+    
+    <string name="wallet_added">A wallet has been added</string>
+    <string name="no_connection_no_wallet">Connection problems, impossible to add a new wallet</string>
+    <string name="slow_connection_no_wallet">Connection is too slow, impossible to add a new wallet</string>
+    <string name="unknown_problem">Unknown problem, please try again later</string>
+    
+    <string name="refresh">Refresh</string>
+    <string name="about">About</string>
+    
+    <string name="send_coins">Send coins</string>
+    <string name="remove_wallet">Remove this wallet</string>
+    
+    <string name="add">ADD</string>
+    <string name="export">EXPORT</string>
+    <string name="share">SHARE</string>
+    
+    <string name="your_wallets">Your Wallets</string>
+    
+    <string name="send_to">Send to</string>
+    <string name="amount">Amount</string>
+    <string name="validate">Validate</string>
+    <string name="discard">Discard</string>
+    
+    <string name="sending">Sending ...</string>
+    
+    <string name="no_connection_no_sending">Connection problems, impossible to complete this task</string>
+    <string name="slow_connection_no_sending">Connection is too slow, impossible to complete this task</string>
+    
+    <string name="zero">Sent</string>
+    <string name="to">to</string>
+    <string name="one">The API is currently unavailable</string>
+    <string name="two">Please provide a Bitcoin address</string>
+    <string name="three">Please specify the amount you would like to send</string>
+    <string name="four">Sorry, this does not look like a valid Bitcoin address</string>
+    <string name="five">Sorry, impossible to parse the amount field</string>
+    <string name="six">Sorry, currently only amounts of 0.01 BTC and more are supported</string>
+    <string name="seven">Use of green address failed - please contact support</string>
+    <string name="eight">Unable to validate the Bitcoin address</string>
+    <string name="minus_four">Sorry, this does not seem to be a valid Bitcoin address</string>
+    <string name="minus_six">Account has insufficient funds (or not enough confirmations) to complete this action</string>
 
 </resources>

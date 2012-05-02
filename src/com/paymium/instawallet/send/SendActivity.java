@@ -105,7 +105,8 @@ public class SendActivity extends SherlockFragmentActivity implements OnClickLis
 		{
 			super.onPreExecute();
 			
-			loadingDialog = LoadingDialog.newInstance("Please wait", "Loading ...");			  									
+			loadingDialog = LoadingDialog.newInstance(getResources().getString(R.string.please_wait), 
+														getResources().getString(R.string.sending));			  									
 			loadingDialog.show(getSupportFragmentManager(), "loading dialog send");
 		}
 
@@ -144,12 +145,16 @@ public class SendActivity extends SherlockFragmentActivity implements OnClickLis
 			
 			if (result.equals("no connection"))
 			{
-				alertingDialogOneButton = AlertingDialogOneButton.newInstance("Fail !!", "No connection, no wallet has been created", R.drawable.error);
+				alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.fail), 
+																				getResources().getString(R.string.no_connection_no_sending), 
+																				R.drawable.error);
 				alertingDialogOneButton.show(getSupportFragmentManager(), "error 1 alerting dialog");
 			}
 			else if(result.equals("slow connection"))
 			{
-				alertingDialogOneButton = AlertingDialogOneButton.newInstance("Fail !!", "Slow connection, no wallet has been created", R.drawable.error);
+				alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.fail), 
+																				getResources().getString(R.string.slow_connection_no_sending), 
+																				R.drawable.error);
 				alertingDialogOneButton.show(getSupportFragmentManager(), "error 2 alerting dialog");
 			}
 			else if (result.equals("OK"))
@@ -163,17 +168,104 @@ public class SendActivity extends SherlockFragmentActivity implements OnClickLis
 			            sendBroadcast(broadcastIntent);
 			            
 			            
-						alertingDialogFinish = AlertingDialogFinish.newInstance("Send !!", payment.getMessage(), R.drawable.ok);
+						alertingDialogFinish = AlertingDialogFinish.newInstance(getResources().getString(R.string.successful), 
+																				getResources().getString(R.string.zero) + amount.getText().toString() + " BTC " + getResources().getString(R.string.to) + " " + address.getText().toString(), 
+																				R.drawable.ok);
 						alertingDialogFinish.show(getSupportFragmentManager(), "Ok dialog");
 						
 						break;		
 	
-					default:
+					case 1:
 						
-						alertingDialogOneButton = AlertingDialogOneButton.newInstance("Error !!", payment.getMessage(), R.drawable.error);
+						alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.fail), 
+																						getResources().getString(R.string.one), 
+																						R.drawable.error);
 						alertingDialogOneButton.show(getSupportFragmentManager(), "Error dialog");
 						
 						break;
+						
+					case 2:
+						
+						alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.fail), 
+																						getResources().getString(R.string.two), 
+																						R.drawable.error);
+						alertingDialogOneButton.show(getSupportFragmentManager(), "Error dialog");
+						
+						break;
+						
+					case 3:
+						
+						alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.fail), 
+																						getResources().getString(R.string.three), 
+																						R.drawable.error);
+						alertingDialogOneButton.show(getSupportFragmentManager(), "Error dialog");
+						
+						break;
+						
+						
+					case 4:
+						
+						alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.fail), 
+																						getResources().getString(R.string.four), 
+																						R.drawable.error);
+						alertingDialogOneButton.show(getSupportFragmentManager(), "Error dialog");
+						
+						break;
+						
+					case 5:
+						
+						alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.fail), 
+																						getResources().getString(R.string.five), 
+																						R.drawable.error);
+						alertingDialogOneButton.show(getSupportFragmentManager(), "Error dialog");
+						
+						break;
+						
+					case 6:
+						
+						alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.fail), 
+																						getResources().getString(R.string.six), 
+																						R.drawable.error);
+						alertingDialogOneButton.show(getSupportFragmentManager(), "Error dialog");
+						
+						break;
+						
+					case 7:
+						
+						alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.fail), 
+																						getResources().getString(R.string.seven), 
+																						R.drawable.error);
+						alertingDialogOneButton.show(getSupportFragmentManager(), "Error dialog");
+						
+						break;
+						
+					case 8:
+						
+						alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.fail), 
+																						getResources().getString(R.string.eight), 
+																						R.drawable.error);
+						alertingDialogOneButton.show(getSupportFragmentManager(), "Error dialog");
+						
+						break;
+						
+					case -4:
+						
+						alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.fail), 
+																						getResources().getString(R.string.minus_four), 
+																						R.drawable.error);
+						alertingDialogOneButton.show(getSupportFragmentManager(), "Error dialog");
+						
+						break;
+						
+					case -6:
+						
+						alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.fail), 
+																						getResources().getString(R.string.minus_six), 
+																						R.drawable.error);
+						alertingDialogOneButton.show(getSupportFragmentManager(), "Error dialog");
+						
+						break;
+						
 				}
 				
 			}

@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Your Wallets" />
+        android:text="@string/your_wallets" />
 
     <ViewFlipper
         android:id="@+id/viewFlipper"
@@ -55,7 +55,7 @@
 	                    android:layout_width="wrap_content"
 	                    android:layout_height="wrap_content"
 	                    android:layout_gravity="center_horizontal"
-	                    android:text="Market Prices" />
+	                    android:text="@string/prices" />
 		
 	                <TextView
 	                    android:id="@+id/textView3"
@@ -158,7 +158,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="ADD" 
+                    android:text="@string/add" 
                     android:layout_marginTop="10dp"/>
                 
             </LinearLayout>
@@ -185,7 +185,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="EXPORT" 
+                    android:text="@string/export" 
                     android:layout_marginTop="10dp"/>
                 
             </LinearLayout>
@@ -202,6 +202,7 @@
 	                android:id="@+id/imageButton3"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
+	                android:layout_gravity="center_horizontal"
 	                android:background="@null"
 	                android:src="@drawable/toolbar_share" />
 	            <TextView
@@ -209,7 +210,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="SHARE" 
+                    android:text="@string/share" 
                     android:layout_marginTop="10dp"/>
                 
             </LinearLayout>
