@@ -9,9 +9,11 @@ import net.londatiga.android.ActionItem;
 import net.londatiga.android.QuickAction;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
@@ -96,6 +98,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	private Editor editor;
 	private String USD,EUR,GBP;
 	
+	private IntentFilter intentFilter;	
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) 
     {
@@ -103,6 +107,11 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wallets);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        
+        this.intentFilter = new IntentFilter();
+        this.intentFilter.addAction("SENT");
+        
+        this.registerReceiver(intentReceiver, intentFilter);
         
         this.addLayout = (LinearLayout) findViewById(R.id.add);
         this.addLayout.setOnClickListener(this);
@@ -1231,6 +1240,40 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		ft.commit();
 	}
 	
+	
+	private BroadcastReceiver intentReceiver = new BroadcastReceiver() {
+	    @Override
+	    public void onReceive(Context context, Intent intent) 
+	    {
+	    	String action = intent.getAction();
+
+	    	System.out.println("ACTION : " + action);
+
+	    	if (action.equals("SENT"))
+	    	{  		
+	    		System.out.println("Begin to refresh the wallet !!!!");
+	    		try 
+	    		{
+					walletsAdapter.updateItem(connection.getWallet(wl.getWallet_id()));
+				} 
+	    		catch (IOException e) 
+	    		{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					
+					return;
+				} 
+	    		catch (ConnectionNotInitializedException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					
+					return;
+				}
+	    	}
+	    	
+	    }
+	};
 	
 	public boolean notEmpty(String s) 
 	{

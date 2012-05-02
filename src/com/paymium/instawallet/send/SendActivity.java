@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,7 +19,6 @@ import android.widget.EditText;
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.paymium.instawallet.R;
-import com.paymium.instawallet.dialog.AlertingDialog;
 import com.paymium.instawallet.dialog.AlertingDialogOneButton;
 import com.paymium.instawallet.dialog.LoadingDialog;
 import com.paymium.instawallet.exception.ConnectionNotInitializedException;
@@ -161,6 +161,11 @@ public class SendActivity extends SherlockFragmentActivity implements OnClickLis
 				{
 					case 0:
 						
+						Intent broadcastIntent = new Intent();
+			            broadcastIntent.setAction("SENT");
+			            sendBroadcast(broadcastIntent);
+			            
+			            
 						alertingDialogFinish = AlertingDialogFinish.newInstance("Send !!", payment.getMessage(), R.drawable.ok);
 						alertingDialogFinish.show(getSupportFragmentManager(), "Ok dialog");
 						
