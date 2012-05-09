@@ -59,7 +59,7 @@
     <string name="more_than_one_address">"There are more than one bitcoin address found</string>
     <string name="invalid_address">This BTC address is invalid</string>
     
-    <string name="add_wallet">Analysing QR code ...</string>
+    <string name="add_wallet_loading">Analysing QR code ...</string>
     
     <string name="wallet_added">A wallet has been added</string>
     <string name="no_connection_no_wallet">Connection problems, impossible to add a new wallet</string>
@@ -71,12 +71,15 @@
     
     <string name="send_coins">Send coins</string>
     <string name="remove_wallet">Remove this wallet</string>
+    <string name="title_address">Bitcoin Address</string>
+    <string name="title_id">Unique ID</string>
     
     <string name="add">ADD</string>
     <string name="export">EXPORT</string>
     <string name="share">SHARE</string>
     
     <string name="your_wallets">Your Wallets</string>
+    <string name="your_wallet">Wallet</string>
     
     <string name="send_to">Send to</string>
     <string name="amount">Amount</string>

@@ -59,7 +59,7 @@
     <string name="more_than_one_address">Il y a plus d\'une adresse BTC trouvée </string>
     <string name="invalid_address">Cette adresse BTC est invalide</string>
     
-    <string name="add_wallet">Analyser le code QR ...</string>
+    <string name="add_wallet_loading">Analyser le code QR ...</string>
     
     <string name="wallet_added">A wallet has been added</string>
     <string name="no_connection_no_wallet">Problème de connexion, aucun wallet est créé</string>
@@ -69,14 +69,17 @@
     <string name="refresh">Rafraîchir</string>
     <string name="about">A propos d\'Instawallet</string>
     
-    <string name="send_coins">Envoyer</string>
+    <string name="send_coins">Envoyer vos coins</string>
     <string name="remove_wallet">Supprimer ce wallet</string>
+    <string name="title_address">Adresse Bitcoin</string>
+    <string name="title_id">Unique ID</string>
     
     <string name="add">AJOUTER</string>
     <string name="export">EXPORTER</string>
     <string name="share">PARTAGER</string>
     
     <string name="your_wallets">Vos Wallets</string>
+    <string name="your_wallet">Wallet</string>
     
     <string name="send_to">Envoyer à</string>
     <string name="amount">Montant</string>

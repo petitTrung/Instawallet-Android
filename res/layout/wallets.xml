@@ -9,8 +9,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/your_wallets" />
+        android:layout_gravity="center_horizontal" />
 
     <ViewFlipper
         android:id="@+id/viewFlipper"
@@ -90,31 +89,122 @@
 	    <LinearLayout
 	        android:id="@+id/flip2"
 	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
+	        android:layout_height="match_parent"
 	        android:orientation="vertical"
 	        android:background="@drawable/border" >
-
-	        <ImageView
-	            android:id="@+id/imageView1"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:src="@drawable/app_icon" 
-	            android:layout_gravity="center_horizontal"
-	            />
-	        <TextView
-		        android:id="@+id/textView6"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_gravity="center_horizontal"
-		        android:text="Your accounts" />
 	        
-	        <TextView
-		        android:id="@+id/textView7"
+	        <LinearLayout
+		        android:id="@+id/qr"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:layout_gravity="center_horizontal"
-		        android:text="Your accounts" 
-		        android:layout_marginBottom="5dp"/>
+		        android:orientation="horizontal"
+		        android:background="@drawable/border" >
+
+		        <ImageView
+		            android:id="@+id/imageView1"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:src="@drawable/app_icon" 
+		            android:layout_gravity="center_horizontal"
+		            />
+		        
+		        <Button 
+		            android:id="@+id/send_coins"
+		            android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="center_vertical" 
+			        android:text="Send coins"/>
+		        
+		    </LinearLayout>
+		    
+	        
+	        <ScrollView
+		            android:id="@+id/scrollView2"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content" >
+		        
+	            
+		        <LinearLayout
+			        android:layout_width="fill_parent"
+			        android:layout_height="match_parent"
+			        android:orientation="vertical"
+			        android:background="@drawable/border" >
+
+		    
+			        <ImageView
+					    android:src="@android:drawable/divider_horizontal_dark"
+					    android:layout_width="fill_parent"
+					    android:layout_height="wrap_content"
+					    android:scaleType="fitXY"
+					    android:paddingLeft="10dp"
+					    android:paddingRight="10dp"
+					    android:paddingBottom="2dp"
+					    android:paddingTop="2dp" />
+			        
+			        <TextView
+				        android:id="@+id/textView6"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_gravity="center_horizontal"
+				        android:text="balance" />
+			        
+			        <ImageView
+					    android:src="@android:drawable/divider_horizontal_dark"
+					    android:layout_width="fill_parent"
+					    android:layout_height="wrap_content"
+					    android:scaleType="fitXY"
+					    android:paddingLeft="10dp"
+					    android:paddingRight="10dp"
+					    android:paddingBottom="2dp"
+					    android:paddingTop="2dp" />
+			        
+			        <TextView
+				        android:id="@+id/textView7"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_gravity="center_horizontal"
+				        android:text="Your accounts" 
+				        android:layout_marginBottom="5dp"/>
+			        
+			        <TextView
+				        android:id="@+id/textView8"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_gravity="center_horizontal"
+				        android:text="Your accounts" 
+				        android:layout_marginBottom="5dp"/>
+			        
+			        
+			        <ImageView
+					    android:src="@android:drawable/divider_horizontal_dark"
+					    android:layout_width="fill_parent"
+					    android:layout_height="wrap_content"
+					    android:scaleType="fitXY"
+					    android:paddingLeft="10dp"
+					    android:paddingRight="10dp"
+					    android:paddingBottom="2dp"
+					    android:paddingTop="2dp" />
+			        
+			        <TextView
+				        android:id="@+id/textView9"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_gravity="center_horizontal"
+				        android:text="Unique ID" />
+			        
+			        <TextView
+				        android:id="@+id/textView10"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_gravity="center_horizontal"
+				        android:text="ABCDEF" 
+				        android:layout_marginBottom="5dp"/>
+		        
+				
+			        
+				</LinearLayout> 
+			
+	        </ScrollView>
 
 	    </LinearLayout>
 	    

@@ -32,6 +32,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,7 +49,6 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.paymium.instawallet.R;
 import com.paymium.instawallet.database.WalletsHandler;
-import com.paymium.instawallet.dialog.AlertingDialog;
 import com.paymium.instawallet.dialog.AlertingDialogOneButton;
 import com.paymium.instawallet.dialog.LoadingDialog;
 import com.paymium.instawallet.exception.ConnectionNotInitializedException;
@@ -88,9 +88,15 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	private LinearLayout addLayout,exportLayout,shareLayout;
 	private ImageButton add,export,share;
 	
+	private TextView title;
+	private Button sendCoins;
 	private ImageView qr;
-	private TextView btcAddress;
 	private TextView balance;
+	private TextView titleAddress;
+	private TextView btcAddress;
+	private TextView titleID;
+	private TextView instawallet_id;
+	
 	
 	private LinkedList<String> walletsIdList;
 	private ArrayList<String> addressBitcoin;
@@ -141,9 +147,17 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         this.share = (ImageButton) findViewById(R.id.imageButton3);
         this.share.setOnClickListener(this);
             
+        this.title = (TextView) findViewById(R.id.textView1);
+        
+        this.sendCoins = (Button) findViewById(R.id.send_coins);
+        this.sendCoins.setOnClickListener(this);
         this.qr = (ImageView) findViewById(R.id.imageView1);
-        this.btcAddress = (TextView) findViewById(R.id.textView7);
         this.balance = (TextView) findViewById(R.id.textView6);
+        this.titleAddress = (TextView) findViewById(R.id.textView7);
+        this.btcAddress = (TextView) findViewById(R.id.textView8);
+        this.titleID = (TextView) findViewById(R.id.textView9);
+        this.instawallet_id = (TextView) findViewById(R.id.textView10);
+        
         
         this.viewAnimator = (ViewAnimator) findViewById(R.id.viewFlipper);
         
@@ -155,8 +169,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		this.editor = prefs.edit();
         
         this.walletsList = (ListView) findViewById(R.id.listView1);
-        this.walletsAdapter = new WalletsAdapter(this);
-        this.walletsList.setAdapter(this.walletsAdapter);
+        walletsAdapter = new WalletsAdapter(this);
+        this.walletsList.setAdapter(walletsAdapter);
         
         this.connection = Connection.getInstance().initialize(this);
         
@@ -274,9 +288,16 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     {
     	AnimationFactory.flipTransition(this.viewAnimator, FlipDirection.LEFT_RIGHT);
     	
-    	this.qr.setImageBitmap(QrCode.generateQrCode(wallet.getWallet_address(), 450, 450));
-    	this.btcAddress.setText(wallet.getWallet_address());
+    	this.qr.setImageBitmap(QrCode.generateQrCode(wallet.getWallet_address(), 270, 270));
+    	this.sendCoins.setText(getResources().getString(R.string.send_coins));
+    	
     	this.balance.setText(getResources().getString(R.string.balance) + " : " + wallet.getWallet_balance().toString() + " BTC");
+    	
+    	this.titleAddress.setText(getResources().getString(R.string.title_address));
+    	this.btcAddress.setText(wallet.getWallet_address());
+    	
+    	this.titleID.setText(getResources().getString(R.string.title_id));
+    	this.instawallet_id.setText(wallet.getWallet_id());
     	
     	changeMenu();
     }
@@ -286,7 +307,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     {
     	if (this.wallets_db.getAllWallets().size() > 0)
     	{
-    		this.walletsAdapter.addItems(this.wallets_db.getAllWallets());
+    		walletsAdapter.addItems(this.wallets_db.getAllWallets());
     	}
     	
     	//---Check connectivity state
@@ -294,15 +315,15 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		boolean isConnected = (connectionManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED || 
 								connectionManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI  ).getState() == NetworkInfo.State.CONNECTED );	
 		
-		USD = this.prefs.getString("usd", "");
-		EUR = this.prefs.getString("eur", "");
-		GBP = this.prefs.getString("gbp", "");
+		this.USD = this.prefs.getString("usd", "");
+		this.EUR = this.prefs.getString("eur", "");
+		this.GBP = this.prefs.getString("gbp", "");
 		
 		if (!USD.equals("") && !EUR.equals("") && !GBP.equals(""))
 		{
-			this.usd.setText("1 BTC = " + USD + " USD");
-			this.eur.setText("1 BTC = " + EUR + " EUR");
-			this.gbp.setText("1 BTC = " + GBP + " GBP");
+			this.usd.setText("1 BTC = " + this.USD + " USD");
+			this.eur.setText("1 BTC = " + this.EUR + " EUR");
+			this.gbp.setText("1 BTC = " + this.GBP + " GBP");
 		}
 		else
 		{
@@ -312,9 +333,9 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				{
 					this.marketPrices = connection.getMarketPrices();
 					
-					USD = this.marketPrices.getUsd().getDay();
-					EUR = this.marketPrices.getEur().getDay();
-					GBP = this.marketPrices.getGbp().getDay();
+					this.USD = this.marketPrices.getUsd().getDay();
+					this.EUR = this.marketPrices.getEur().getDay();
+					this.GBP = this.marketPrices.getGbp().getDay();
 					
 					this.editor.putString("usd", USD);
 					this.editor.putString("eur", EUR);
@@ -571,6 +592,13 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		{
 			share();
 		}
+		else if (view.getId() == R.id.send_coins)
+		{
+			Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+			intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+
+			startActivityForResult(intent, REQUEST_SEND);
+		}
 		
 		changeMenu();	
 	}
@@ -779,6 +807,21 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
  	           	this.walletIdExtractor = new WalletIdExtractor();
  	           	walletsIdList = this.walletIdExtractor.extract(link);				
 			}
+		}	
+		else if (requestCode == REQUEST_SEND) 
+		{
+			ExtractAddressBitcoin extractAddressBitcoin = new ExtractAddressBitcoin();
+			if (resultCode == RESULT_OK) 
+			{
+				String address = intent.getStringExtra("SCAN_RESULT");
+				//String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+
+				//System.out.println("Bitcoin Address : " + address);
+				
+				addressBitcoin = new ArrayList<String>();
+
+				addressBitcoin = extractAddressBitcoin.extract(address);
+			}
 		}
 	}
 	
@@ -811,7 +854,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			}
 			else
 			{
-				if (this.walletsAdapter.isIncluded(walletsIdList.get(0)))
+				if (walletsAdapter.isIncluded(walletsIdList.get(0)))
 				{
 					this.alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.warning), 
 																					getResources().getString(R.string.wallet_existed), 
@@ -890,7 +933,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			super.onPreExecute();
 			
 			loadingDialog = LoadingDialog.newInstance(getResources().getString(R.string.please_wait), 
-														getResources().getString(R.string.add_wallet));			  									
+														getResources().getString(R.string.add_wallet_loading));			  									
 			loadingDialog.show(getSupportFragmentManager(), "loading dialog add");
 	    } 
 
@@ -1156,13 +1199,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	    		refresh.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
 	    	}
 	    	
-	    	MenuItem send = menu.add(0,1,1,getActivity().getResources().getString(R.string.send_coins));
-	    	{
-	    		send.setIcon(R.drawable.send);
-	    		send.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
-	    	}
-	    	
-	    	MenuItem delete = menu.add(0,2,2,getActivity().getResources().getString(R.string.remove_wallet));
+	    	MenuItem delete = menu.add(0,1,1,getActivity().getResources().getString(R.string.remove_wallet));
 	    	{
 	    		delete.setIcon(R.drawable.delete);
 	    		delete.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);		
@@ -1185,21 +1222,12 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 					refresh();
 					
 					return true;
-					
+
 				case 1:
-					
-					Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-					intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-
-					startActivityForResult(intent, REQUEST_SEND);
-					
-					return true;
-
-				case 2:
 					
 					AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
 						
-					//changeMenu();
+					changeMenu();
 					
 					deleteItem();
 					
@@ -1218,33 +1246,9 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			return false;
 		}
 		
-		@Override
-		public void onActivityResult(int requestCode, int resultCode, Intent intent) 
-		{
-			super.onActivityResult(requestCode, resultCode, intent);
-			
-			ExtractAddressBitcoin extractAddressBitcoin = new ExtractAddressBitcoin();
-			
-			if (requestCode == REQUEST_SEND) 
-			{
-				if (resultCode == RESULT_OK) 
-				{
-					String address = intent.getStringExtra("SCAN_RESULT");
-					//String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-
-					//System.out.println("Bitcoin Address : " + address);
-					
-					addressBitcoin = new ArrayList<String>();
-
-					addressBitcoin = extractAddressBitcoin.extract(address);
-				}
-			}
-		}
 	}
 	
-	
-	
-	
+
 	
 	public void changeMenu()
 	{
@@ -1255,6 +1259,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		{
 			ft.show(this.menuWalletsList);
 			getSupportActionBar().setDisplayHomeAsUpEnabled(false);	
+			
+			this.title.setText(getResources().getString(R.string.your_wallets));
 		}
 		else
 		{
@@ -1265,6 +1271,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		{
 			ft.show(this.menuSingleWallet);
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);	
+			
+			this.title.setText(getResources().getString(R.string.your_wallet));
 		}
 		else
 		{
@@ -1310,7 +1318,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	@Override
 	protected void onDestroy() 
 	{
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		unregisterReceiver(intentReceiver);
 	}
