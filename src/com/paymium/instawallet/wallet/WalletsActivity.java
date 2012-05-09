@@ -15,11 +15,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -57,7 +53,6 @@ import com.paymium.instawallet.exception.ConnectionNotInitializedException;
 import com.paymium.instawallet.flip.AnimationFactory;
 import com.paymium.instawallet.flip.AnimationFactory.FlipDirection;
 import com.paymium.instawallet.json.NewWallet;
-import com.paymium.instawallet.market.MarketPrices;
 import com.paymium.instawallet.qrcode.QrCode;
 import com.paymium.instawallet.send.SendActivity;
 
@@ -102,13 +97,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	
 	private LinkedList<String> walletsIdList;
 	private ArrayList<String> addressBitcoin;
-	
-	private MarketPrices marketPrices;
-	private TextView usd,eur,gbp;
-	
-	private SharedPreferences prefs;
-	private Editor editor;
-	private String USD,EUR,GBP;
 	
 	private IntentFilter intentFilter;	
 	
@@ -163,13 +151,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         
         
         viewAnimator = (ViewAnimator) findViewById(R.id.viewFlipper);
-        
-        this.usd = (TextView) findViewById(R.id.textView3);
-        this.eur = (TextView) findViewById(R.id.textView4);
-        this.gbp = (TextView) findViewById(R.id.textView5);
-        
-		this.prefs = getSharedPreferences("XXX", MODE_PRIVATE);
-		this.editor = prefs.edit();
         
         this.walletsList = (ListView) findViewById(R.id.listView1);
         walletsAdapter = new WalletsAdapter(this);
@@ -313,61 +294,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     	{
     		walletsAdapter.addItems(this.wallets_db.getAllWallets());
     	}
-    	
-    	//---Check connectivity state
-    	ConnectivityManager connectionManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		boolean isConnected = (connectionManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED || 
-								connectionManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI  ).getState() == NetworkInfo.State.CONNECTED );	
-		
-		this.USD = this.prefs.getString("usd", "");
-		this.EUR = this.prefs.getString("eur", "");
-		this.GBP = this.prefs.getString("gbp", "");
-		
-		if (!USD.equals("") && !EUR.equals("") && !GBP.equals(""))
-		{
-			this.usd.setText("1 BTC = " + this.USD + " USD");
-			this.eur.setText("1 BTC = " + this.EUR + " EUR");
-			this.gbp.setText("1 BTC = " + this.GBP + " GBP");
-		}
-		else
-		{
-			if (isConnected)
-			{
-				try 
-				{
-					this.marketPrices = connection.getMarketPrices();
-					
-					this.USD = this.marketPrices.getUsd().getDay();
-					this.EUR = this.marketPrices.getEur().getDay();
-					this.GBP = this.marketPrices.getGbp().getDay();
-					
-					this.editor.putString("usd", USD);
-					this.editor.putString("eur", EUR);
-					this.editor.putString("gbp", GBP);
-					this.editor.commit();
-					
-					this.usd.setText("1 BTC = " + USD + " USD");
-					this.eur.setText("1 BTC = " + EUR + " EUR");
-					this.gbp.setText("1 BTC = " + GBP + " GBP");
-					
-				} 
-				catch (IOException e) 
-				{
-					e.printStackTrace();
-				} 
-				catch (ConnectionNotInitializedException e) 
-				{
-					e.printStackTrace();
-				}
-			}
-			else if(!isConnected)
-			{
-				this.usd.setText("Unavailable"); 
-				this.eur.setText("Unavailable"); 
-				this.gbp.setText("Unavailable"); 
-			}
-		}
-		
+
     }
     
     public void refresh()
@@ -423,20 +350,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				try 
 				{
 					this.update.add(connection.getWallet(walletsIDList[i]));
-					
-					if (i == 0)
-					{
-						marketPrices = connection.getMarketPrices();
-						
-						USD = marketPrices.getUsd().getDay();
-						EUR = marketPrices.getEur().getDay();
-						GBP = marketPrices.getGbp().getDay();
-						
-						editor.putString("usd", USD);
-						editor.putString("eur", EUR);
-						editor.putString("gbp", GBP);
-						editor.commit();
-					}					
 				} 
 				catch (IOException e) 
 				{
@@ -480,10 +393,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				alertingDialogOneButton.show(getSupportFragmentManager(), "error 2 alerting dialog");
 			}
 			else if (result.equals("OK"))
-			{
-				usd.setText("1 BTC = " + USD + " USD");
-				eur.setText("1 BTC = " + EUR + " EUR");
-				gbp.setText("1 BTC = " + GBP + " GBP");			
+			{		
 				
 				for (int i = 0 ; i < this.update.size() ; i++ )
 				{
