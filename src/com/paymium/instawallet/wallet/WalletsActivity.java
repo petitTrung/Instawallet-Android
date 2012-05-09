@@ -30,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,7 +39,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -47,6 +47,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 import com.paymium.instawallet.R;
 import com.paymium.instawallet.database.WalletsHandler;
+import com.paymium.instawallet.database.WalletsNameHandler;
 import com.paymium.instawallet.dialog.AlertingDialogOneButton;
 import com.paymium.instawallet.dialog.LoadingDialog;
 import com.paymium.instawallet.exception.ConnectionNotInitializedException;
@@ -73,6 +74,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	private static final int REQUEST_SEND = 2;
 	
 	private WalletsHandler wallets_db;
+	private WalletsNameHandler wallets_names_db;
 
 	private static final int ID_DETAIL = 1;
 	private static final int ID_DELETE = 2;
@@ -86,7 +88,10 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	private ImageButton add,export,share;
 	
 	private TextView title;
+	
+	private TextView walletName;
 	private Button sendCoins;
+	private Button changeName;
 	private ImageView qr;
 	private TextView balance;
 	private TextView titleAddress;
@@ -139,8 +144,11 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
             
         this.title = (TextView) findViewById(R.id.textView1);
         
+        this.walletName = (TextView) findViewById(R.id.textView2);
         this.sendCoins = (Button) findViewById(R.id.send_coins);
         this.sendCoins.setOnClickListener(this);
+        this.changeName = (Button) findViewById(R.id.change_name);
+        this.changeName.setOnClickListener(this);
         this.qr = (ImageView) findViewById(R.id.imageView1);
         this.qr.setOnClickListener(this);
         this.balance = (TextView) findViewById(R.id.textView6);
@@ -178,6 +186,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 
         
         this.wallets_db = new WalletsHandler(this);
+        this.wallets_names_db = new WalletsNameHandler(this);
+        
         this.load();
    
         changeMenu();
@@ -272,7 +282,17 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     {
     	AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
     	
-    	this.qr.setImageBitmap(QrCode.generateQrCode(wallet.getWallet_address(), 270, 270));
+    	if (this.wallets_names_db.getWalletName(wallet.getWallet_id()).equals(""))
+    	{
+    		this.walletName.setText(getResources().getString(R.string.united));
+    	}
+    	else
+    	{
+    		this.walletName.setText(this.wallets_names_db.getWalletName(wallet.getWallet_id()));
+    	}
+    	
+    	
+    	this.qr.setImageBitmap(QrCode.generateQrCode(wallet.getWallet_address(), 230, 230));
     	this.sendCoins.setText(getResources().getString(R.string.send_coins));
     	
     	this.balance.setText(getResources().getString(R.string.balance) + " : " + wallet.getWallet_balance().toString() + " BTC");
@@ -309,7 +329,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     	else if (this.currentView() == R.id.flip2)
     	{
     		String[] data = new String[]{wl.getWallet_id()};
-    		
     		new refreshWallet().execute(data);
     	}
     
@@ -337,12 +356,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		@Override
 		protected String doInBackground(String... params) 
 		{
-			/*for (int i = 0 ; i < params.length ; i++)
-			{
-				System.out.println(params[i]);
-			}*/
-			
-			
+		
 			String[] walletsIDList = params;
 			
 			for(int i = 0 ; i < walletsIDList.length ; i++ )
@@ -520,10 +534,15 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 
 			startActivityForResult(intent, REQUEST_SEND);
 		}
+		else if (view.getId() == R.id.change_name)
+		{
+			changeName();
+		}
 		else if (view.getId() == R.id.imageView1)
 		{
 			zoomQrCode();
 		}
+		
 		
 		changeMenu();	
 	}
@@ -719,12 +738,81 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	
 	public void deleteItem()
 	{
-		alertingDialogDelete = AlertingDialogDelete.newInstance(getResources().getString(R.string.warning), 
-																getResources().getString(R.string.confirm),
-																R.drawable.warning);			  									
-		alertingDialogDelete.show(getSupportFragmentManager(), "alert dialog delete");
+		AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
+		dlgAlert.setTitle(getResources().getString(R.string.warning));
+        dlgAlert.setMessage(getResources().getString(R.string.confirm));        
+        dlgAlert.setIcon(R.drawable.warning);
+        dlgAlert.setCancelable(true);
+        
+        
+        dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) 
+			{
+				//Toast.makeText(getActivity(), "click on OK", Toast.LENGTH_LONG);
+				walletsAdapter.removeItem(wl);
+				
+				if (currentView() == R.id.flip2)
+				{
+					AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
+				}
+				
+				changeMenu();
+			}
+		});
 		
-		changeMenu();
+        dlgAlert.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) 
+			{
+				//Toast.makeText(getActivity(), "click on Cancel", Toast.LENGTH_LONG);
+			}
+		});	
+        
+        dlgAlert.create().show();
+		
+	}
+	
+	
+	public void changeName()
+	{
+		AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
+		dlgAlert.setTitle(getResources().getString(R.string.rename));       
+        dlgAlert.setIcon(R.drawable.rename);
+		
+		LayoutInflater factory = LayoutInflater.from(this);		
+        View view = factory.inflate(R.layout.change_name, null);
+        
+        dlgAlert.setView(view);
+
+		final EditText et = (EditText) view.findViewById(R.id.editText1);
+			
+		dlgAlert.setCancelable(true);
+		
+		dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) 
+			{
+				//Toast.makeText(getActivity(), "click on OK", Toast.LENGTH_LONG);
+				if (notEmpty(et.getText().toString()))
+				{
+					wallets_names_db.updateWallet(wl,et.getText().toString());
+					walletName.setText(et.getText().toString());
+				}	
+				else if (!notEmpty(et.getText().toString()))
+				{
+					dialog.cancel();
+					Toast.makeText(getBaseContext(), getResources().getString(R.string.name_empty), Toast.LENGTH_LONG).show();			
+				}
+				
+			}
+		});
+		
+        dlgAlert.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) 
+			{
+				//Toast.makeText(getActivity(), "click on Cancel", Toast.LENGTH_LONG);
+			}
+		});	
+        
+        dlgAlert.create().show();
 	}
 	
 	
@@ -1169,10 +1257,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 					
 					deleteItem();
 					
-					AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
-						
-					changeMenu();
-					
 					return true;
 					
 				case android.R.id.home:
@@ -1275,62 +1359,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	public boolean notEmpty(String s) 
 	{
 		return (s != null && s.length() > 0);
-	}
-	
-	
-	private AlertingDialogDelete alertingDialogDelete;
-	
-	public static class AlertingDialogDelete extends SherlockDialogFragment
-	{
-		public static AlertingDialogDelete newInstance(String title, String message, int icon)
-		{
-			AlertingDialogDelete frag = new AlertingDialogDelete();
-			Bundle args = new Bundle();
-			args.putString("title", title);
-			args.putString("message", message);
-			args.putInt("icon", icon);
-			frag.setArguments(args);
-			
-			return frag;
-		}
-		
-		public Dialog onCreateDialog(Bundle savedInstanceState)
-		{
-			String title = getArguments().getString("title");
-			String message = getArguments().getString("message");
-			int icon = getArguments().getInt("icon");
-			
-			AlertDialog.Builder aldg = new AlertDialog.Builder(getActivity());
-			
-			aldg.setIcon(getActivity().getResources().getDrawable(icon));
-			aldg.setTitle(title);
-			aldg.setMessage(message);
-			
-			aldg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) 
-				{
-					//Toast.makeText(getActivity(), "click on OK", Toast.LENGTH_LONG);
-					walletsAdapter.removeItem(wl);
-					if(viewAnimator.getCurrentView().getId() == R.id.flip2)
-					{
-						AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
-					}
-					
-				}
-			});
-			
-			aldg.setNegativeButton(getActivity().getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) 
-				{
-					//Toast.makeText(getActivity(), "click on Cancel", Toast.LENGTH_LONG);
-					AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
-				}
-			});	
-			
-			
-			return aldg.create();
-		}
-		
 	}
     
 }

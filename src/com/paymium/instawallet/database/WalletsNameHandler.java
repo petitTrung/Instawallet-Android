@@ -1,6 +1,5 @@
 package com.paymium.instawallet.database;
 
-import java.math.BigDecimal;
 import java.util.LinkedList;
 
 import com.paymium.instawallet.wallet.Wallet;
@@ -13,38 +12,37 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class WalletsHandler 
+
+public class WalletsNameHandler 
 {
 	// All Static variables
 	// Database Version
 	private static final int DATABASE_VERSION = 2;
 
 	// Database Name
-	private static final String DATABASE_NAME = "WalletsManager";
+	private static final String DATABASE_NAME = "WalletsNameManager";
 
 	// Table name
-	private static final String TABLE_WALLETS = "Wallets";
+	private static final String TABLE_WALLETS_NAME = "WalletsName";
 	
 	// Table Columns names
 	private static final String KEY_ID = "id";
-	private static final String KEY_ADDRESS = "address";
-	private static final String KEY_BALANCE = "balance";
+	private static final String KEY_NAME = "name";
 	
 	private static final String TAG = "DBAdapter";
 	
-	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_WALLETS + "(" + KEY_ID + " TEXT PRIMARY KEY,"								 
-																						+ KEY_ADDRESS + " TEXT NOT NULL,"
-																						+ KEY_BALANCE + " TEXT NOT NULL"
-																				  + ")";	
+	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_WALLETS_NAME + "(" + KEY_ID + " TEXT PRIMARY KEY,"								 
+																							 + KEY_NAME + " TEXT"
+																					   + ")";	
 	private DatabaseHelper DBHelper;
     private SQLiteDatabase db;
-	
-	public WalletsHandler(Context context) 
+    
+    public WalletsNameHandler(Context context) 
 	{
 		this.DBHelper = new DatabaseHelper(context);
 	}
-
-	private static class DatabaseHelper extends SQLiteOpenHelper
+    
+    private static class DatabaseHelper extends SQLiteOpenHelper
 	{
 		DatabaseHelper(Context context)
         {
@@ -79,16 +77,16 @@ public class WalletsHandler
 		public void truncate(SQLiteDatabase db)
 		{ 
 			// Drop older table if existed
-			db.execSQL("DROP TABLE IF EXISTS " + TABLE_WALLETS);
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_WALLETS_NAME);
 
 			// Create tables again
 			onCreate(db);
 
 		}
 	}
-	
+    
 	//---opens the database---
-    public WalletsHandler open() throws SQLException 
+    public WalletsNameHandler open() throws SQLException 
     {
         db = DBHelper.getWritableDatabase();
         return this;
@@ -99,9 +97,10 @@ public class WalletsHandler
     {
         DBHelper.close();
     }
+   
     
-    //---insert a wallet into the database---
-    public void addWallet(Wallet wallet) 
+    //---insert a wallet name into the database---
+    public void addWalletName(Wallet wallet) 
     {
     	if (!this.verifyBeforeAdding(wallet))
     	{
@@ -111,49 +110,72 @@ public class WalletsHandler
     		ContentValues value = new ContentValues();
 
     		value.put(KEY_ID, wallet.getWallet_id());
-    		value.put(KEY_ADDRESS, wallet.getWallet_address());
-    		value.put(KEY_BALANCE, wallet.getWallet_balance().toString());
     		
-    		db.insert(TABLE_WALLETS, null, value);
+    		value.put(KEY_NAME, "");
+    		
+    		db.insert(TABLE_WALLETS_NAME, null, value);
     		
     		this.close();
     		
     		//System.out.println("ADDING A WALLET IS DONE !!");
-    	}	
+    	}
+		
+		
     }
     
-	// Getting a single wallet
-	public Wallet getWallet(String id) 
+    //---insert a wallet name into the database---
+    public void addWalletName(Wallet wallet, String wallet_name) 
+    {
+    	if (!this.verifyBeforeAdding(wallet))
+    	{
+    		//System.out.println("PREPARING FOR ADDING A WALLET!!");
+    		this.open();
+    		
+    		ContentValues value = new ContentValues();
+
+    		value.put(KEY_ID, wallet.getWallet_id());
+    		value.put(KEY_NAME, wallet_name);
+    		
+    		db.insert(TABLE_WALLETS_NAME, null, value);
+    		
+    		this.close();
+    		
+    		//System.out.println("ADDING A WALLET IS DONE !!");
+    	}
+		
+		
+    }
+    
+	// Getting a single wallet name
+	public String getWalletName(String id) 
 	{
 		this.open();
 	 
-	    Cursor cursor = db.query(TABLE_WALLETS, new String[] { KEY_ID, KEY_ADDRESS}, KEY_ID + "=?",
+	    Cursor cursor = db.query(TABLE_WALLETS_NAME, new String[] { KEY_ID, KEY_NAME}, KEY_ID + "=?",
 	            								new String[] { id }, null, null, null, null);
 	    if (cursor != null)
 	        cursor.moveToFirst();
-	 
-	    Wallet wallet = new Wallet();
-		
-		wallet.setWallet_id(cursor.getString(0));
-		wallet.setWallet_address(cursor.getString(1));
-		wallet.setWallet_balance(new BigDecimal(cursor.getString(2)));
+	    
+	    String wallet_name = cursor.getString(1);
+	    
+	    System.out.println("donnee : " + wallet_name);
 	    
 	    cursor.close();
 	    
 	    
 	    this.close();
 	    
-	    // return wallet
-	    return wallet;
+	    // return wallet name
+	    return wallet_name;
 	}
-    
-	// Getting all wallets
-	public LinkedList<Wallet> getAllWallets() 
+	
+	// Getting all wallets names
+	public LinkedList<String> getAllWalletsNames() 
 	{
-		LinkedList<Wallet> walletsList = new LinkedList<Wallet>();
+		LinkedList<String> walletsNamesList = new LinkedList<String>();
 		
 		// Select All Query
-		String selectQuery = "SELECT * FROM " + TABLE_WALLETS;
+		String selectQuery = "SELECT * FROM " + TABLE_WALLETS_NAME;
 
 		this.open();
 		
@@ -164,15 +186,9 @@ public class WalletsHandler
 		{
 			do 
 			{
-				Wallet wallet = new Wallet();
+				String wallet_name = cursor.getString(1);
 				
-				wallet.setWallet_id(cursor.getString(0));
-				wallet.setWallet_address(cursor.getString(1));
-				wallet.setWallet_balance(new BigDecimal(cursor.getString(2)));
-				
-				
-				walletsList.add(wallet);
-				
+				walletsNamesList.add(wallet_name);		
 			} 
 			while (cursor.moveToNext());
 		}
@@ -181,56 +197,72 @@ public class WalletsHandler
 		
 		this.close();
 		
-		// return wallets list
+		// return wallets name list
 		
-		return walletsList;
+		return walletsNamesList;
 	}
 	
-	
-	public LinkedList<String> getAllWalletsID()
+	public LinkedList<String> getAllWalletsIDs()
 	{
-		LinkedList<String> walletsIDList = new LinkedList<String>();
-		LinkedList<Wallet> walletsList = this.getAllWallets();
+		LinkedList<String> walletsIDsList = new LinkedList<String>();
 		
-		for (int i = 0 ; i < walletsList.size() ; i++)
+		// Select All Query
+		String selectQuery = "SELECT * FROM " + TABLE_WALLETS_NAME;
+
+		this.open();
+		
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) 
 		{
-			walletsIDList.add(walletsList.get(i).getWallet_id());
+			do 
+			{
+				String wallet_id = cursor.getString(0);
+				
+				walletsIDsList.add(wallet_id);		
+			} 
+			while (cursor.moveToNext());
 		}
 		
-		return walletsIDList;
+		cursor.close();
+		
+		this.close();
+		
+		// return wallets name list
+		
+		return walletsIDsList;
 	}
 	
-    // Updating a wallet
-	public void updateWallet(Wallet wallet) 
+    // Updating a wallet name
+	public void updateWallet(Wallet wallet, String wallet_name) 
 	{ 
 		this.open();
 			
 	    ContentValues value = new ContentValues();
 	    
 	    value.put(KEY_ID, wallet.getWallet_id());
-		value.put(KEY_ADDRESS, wallet.getWallet_address());
-		value.put(KEY_BALANCE, wallet.getWallet_balance().toString());
+		value.put(KEY_NAME, wallet_name);
 	 
 	    // updating row
-	    db.update(TABLE_WALLETS, value, KEY_ID + " = ?", new String[] { wallet.getWallet_id() });
+	    db.update(TABLE_WALLETS_NAME, value, KEY_ID + " = ?", new String[] { wallet.getWallet_id() });
 	    
 	    this.close();
 	}
 	
-	
-    // Deleting a wallet
+    // Deleting a wallet name
 	public void deleteWallet(Wallet wallet) 
 	{
 		this.open();
 		
-	    db.delete(TABLE_WALLETS, KEY_ID + " = ?", new String[] { wallet.getWallet_id() });
+	    db.delete(TABLE_WALLETS_NAME, KEY_ID + " = ?", new String[] { wallet.getWallet_id() });
 	    
 	    this.close();
 	}
-	
+    
 	public boolean verifyBeforeAdding(Wallet wallet)
 	{
-		LinkedList<String> walletsIDList = this.getAllWalletsID();
+		LinkedList<String> walletsIDList = this.getAllWalletsIDs();
 		
 		for (int i = 0 ; i < walletsIDList.size() ; i++)
 		{
@@ -241,5 +273,6 @@ public class WalletsHandler
 		}
 		return false;
 	}
-    
+	
+	
 }

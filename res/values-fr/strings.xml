@@ -30,7 +30,7 @@
     <string name="slow_connection_no_update_all_wallets">La connexion est trop lente, les wallets n\'ont pu être mis à jour</string>
     
     <string name="create_wallet">Créer un nouveau wallet</string>
-    <string name="scan_id">Scanner l\'ID d\'un wallet existant </string>
+    <string name="scan_id">Scanner l\'ID d\'un wallet</string>
     <string name="add_wallet">Ajouter un wallet</string>
     
     <string name="cancel">Annuler</string>
@@ -45,7 +45,7 @@
     
     <string name="send_via_email">Envoyer par E-mail</string>
     <string name="send_via_sms">Envoyer par SMS</string>
-    <string name="copy_to_clipboard">Copier dans le presse-papier</string>
+    <string name="copy_to_clipboard">Copier l\'adresse BTC</string>
     <string name="send_btc_address">Envoyer Adresse Bitcoin</string>
     
     <string name="please_send_to_address">Merci d\'envoyer vos Bitcoins à l\'adresse suivante : </string>
@@ -70,6 +70,7 @@
     <string name="about">A propos d\'Instawallet</string>
     
     <string name="send_coins">Envoyer vos coins</string>
+    <string name="change_name">Renommer ce wallet</string>
     <string name="remove_wallet">Supprimer ce wallet</string>
     <string name="title_address">Adresse Bitcoin</string>
     <string name="title_id">Unique ID</string>
@@ -104,7 +105,12 @@
     <string name="minus_four">Désolé, cela ne ressemble pas à une adresse valide Bitcoin</string>
     <string name="minus_six">Vous n\'avez pas assez de BTC pour effectuer cette opération </string>
     
-    <string name="about">Instawallet est conçu pour être utilisé comme une portefeuille temporaire pour vos bitcoins. Nous vous déconseillons d\'utiliser Instawallets pour stocker une grande quantité de bitcoins accessibles à partir de vos téléphones qui peuvent être perdus ou volés. Assurez-vous de sauvegarder votre ID unique d\'Instawallet (via l\'onglet EXPORTER dessous) ou transférer vos bitcoins à une plus grande portefeuille tel que Paytunia.com</string>
+    <string name="about_instawallet">Instawallet est conçu pour être utilisé comme une portefeuille temporaire pour vos bitcoins. Nous vous déconseillons d\'utiliser Instawallets pour stocker une grande quantité de bitcoins accessibles à partir de vos téléphones qui peuvent être perdus ou volés. Assurez-vous de sauvegarder votre ID unique d\'Instawallet (via l\'onglet EXPORTER dessous) ou transférer vos bitcoins à une plus grande portefeuille tel que Paytunia.com</string>
+    
     <string name="confirm">Assurez-vous d\'enregistrer l\'id du wallet avant de l\'enlever. Supprimer ce wallet ?</string>
+    
+    <string name="united">Sans nom</string>
+    <string name="rename">Renommer ce wallet</string>
+    <string name="name_empty">Le nom du wallet est vide</string>
     
 </resources>

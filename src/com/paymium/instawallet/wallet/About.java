@@ -20,7 +20,7 @@ public class About extends SherlockActivity implements OnClickListener
         setContentView(R.layout.about);
         
         this.tv = (TextView) findViewById(R.id.text);
-        this.tv.setText(R.string.about);
+        this.tv.setText(R.string.about_instawallet);
         
         this.btn = (Button) findViewById(R.id.button1);
         this.btn.setOnClickListener(this);

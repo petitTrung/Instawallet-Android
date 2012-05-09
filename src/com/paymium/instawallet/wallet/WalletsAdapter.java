@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import com.paymium.instawallet.R;
 import com.paymium.instawallet.database.WalletsHandler;
+import com.paymium.instawallet.database.WalletsNameHandler;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ public class WalletsAdapter extends BaseAdapter
 	
 	private Context context;
 	private WalletsHandler db;
+	private WalletsNameHandler db_name;
 	private DecimalFormat decimalFormat;
 	
 	public WalletsAdapter(Context context)
@@ -31,6 +33,7 @@ public class WalletsAdapter extends BaseAdapter
 		
 		//---Initialize database
 		this.db = new WalletsHandler(this.context);
+		this.db_name = new WalletsNameHandler(this.context);
 	}
 	
 	public void addItem(Wallet wallet)
@@ -38,12 +41,18 @@ public class WalletsAdapter extends BaseAdapter
 		this.walletsList.add(wallet);
 		this.notifyDataSetChanged();
 		this.db.addWallet(wallet);
+		this.db_name.addWalletName(wallet);
 	}
 	
 	public void addItems(LinkedList<Wallet> walletsList)
 	{
 		this.walletsList.addAll(walletsList);
 		this.notifyDataSetChanged();
+		for (int i = 0 ; i < walletsList.size() ; i++)
+		{
+			this.db.addWallet(walletsList.get(i));
+			this.db_name.addWalletName(walletsList.get(i));
+		}
 	}
 	
 	public void updateItem(Wallet wallet)

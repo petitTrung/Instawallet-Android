@@ -90,8 +90,7 @@ public class Connection
 		else
 		{
 			System.setProperty("http.keepAlive", "false");
-	        System.out.println("Android version <= 2.2");
-	        
+	       
 	        DefaultHttpClient http_client = new DefaultHttpClient();
         	
 	        HttpGet http_get = new HttpGet(url);

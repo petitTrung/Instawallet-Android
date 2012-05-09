@@ -70,6 +70,7 @@
     <string name="about">About</string>
     
     <string name="send_coins">Send coins</string>
+    <string name="change_name">Change Wallet Name</string>
     <string name="remove_wallet">Remove this wallet</string>
     <string name="title_address">Bitcoin Address</string>
     <string name="title_id">Unique ID</string>
@@ -104,7 +105,12 @@
     <string name="minus_four">Sorry, this does not seem to be a valid Bitcoin address</string>
     <string name="minus_six">Account has insufficient funds (or not enough confirmations) to complete this action</string>
     
-    <string name="about">Instawallets are designed to serve as temporary wallets for your bitcoins. We DO NOT recommend using Instawallets to store large amounts of bitcoins accessible from devices that can be lost or stolen. Make sure you backup your Instawallet Unique ID or transfer or transfer your coins to a super wallet such as Paytunia.com</string>
+    <string name="about_instawallet">Instawallets are designed to serve as temporary wallets for your bitcoins. We DO NOT recommend using Instawallets to store large amounts of bitcoins accessible from devices that can be lost or stolen. Make sure you backup your Instawallet Unique ID or transfer or transfer your coins to a super wallet such as Paytunia.com</string>
 
     <string name="confirm">Please save your wallet ID before removing. Remove this wallet anyway ?</string>
+    
+    <string name="united">United</string>
+    <string name="rename">Change Wallet Name</string>
+    <string name="name_empty">Wallet name is blank</string>
+    
 </resources>
