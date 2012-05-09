@@ -172,7 +172,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         walletsAdapter = new WalletsAdapter(this);
         this.walletsList.setAdapter(walletsAdapter);
         
-        this.connection = Connection.getInstance().initialize(this);
+        this.connection = Connection.getInstance().initialize();
         
         this.fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = this.fragmentManager.beginTransaction();

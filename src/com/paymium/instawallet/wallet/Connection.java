@@ -16,13 +16,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.content.Context;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.paymium.instawallet.connection.MyHttpClient;
 import com.paymium.instawallet.constant.Constant;
 import com.paymium.instawallet.exception.ConnectionNotInitializedException;
 import com.paymium.instawallet.json.Address;
@@ -41,8 +38,6 @@ public class Connection
 	private boolean isInitialized = false;
 	
 	private boolean isPayment = false;
-	
-	private Context context;
 
 	
 	/**
@@ -75,14 +70,12 @@ public class Connection
 		return Connection.instance;
 	}
 
-	public Connection initialize(Context context)
+	public Connection initialize()
 	{
 		GsonBuilder gsonBuilder = new GsonBuilder();
 
 		// TODO : Handle timezones properly
 		this.gson = gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-		
-		this.context = context;
 		
 		this.decimalFormat = new DecimalFormat("#################");
 
@@ -138,9 +131,10 @@ public class Connection
 		}
 		else
 		{
-			if (this.isPayment) 
+			if (this.isPayment == true) 
 			{
-				System.out.println("Is Payment : " + this.isPayment);
+				this.setPayment(false);
+				
 				if (jsonData == null) 
 				{
 					throw new IllegalArgumentException("Cannot POST payment with empty body");
@@ -180,7 +174,8 @@ public class Connection
 			
 			else
 			{
-				DefaultHttpClient http_client = new MyHttpClient(context);
+				
+				DefaultHttpClient http_client = new DefaultHttpClient();;
 	        	
 				HttpPost http_post = new HttpPost(url);
 				http_post.setHeader("Accept", "application/json");
@@ -338,37 +333,10 @@ public class Connection
 		jsonData.add("address", addressJson);
 		jsonData.add("amount", amountJson);;
 		
-		/*System.out.println(jsonData.toString());
-		
-		Pattern pattern;
-		Matcher matcher;
-		boolean successful;*/
-		
 		String response = postMethod(Constant.paymentUrl(wallet_id), jsonData);
-		
-		/*System.out.println("Payment result : " + response);
-		
-		pattern = Pattern.compile("true");
-		matcher = pattern.matcher(response);
-		successful = matcher.find();*/
-
-		
+	
 		return this.gson.fromJson(response, Payment.class);
-		/*if(successful)
-		{
-			return (this.gson.fromJson(response, Payment.class));
-		}
-		else
-		{
-			Payment a = this.gson.fromJson(response, Payment.class);
-			
-			System.out.println("Message code : " + a.getMessage_code());
-			
-			System.out.println("Message      : " + a.getMessage());
-			
-			return a.getMessage();
-
-		}*/
+		
 	}
 	
 
