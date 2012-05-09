@@ -65,7 +65,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	private ListView walletsList;
 	private static WalletsAdapter walletsAdapter;
 	
-	private ViewAnimator viewAnimator;
+	private static ViewAnimator viewAnimator;
 	
 	private Connection connection;
 	
@@ -159,7 +159,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         this.instawallet_id = (TextView) findViewById(R.id.textView10);
         
         
-        this.viewAnimator = (ViewAnimator) findViewById(R.id.viewFlipper);
+        viewAnimator = (ViewAnimator) findViewById(R.id.viewFlipper);
         
         this.usd = (TextView) findViewById(R.id.textView3);
         this.eur = (TextView) findViewById(R.id.textView4);
@@ -286,7 +286,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     
     public void flipToQrCode(Wallet wallet)
     {
-    	AnimationFactory.flipTransition(this.viewAnimator, FlipDirection.LEFT_RIGHT);
+    	AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
     	
     	this.qr.setImageBitmap(QrCode.generateQrCode(wallet.getWallet_address(), 270, 270));
     	this.sendCoins.setText(getResources().getString(R.string.send_coins));
@@ -301,6 +301,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     	
     	changeMenu();
     }
+    
     
     
     public void load()
@@ -567,6 +568,13 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			else if (result.equals("OK"))
 			{
 				walletsAdapter.updateItem(wallet);
+				
+				wl = wallet;
+				
+				qr.setImageBitmap(QrCode.generateQrCode(wl.getWallet_address(), 270, 270));
+				balance.setText(getResources().getString(R.string.balance) + " : " + wl.getWallet_balance().toString() + " BTC");
+		    	btcAddress.setText(wl.getWallet_address());
+		    	instawallet_id.setText(wl.getWallet_id());
 				
 				alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.successful), 
 																			getResources().getString(R.string.wallet_updated), 
@@ -917,7 +925,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	
 	public int currentView()
 	{
-		return this.viewAnimator.getCurrentView().getId(); 
+		return viewAnimator.getCurrentView().getId(); 
 	}
 
 	private AlertingDialogOneButton alertingDialogOneButton;
@@ -1225,11 +1233,9 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 
 				case 1:
 					
-					AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
+					deleteItem();
 						
 					changeMenu();
-					
-					deleteItem();
 					
 					return true;
 					
@@ -1296,7 +1302,15 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	    		
 	    		try 
 	    		{
-					walletsAdapter.updateItem(connection.getWallet(wl.getWallet_id()));
+	    			wl = connection.getWallet(wl.getWallet_id());
+	    			
+					walletsAdapter.updateItem(wl);
+					
+					qr.setImageBitmap(QrCode.generateQrCode(wl.getWallet_address(), 270, 270));
+					balance.setText(getResources().getString(R.string.balance) + " : " + wl.getWallet_balance().toString() + " BTC");
+			    	btcAddress.setText(wl.getWallet_address());
+			    	instawallet_id.setText(wl.getWallet_id());
+			    	
 				} 
 	    		catch (IOException e) 
 	    		{
@@ -1361,6 +1375,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				{
 					//Toast.makeText(getActivity(), "click on OK", Toast.LENGTH_LONG);
 					walletsAdapter.removeItem(wl);
+					AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
 				}
 			});
 			

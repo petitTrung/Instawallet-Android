@@ -169,7 +169,10 @@ public class SendActivity extends SherlockFragmentActivity implements OnClickLis
 			            
 			            
 						alertingDialogFinish = AlertingDialogFinish.newInstance(getResources().getString(R.string.successful), 
-																				getResources().getString(R.string.zero) + amount.getText().toString() + " BTC " + getResources().getString(R.string.to) + " " + address.getText().toString(), 
+																				getResources().getString(R.string.zero) + " " 
+																				+ amount.getText().toString() + " BTC "  
+																				+ getResources().getString(R.string.to) + " " 
+																				+ address.getText().toString(), 
 																				R.drawable.ok);
 						alertingDialogFinish.show(getSupportFragmentManager(), "Ok dialog");
 						
