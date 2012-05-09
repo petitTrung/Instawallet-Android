@@ -74,7 +74,6 @@ public class Connection
 	{
 		GsonBuilder gsonBuilder = new GsonBuilder();
 
-		// TODO : Handle timezones properly
 		this.gson = gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 		
 		this.decimalFormat = new DecimalFormat("#################");

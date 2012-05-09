@@ -27,6 +27,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.ClipboardManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -47,6 +48,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 import com.paymium.instawallet.R;
 import com.paymium.instawallet.database.WalletsHandler;
 import com.paymium.instawallet.dialog.AlertingDialogOneButton;
@@ -152,6 +154,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         this.sendCoins = (Button) findViewById(R.id.send_coins);
         this.sendCoins.setOnClickListener(this);
         this.qr = (ImageView) findViewById(R.id.imageView1);
+        this.qr.setOnClickListener(this);
         this.balance = (TextView) findViewById(R.id.textView6);
         this.titleAddress = (TextView) findViewById(R.id.textView7);
         this.btcAddress = (TextView) findViewById(R.id.textView8);
@@ -607,6 +610,10 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 
 			startActivityForResult(intent, REQUEST_SEND);
 		}
+		else if (view.getId() == R.id.imageView1)
+		{
+			zoomQrCode();
+		}
 		
 		changeMenu();	
 	}
@@ -785,12 +792,29 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		alert.show();
 	}
 	
+	public void zoomQrCode()
+	{
+		Dialog dialog = new Dialog(this);
+		LayoutInflater factory = LayoutInflater.from(this);
+		
+        View view = factory.inflate(R.layout.zoom_qr, null);
+		ImageView imageQr = (ImageView) view.findViewById(R.id.imageView1);
+		imageQr.setImageBitmap(QrCode.generateQrCode(wl.getWallet_address(), 470, 470));
+		
+		dialog.requestWindowFeature((int) Window.FEATURE_NO_TITLE);
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.show();
+	}
+	
 	public void deleteItem()
 	{
 		alertingDialogDelete = AlertingDialogDelete.newInstance(getResources().getString(R.string.warning), 
 																getResources().getString(R.string.confirm),
 																R.drawable.warning);			  									
 		alertingDialogDelete.show(getSupportFragmentManager(), "alert dialog delete");
+		
+		changeMenu();
 	}
 	
 	
@@ -1234,6 +1258,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				case 1:
 					
 					deleteItem();
+					
+					AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
 						
 					changeMenu();
 					
@@ -1387,8 +1413,10 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				public void onClick(DialogInterface dialog, int whichButton) 
 				{
 					//Toast.makeText(getActivity(), "click on Cancel", Toast.LENGTH_LONG);
+					AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
 				}
 			});	
+			
 			
 			return aldg.create();
 		}

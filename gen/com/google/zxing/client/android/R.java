@@ -1057,6 +1057,7 @@ containing a value of this type.
         public static final int sherlock_spinner_item=0x7f030027;
         public static final int wallet_item=0x7f030028;
         public static final int wallets=0x7f030029;
+        public static final int zoom_qr=0x7f03002a;
     }
     public static final class raw {
         public static final int beep=0x7f060000;
