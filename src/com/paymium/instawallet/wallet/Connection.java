@@ -140,6 +140,7 @@ public class Connection
 		{
 			if (this.isPayment) 
 			{
+				System.out.println("Is Payment : " + this.isPayment);
 				if (jsonData == null) 
 				{
 					throw new IllegalArgumentException("Cannot POST payment with empty body");

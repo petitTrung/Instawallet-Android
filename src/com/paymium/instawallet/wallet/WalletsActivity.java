@@ -1375,7 +1375,11 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				{
 					//Toast.makeText(getActivity(), "click on OK", Toast.LENGTH_LONG);
 					walletsAdapter.removeItem(wl);
-					AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
+					if(viewAnimator.getCurrentView().getId() == R.id.flip2)
+					{
+						AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
+					}
+					
 				}
 			});
 			
