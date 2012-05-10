@@ -1151,8 +1151,19 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		
 	}
 	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) 
+	{
+		super.onRestoreInstanceState(savedInstanceState);
+		changeMenu();
+	}
+	
 	public class MenuWalletsList extends SherlockFragment
 	{
+		public MenuWalletsList() 
+		{
+			
+		}
 		@Override
 		public void onCreate(Bundle savedInstanceState) 
 		{
@@ -1208,6 +1219,11 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	
 	public class MenuSingleWallet extends SherlockFragment
 	{
+		public MenuSingleWallet() 
+		{
+			
+		}
+		
 		@Override
 		public void onCreate(Bundle savedInstanceState) 
 		{
