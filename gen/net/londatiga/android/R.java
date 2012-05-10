@@ -15,13 +15,15 @@ public final class R {
         public static final int grow_from_top=0x7f040003;
         public static final int grow_from_topleft_to_bottomright=0x7f040004;
         public static final int grow_from_topright_to_bottomleft=0x7f040005;
-        public static final int rail=0x7f040006;
-        public static final int shrink_from_bottom=0x7f040007;
-        public static final int shrink_from_bottomleft_to_topright=0x7f040008;
-        public static final int shrink_from_bottomright_to_topleft=0x7f040009;
-        public static final int shrink_from_top=0x7f04000a;
-        public static final int shrink_from_topleft_to_bottomright=0x7f04000b;
-        public static final int shrink_from_topright_to_bottomleft=0x7f04000c;
+        public static final int list_layout_controller=0x7f040006;
+        public static final int rail=0x7f040007;
+        public static final int scale=0x7f040008;
+        public static final int shrink_from_bottom=0x7f040009;
+        public static final int shrink_from_bottomleft_to_topright=0x7f04000a;
+        public static final int shrink_from_bottomright_to_topleft=0x7f04000b;
+        public static final int shrink_from_top=0x7f04000c;
+        public static final int shrink_from_topleft_to_bottomright=0x7f04000d;
+        public static final int shrink_from_topright_to_bottomleft=0x7f04000e;
     }
     public static final class array {
         public static final int country_codes=0x7f070000;

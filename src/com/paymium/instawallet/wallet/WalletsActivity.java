@@ -26,6 +26,8 @@ import android.text.ClipboardManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -161,6 +163,11 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         viewAnimator = (ViewAnimator) findViewById(R.id.viewFlipper);
         
         this.walletsList = (ListView) findViewById(R.id.listView1);
+        this.walletsList.setTextFilterEnabled(true);
+        LayoutAnimationController controller 
+        = AnimationUtils.loadLayoutAnimation(
+          this, R.anim.list_layout_controller);
+        this.walletsList.setLayoutAnimation(controller);
         walletsAdapter = new WalletsAdapter(this);
         this.walletsList.setAdapter(walletsAdapter);
         
