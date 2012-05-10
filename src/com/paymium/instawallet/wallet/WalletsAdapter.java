@@ -103,25 +103,21 @@ public class WalletsAdapter extends BaseAdapter
 
 	public int getCount() 
 	{
-		// TODO Auto-generated method stub
 		return this.walletsList.size();
 	}
 
 	public Object getItem(int position) 
 	{
-		// TODO Auto-generated method stub
 		return this.walletsList.get(position);
 	}
 
 	public long getItemId(int position) 
 	{
-		// TODO Auto-generated method stub
 		return position;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) 
 	{
-		// TODO Auto-generated method stub
 		
 		
 		if (convertView == null) 
@@ -129,13 +125,21 @@ public class WalletsAdapter extends BaseAdapter
 			convertView = this.layoutInflater.inflate(R.layout.wallet_item, null);
 		}
 		
-		TextView wallet_id = (TextView) convertView.findViewById(R.id.textView1);
+		TextView wallet_title = (TextView) convertView.findViewById(R.id.textView1);
 		TextView wallet_address = (TextView) convertView.findViewById(R.id.textView2);
 		TextView wallet_balance = (TextView) convertView.findViewById(R.id.textView3);
 		
 		Wallet wallet = this.walletsList.get(position);
 		
-		wallet_id.setText(wallet.getWallet_id());
+		if (!this.notEmpty(this.db_name.getWalletName(wallet.getWallet_id())))
+		{
+			wallet_title.setText(this.context.getResources().getString(R.string.united));
+		}
+		else
+		{
+			wallet_title.setText(this.db_name.getWalletName(wallet.getWallet_id()));
+		}
+
 		wallet_address.setText(wallet.getWallet_address());
 		wallet_balance.setText(this.decimalFormat.format(wallet.getWallet_balance()));
 
@@ -154,6 +158,11 @@ public class WalletsAdapter extends BaseAdapter
 			}			
 		}
 		return false;
+	}
+	
+	public boolean notEmpty(String s) 
+	{
+		return (s != null && s.length() > 0);
 	}
 
 }

@@ -69,7 +69,7 @@
     <string name="refresh">Refresh</string>
     <string name="about">About</string>
     
-    <string name="send_coins">Send coins</string>
+    <string name="send_coins">Send your bitcoins</string>
     <string name="change_name">Change Wallet Name</string>
     <string name="remove_wallet">Remove this wallet</string>
     <string name="title_address">Bitcoin Address</string>

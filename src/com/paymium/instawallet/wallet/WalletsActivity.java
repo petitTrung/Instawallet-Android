@@ -795,6 +795,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				{
 					wallets_names_db.updateWallet(wl,et.getText().toString());
 					walletName.setText(et.getText().toString());
+					walletsAdapter.notifyDataSetChanged();
 				}	
 				else if (!notEmpty(et.getText().toString()))
 				{
@@ -861,12 +862,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		super.onStart();
 		
 		if (this.walletsIdList != null)
-		{
-			/*for (int i = 0 ; i < walletsIdList.size();i++)
-			{
-	    		System.out.println( walletsIdList.get(i).toString());
-	    	}	*/
-	        	
+		{    	
 			
 			if (this.walletsIdList.size() == 0)
 			{
@@ -971,6 +967,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		protected Object doInBackground(String... data) 
 		{
 			Wallet wallet = null;
+			
 			System.out.println("data : " + data[0]);
 			try 
 			{
@@ -1326,7 +1323,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	    			
 					walletsAdapter.updateItem(wl);
 					
-					qr.setImageBitmap(QrCode.generateQrCode(wl.getWallet_address(), 270, 270));
+					qr.setImageBitmap(QrCode.generateQrCode(wl.getWallet_address(), 230, 230));
 					balance.setText(getResources().getString(R.string.balance) + " : " + wl.getWallet_balance().toString() + " BTC");
 			    	btcAddress.setText(wl.getWallet_address());
 			    	instawallet_id.setText(wl.getWallet_id());
