@@ -53,7 +53,7 @@
     
     <string name="no_id_found">Aucune wallet id a été trouvée</string>
     <string name="more_than_one_id">Il y a plus d\'une wallet id trouvée</string>
-    <string name="wallet_existed">Ce wallet est existé déjà dans votre liste !!</string>
+    <string name="wallet_existed">Ce wallet existe déjà dans votre liste !!</string>
     
     <string name="no_address_found">Aucune adresse BTC trouvée</string>
     <string name="more_than_one_address">Il y a plus d\'une adresse BTC trouvée </string>
@@ -112,5 +112,6 @@
     <string name="united">Sans nom</string>
     <string name="rename">Renommer ce wallet</string>
     <string name="name_empty">Le nom du wallet est vide</string>
+    <string name="no_wallet">Aucun wallet a été trouvé</string>
     
 </resources>

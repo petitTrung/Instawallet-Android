@@ -112,5 +112,6 @@
     <string name="united">United</string>
     <string name="rename">Change Wallet Name</string>
     <string name="name_empty">Wallet name is blank</string>
+    <string name="no_wallet">There isn\'t any wallet was found</string>
     
 </resources>

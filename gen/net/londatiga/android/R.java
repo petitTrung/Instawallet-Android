@@ -1208,6 +1208,7 @@ containing a value of this type.
         public static final int no_connection_no_update_wallet=0x7f0a0091;
         public static final int no_connection_no_wallet=0x7f0a00ad;
         public static final int no_id_found=0x7f0a00a5;
+        public static final int no_wallet=0x7f0a00d4;
         public static final int one=0x7f0a00c5;
         public static final int please_select_wallet=0x7f0a009e;
         public static final int please_send_to_address=0x7f0a00a3;

@@ -55,6 +55,7 @@ import com.paymium.instawallet.dialog.LoadingDialog;
 import com.paymium.instawallet.exception.ConnectionNotInitializedException;
 import com.paymium.instawallet.flip.AnimationFactory;
 import com.paymium.instawallet.flip.AnimationFactory.FlipDirection;
+import com.paymium.instawallet.json.Address;
 import com.paymium.instawallet.json.NewWallet;
 import com.paymium.instawallet.qrcode.QrCode;
 import com.paymium.instawallet.send.SendActivity;
@@ -979,17 +980,28 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			try 
 			{
 				String wallet_id = data[0];
-				String wallet_address = connection.getAddressJson(wallet_id).getAddress();
-				BigDecimal wallet_balance = connection.getBalanceJson(wallet_id).getBalance().divide(new BigDecimal(Math.pow(10, 8)));
+				String wallet_address;
 				
-				if (notEmpty(wallet_id) && notEmpty(wallet_address) && notEmpty(wallet_balance.toString()))
+				Address a = connection.getAddressJson(wallet_id);
+				
+				if (a != null)
 				{
-					wallet = new Wallet();
-					wallet.setWallet_id(wallet_id);
-					wallet.setWallet_address(wallet_address);
-					wallet.setWallet_balance(wallet_balance);
+					wallet_address = a.getAddress();
+					BigDecimal wallet_balance = connection.getBalanceJson(wallet_id).getBalance().divide(new BigDecimal(Math.pow(10, 8)));
 					
-					return wallet;
+					if (notEmpty(wallet_id) && notEmpty(wallet_address) && notEmpty(wallet_balance.toString()))
+					{
+						wallet = new Wallet();
+						wallet.setWallet_id(wallet_id);
+						wallet.setWallet_address(wallet_address);
+						wallet.setWallet_balance(wallet_balance);
+						
+						return wallet;
+					}
+				}
+				else
+				{
+					return "no wallet";
 				}
 	
 			} 
@@ -1044,6 +1056,13 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 					alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.fail), 
 																					getResources().getString(R.string.slow_connection_no_wallet), 
 																					R.drawable.error);
+					alertingDialogOneButton.show(getSupportFragmentManager(), "error 2 alerting dialog");
+				}
+				else if (result.equals("no wallet"))
+				{
+					alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.fail), 
+																				getResources().getString(R.string.no_wallet), 
+																				R.drawable.error);
 					alertingDialogOneButton.show(getSupportFragmentManager(), "error 2 alerting dialog");
 				}
 				else if (result.equals("fail"))
