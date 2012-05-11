@@ -61,7 +61,7 @@
     
     <string name="add_wallet_loading">Analyser le code QR ...</string>
     
-    <string name="wallet_added">A wallet has been added</string>
+    <string name="wallet_added">Un wallet a été ajouté</string>
     <string name="no_connection_no_wallet">Problème de connexion, aucun wallet est créé</string>
     <string name="slow_connection_no_wallet">La connexion est trop lente, aucun wallet est créé</string>
     <string name="unknown_problem">Problème inconnu, veuillez réessayer plus tard</string>

@@ -1065,7 +1065,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		{ 
 			super.onPreExecute();
 			
-			loadingDialog = LoadingDialog.newInstance("Please wait", "Loading ...");			  									
+			loadingDialog = LoadingDialog.newInstance(getResources().getString(R.string.please_wait), 
+													getResources().getString(R.string.loading));			  									
 			loadingDialog.show(getSupportFragmentManager(), "loading dialog");
 	    } 
 
