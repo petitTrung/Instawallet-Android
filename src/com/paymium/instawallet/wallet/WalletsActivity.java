@@ -841,10 +841,10 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				
 				//System.out.println("String result : " + link);
 				
-				walletsIdList = new LinkedList<String>();
+				this.walletsIdList = new LinkedList<String>();
 				
  	           	this.walletIdExtractor = new WalletIdExtractor();
- 	           	walletsIdList = this.walletIdExtractor.extract(link);				
+ 	           	this.walletsIdList = this.walletIdExtractor.extract(link);				
 			}
 		}	
 		else if (requestCode == REQUEST_SEND) 
@@ -857,9 +857,9 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 
 				//System.out.println("Bitcoin Address : " + address);
 				
-				addressBitcoin = new ArrayList<String>();
+				this.addressBitcoin = new ArrayList<String>();
 
-				addressBitcoin = extractAddressBitcoin.extract(address);
+				this.addressBitcoin = extractAddressBitcoin.extract(address);
 			}
 		}
 	}
@@ -976,7 +976,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		{
 			Wallet wallet = null;
 			
-			System.out.println("data : " + data[0]);
+			//System.out.println("data : " + data[0]);
 			try 
 			{
 				String wallet_id = data[0];
@@ -1354,7 +1354,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	    {
 	    	String action = intent.getAction();
 
-	    	System.out.println("ACTION : " + action);
+	    	//System.out.println("ACTION : " + action);
 
 	    	if (action.equals("SENT"))
 	    	{  		
