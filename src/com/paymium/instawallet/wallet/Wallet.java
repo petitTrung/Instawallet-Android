@@ -9,12 +9,12 @@ public class Wallet
 	private String wallet_address;
 	
 	private BigDecimal wallet_balance;
-
 	
+	private BigDecimal wallet_spendable_balance;
+
 	public Wallet() 
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Wallet(String wallet_id) 
@@ -52,7 +52,17 @@ public class Wallet
 	{
 		this.wallet_balance = wallet_balance;
 	}
-	
+
+	public BigDecimal getWallet_spendable_balance() 
+	{
+		return wallet_spendable_balance;
+	}
+
+	public void setWallet_spendable_balance(BigDecimal wallet_spendable_balance) 
+	{
+		this.wallet_spendable_balance = wallet_spendable_balance;
+	}
+
 	public String toString()
 	{
 		StringBuilder asString = new StringBuilder();
@@ -68,6 +78,10 @@ public class Wallet
 	    
 	    asString.append("Balance               : ");
 	    asString.append(this.wallet_balance.toString());
+	    asString.append("\n");
+	    
+	    asString.append("Spendable Balance     : ");
+	    asString.append(this.wallet_spendable_balance.toString());
 	    asString.append("\n\n");
 	    
 	    return (asString.toString());

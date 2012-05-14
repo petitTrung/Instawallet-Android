@@ -56,6 +56,7 @@ import com.paymium.instawallet.exception.ConnectionNotInitializedException;
 import com.paymium.instawallet.flip.AnimationFactory;
 import com.paymium.instawallet.flip.AnimationFactory.FlipDirection;
 import com.paymium.instawallet.json.Address;
+import com.paymium.instawallet.json.Balance;
 import com.paymium.instawallet.json.NewWallet;
 import com.paymium.instawallet.qrcode.QrCode;
 import com.paymium.instawallet.send.SendActivity;
@@ -90,17 +91,19 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	private LinearLayout addLayout,exportLayout,shareLayout;
 	private ImageButton add,export,share;
 	
-	private TextView title;
-	
 	private TextView walletName;
+
 	private Button sendCoins;
 	private Button changeName;
+	
 	private ImageView qr;
+	
 	private TextView balance;
-	private TextView titleAddress;
-	private TextView btcAddress;
-	private TextView titleID;
-	private TextView instawallet_id;
+	private TextView spendable_balance;
+	private TextView address;
+	private TextView address_value;
+	private TextView unique_id;
+	private TextView unique_id_value;
 	
 	
 	private LinkedList<String> walletsIdList;
@@ -145,29 +148,28 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         this.share = (ImageButton) findViewById(R.id.imageButton3);
         this.share.setOnClickListener(this);
             
-        this.title = (TextView) findViewById(R.id.textView1);
+        this.walletName = (TextView) findViewById(R.id.wallet_name);
         
-        this.walletName = (TextView) findViewById(R.id.textView2);
+        //Flip 2
         this.sendCoins = (Button) findViewById(R.id.send_coins);
         this.sendCoins.setOnClickListener(this);
         this.changeName = (Button) findViewById(R.id.change_name);
         this.changeName.setOnClickListener(this);
         this.qr = (ImageView) findViewById(R.id.imageView1);
         this.qr.setOnClickListener(this);
-        this.balance = (TextView) findViewById(R.id.textView6);
-        this.titleAddress = (TextView) findViewById(R.id.textView7);
-        this.btcAddress = (TextView) findViewById(R.id.textView8);
-        this.titleID = (TextView) findViewById(R.id.textView9);
-        this.instawallet_id = (TextView) findViewById(R.id.textView10);
+        this.balance = (TextView) findViewById(R.id.balance);
+        this.spendable_balance = (TextView) findViewById(R.id.spendable_balance);
+        this.address = (TextView) findViewById(R.id.bitcoin_address);
+        this.address_value = (TextView) findViewById(R.id.bitcoin_address_value);
+        this.unique_id = (TextView) findViewById(R.id.unique_id);
+        this.unique_id_value = (TextView) findViewById(R.id.unique_id_value);
         
         
         viewAnimator = (ViewAnimator) findViewById(R.id.viewFlipper);
         
         this.walletsList = (ListView) findViewById(R.id.listView1);
         this.walletsList.setTextFilterEnabled(true);
-        LayoutAnimationController controller 
-        = AnimationUtils.loadLayoutAnimation(
-          this, R.anim.list_layout_controller);
+        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(this, R.anim.list_layout_controller);
         this.walletsList.setLayoutAnimation(controller);
         walletsAdapter = new WalletsAdapter(this);
         this.walletsList.setAdapter(walletsAdapter);
@@ -260,7 +262,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
 			{
 				wl = (Wallet) walletsAdapter.getItem(position);
-				
+				System.out.println(wl);
 				flipToQrCode(wl);
 			}
 		});
@@ -279,8 +281,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		});
 
 		this.walletIdExtractor = new WalletIdExtractor();
-		
-		
 
 	}
     
@@ -288,28 +288,28 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     
     public void flipToQrCode(Wallet wallet)
     {
+    	//System.out.println(wallet);
     	AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
-    	
-    	if (this.wallets_names_db.getWalletName(wallet.getWallet_id()).equals(""))
-    	{
-    		this.walletName.setText(getResources().getString(R.string.united));
-    	}
-    	else
-    	{
-    		this.walletName.setText(this.wallets_names_db.getWalletName(wallet.getWallet_id()));
-    	}
-    	
-    	
+
     	this.qr.setImageBitmap(QrCode.generateQrCode(wallet.getWallet_address(), 230, 230));
     	this.sendCoins.setText(getResources().getString(R.string.send_coins));
     	
     	this.balance.setText(getResources().getString(R.string.balance) + " : " + wallet.getWallet_balance().toString() + " BTC");
+    	if (!wallet.getWallet_spendable_balance().equals(wallet.getWallet_balance()))
+    	{
+    		this.spendable_balance.setText(wallet.getWallet_balance().subtract(wallet.getWallet_spendable_balance()).toString()
+    										+ " " + getResources().getString(R.string.confirming));												
+    	}
+    	else
+    	{
+    		this.spendable_balance.setText("");
+    	}
     	
-    	this.titleAddress.setText(getResources().getString(R.string.title_address));
-    	this.btcAddress.setText(wallet.getWallet_address());
+    	this.address.setText(getResources().getString(R.string.title_address));
+    	this.address_value.setText(wallet.getWallet_address());
     	
-    	this.titleID.setText(getResources().getString(R.string.title_id));
-    	this.instawallet_id.setText(wallet.getWallet_id());
+    	this.unique_id.setText(getResources().getString(R.string.title_id));
+    	this.unique_id_value.setText(wallet.getWallet_id());
     	
     	changeMenu();
     }
@@ -322,7 +322,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     	{
     		walletsAdapter.addItems(this.wallets_db.getAllWallets());
     	}
-
     }
     
     public void refresh()
@@ -504,12 +503,19 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			{
 				walletsAdapter.updateItem(wallet);
 				
-				wl = wallet;
-				
-				qr.setImageBitmap(QrCode.generateQrCode(wl.getWallet_address(), 270, 270));
-				balance.setText(getResources().getString(R.string.balance) + " : " + wl.getWallet_balance().toString() + " BTC");
-		    	btcAddress.setText(wl.getWallet_address());
-		    	instawallet_id.setText(wl.getWallet_id());
+				qr.setImageBitmap(QrCode.generateQrCode(wallet.getWallet_address(), 270, 270));
+				balance.setText(getResources().getString(R.string.balance) + " : " + wallet.getWallet_balance().toString() + " BTC");
+		    	if ((wallet.getWallet_balance().floatValue() - wallet.getWallet_spendable_balance().floatValue()) > 0)
+		    	{
+		    		spendable_balance.setText(wallet.getWallet_balance().subtract(wallet.getWallet_spendable_balance()).toString()
+		    									+ " " + getResources().getString(R.string.confirming));
+		    	}
+		    	else
+		    	{
+		    		spendable_balance.setText("");
+		    	}
+				address_value.setText(wallet.getWallet_address());
+		    	unique_id_value.setText(wallet.getWallet_id());
 				
 				alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.successful), 
 																			getResources().getString(R.string.wallet_updated), 
@@ -903,6 +909,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				}
 				
 			}
+			walletsIdList = null;
 		}
 		
 		if (this.addressBitcoin != null)
@@ -944,6 +951,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 					this.alertingDialogOneButton.show(getSupportFragmentManager(), "Invalid btc address");
 				}
 			}
+			addressBitcoin = null;
 		}
 				
 	}
@@ -987,7 +995,11 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				if (a != null)
 				{
 					wallet_address = a.getAddress();
-					BigDecimal wallet_balance = connection.getBalanceJson(wallet_id).getBalance().divide(new BigDecimal(Math.pow(10, 8)));
+					
+					Balance b = connection.getBalanceJson(wallet_id);
+					
+					BigDecimal wallet_balance = b.getBalance().divide(new BigDecimal(Math.pow(10, 8)));
+					BigDecimal wallet_spendable_balance = b.getSpendable_balance().divide(new BigDecimal(Math.pow(10, 8)));
 					
 					if (notEmpty(wallet_id) && notEmpty(wallet_address) && notEmpty(wallet_balance.toString()))
 					{
@@ -995,6 +1007,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 						wallet.setWallet_id(wallet_id);
 						wallet.setWallet_address(wallet_address);
 						wallet.setWallet_balance(wallet_balance);
+						wallet.setWallet_spendable_balance(wallet_spendable_balance);
 						
 						return wallet;
 					}
@@ -1101,7 +1114,11 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				
 				String wallet_id = newWallet.getWallet_id();
 				String wallet_address = connection.getAddressJson(wallet_id).getAddress();
-				BigDecimal wallet_balance = connection.getBalanceJson(wallet_id).getBalance();
+				
+				Balance b = connection.getBalanceJson(wallet_id);
+				
+				BigDecimal wallet_balance = b.getBalance();
+				BigDecimal wallet_spendable_balance = b.getSpendable_balance();
 				
 				if (notEmpty(wallet_id) && notEmpty(wallet_address) && notEmpty(wallet_balance.toString()))
 				{
@@ -1109,6 +1126,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 					wallet.setWallet_id(wallet_id);
 					wallet.setWallet_address(wallet_address);
 					wallet.setWallet_balance(wallet_balance);
+					wallet.setWallet_spendable_balance(wallet_spendable_balance);
 					
 					return wallet;
 				}
@@ -1326,7 +1344,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			ft.show(this.menuWalletsList);
 			getSupportActionBar().setDisplayHomeAsUpEnabled(false);	
 			
-			this.title.setText(getResources().getString(R.string.your_wallets));
+			this.walletName.setText(getResources().getString(R.string.your_wallets));		
+			//this.title.setText(getResources().getString(R.string.your_wallets));
 		}
 		else
 		{
@@ -1338,7 +1357,15 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			ft.show(this.menuSingleWallet);
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);	
 			
-			this.title.setText(getResources().getString(R.string.your_wallet));
+			if (this.wallets_names_db.getWalletName(wl.getWallet_id()).equals(""))
+	    	{
+	    		this.walletName.setText(getResources().getString(R.string.united));
+	    	}
+	    	else
+	    	{
+	    		this.walletName.setText(this.wallets_names_db.getWalletName(wl.getWallet_id()));
+	    	}
+			//this.title.setText(getResources().getString(R.string.your_wallet));
 		}
 		else
 		{
@@ -1368,8 +1395,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 					
 					qr.setImageBitmap(QrCode.generateQrCode(wl.getWallet_address(), 230, 230));
 					balance.setText(getResources().getString(R.string.balance) + " : " + wl.getWallet_balance().toString() + " BTC");
-			    	btcAddress.setText(wl.getWallet_address());
-			    	instawallet_id.setText(wl.getWallet_id());
+			    	address_value.setText(wl.getWallet_address());
+			    	unique_id_value.setText(wl.getWallet_id());
 			    	
 				} 
 	    		catch (IOException e) 

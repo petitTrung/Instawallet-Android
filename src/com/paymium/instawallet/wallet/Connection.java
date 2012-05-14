@@ -47,6 +47,7 @@ public class Connection
 		super();
 	}
 
+	
 	/**
 	 * Gets the single instance of Connection (Singleton)
 	 *
@@ -68,6 +69,7 @@ public class Connection
 		return Connection.instance;
 	}
 
+	
 	public Connection initialize()
 	{
 		GsonBuilder gsonBuilder = new GsonBuilder();
@@ -202,7 +204,7 @@ public class Connection
 	{
 		Pattern pattern;
 		Matcher matcher;
-		boolean successful,id;
+		boolean successful;
 		
 		String response = this.postMethod(Constant.newWalletUrl,null);
 		
@@ -212,15 +214,11 @@ public class Connection
 		matcher = pattern.matcher(response);
 		successful = matcher.find();
 		
-		pattern = Pattern.compile("wallet_id");
-		matcher = pattern.matcher(response);
-		id = matcher.find();
-		
-		if(successful && id)
+		if(successful)
 		{
 			System.out.println("A new wallet was created !!");
 			
-			NewWallet a = gson.fromJson(response, NewWallet.class);
+			NewWallet a = this.gson.fromJson(response, NewWallet.class);
 			
 			return a;
 		}
@@ -236,7 +234,7 @@ public class Connection
 	{
 		Pattern pattern;
 		Matcher matcher;
-		boolean successful,address;
+		boolean successful;
 		
 		String response = this.getMethod(Constant.addressUrl(wallet_id));
 		
@@ -244,11 +242,7 @@ public class Connection
 		matcher = pattern.matcher(response);
 		successful = matcher.find();
 		
-		pattern = Pattern.compile("address");
-		matcher = pattern.matcher(response);
-		address = matcher.find();
-		
-		if(successful && address)
+		if(successful)
 		{
 			//System.out.println("Get an address !!");
 			
@@ -258,7 +252,7 @@ public class Connection
 		}
 		else
 		{
-			System.out.println("No address was gotten !!");
+			//System.out.println("No address was gotten !!");
 			
 			return null;
 		}
@@ -270,7 +264,7 @@ public class Connection
 	{
 		Pattern pattern;
 		Matcher matcher;
-		boolean successful,balance;
+		boolean successful;
 		
 		String response = this.getMethod(Constant.balanceUrl(wallet_id));
 		
@@ -278,21 +272,15 @@ public class Connection
 		matcher = pattern.matcher(response);
 		successful = matcher.find();
 		
-		pattern = Pattern.compile("balance");
-		matcher = pattern.matcher(response);
-		balance = matcher.find();
-		
-		if(successful && balance)
-		{
-			//System.out.println("Get a balance !!");
-			
+		if(successful)
+		{	
 			Balance a = gson.fromJson(response, Balance.class);
 			
 			return a;
 		}
 		else
 		{
-			System.out.println("No balance was gotten !!");
+			//System.out.println("No balance was gotten !!");
 			
 			return null;
 		}
@@ -305,7 +293,11 @@ public class Connection
 		
 		wallet.setWallet_id(wallet_id);
 		wallet.setWallet_address(this.getAddressJson(wallet_id).getAddress());
-		wallet.setWallet_balance(this.getBalanceJson(wallet_id).getBalance().divide(new BigDecimal(Math.pow(10, 8))));
+		
+		Balance b = this.getBalanceJson(wallet_id);
+			
+		wallet.setWallet_balance(b.getBalance().divide(new BigDecimal(Math.pow(10, 8))));
+		wallet.setWallet_spendable_balance(b.getSpendable_balance().divide(new BigDecimal(Math.pow(10, 8))));
 		
 		return wallet;
 	}
@@ -320,8 +312,8 @@ public class Connection
 		BigDecimal amountSatoshis = amount.multiply(new BigDecimal(Math.pow(10, 8)));
 		
 		
-		JsonElement addressJson = gson.toJsonTree(address);
-		JsonElement amountJson = gson.toJsonTree(decimalFormat.format(amountSatoshis));
+		JsonElement addressJson = this.gson.toJsonTree(address);
+		JsonElement amountJson = this.gson.toJsonTree(decimalFormat.format(amountSatoshis));
 		
 		
 		JsonObject jsonData = new JsonObject();

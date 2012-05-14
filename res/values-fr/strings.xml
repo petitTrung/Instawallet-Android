@@ -113,5 +113,6 @@
     <string name="rename">Renommer ce wallet</string>
     <string name="name_empty">Le nom du wallet est vide</string>
     <string name="no_wallet">Aucun wallet a été trouvé</string>
+    <string name="confirming">BTC est en attente</string>
     
 </resources>

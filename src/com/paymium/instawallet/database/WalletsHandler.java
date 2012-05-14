@@ -29,12 +29,15 @@ public class WalletsHandler
 	private static final String KEY_ID = "id";
 	private static final String KEY_ADDRESS = "address";
 	private static final String KEY_BALANCE = "balance";
+	private static final String KEY_SPENDABLE_BALANCE = "spendableBalance";
 	
 	private static final String TAG = "DBAdapter";
 	
-	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_WALLETS + "(" + KEY_ID + " TEXT PRIMARY KEY,"								 
+	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_WALLETS + "(" 
+																						+ KEY_ID + " TEXT PRIMARY KEY,"								 
 																						+ KEY_ADDRESS + " TEXT NOT NULL,"
-																						+ KEY_BALANCE + " TEXT NOT NULL"
+																						+ KEY_BALANCE + " TEXT NOT NULL,"
+																						+ KEY_SPENDABLE_BALANCE + " TEXT NOT NULL "
 																				  + ")";	
 	private DatabaseHelper DBHelper;
     private SQLiteDatabase db;
@@ -113,6 +116,7 @@ public class WalletsHandler
     		value.put(KEY_ID, wallet.getWallet_id());
     		value.put(KEY_ADDRESS, wallet.getWallet_address());
     		value.put(KEY_BALANCE, wallet.getWallet_balance().toString());
+    		value.put(KEY_SPENDABLE_BALANCE, wallet.getWallet_spendable_balance().toString());
     		
     		db.insert(TABLE_WALLETS, null, value);
     		
@@ -137,6 +141,7 @@ public class WalletsHandler
 		wallet.setWallet_id(cursor.getString(0));
 		wallet.setWallet_address(cursor.getString(1));
 		wallet.setWallet_balance(new BigDecimal(cursor.getString(2)));
+		wallet.setWallet_spendable_balance(new BigDecimal(cursor.getString(3)));
 	    
 	    cursor.close();
 	    
@@ -169,7 +174,7 @@ public class WalletsHandler
 				wallet.setWallet_id(cursor.getString(0));
 				wallet.setWallet_address(cursor.getString(1));
 				wallet.setWallet_balance(new BigDecimal(cursor.getString(2)));
-				
+				wallet.setWallet_spendable_balance(new BigDecimal(cursor.getString(3)));
 				
 				walletsList.add(wallet);
 				
@@ -210,6 +215,7 @@ public class WalletsHandler
 	    value.put(KEY_ID, wallet.getWallet_id());
 		value.put(KEY_ADDRESS, wallet.getWallet_address());
 		value.put(KEY_BALANCE, wallet.getWallet_balance().toString());
+		value.put(KEY_SPENDABLE_BALANCE, wallet.getWallet_spendable_balance().toString());
 	 
 	    // updating row
 	    db.update(TABLE_WALLETS, value, KEY_ID + " = ?", new String[] { wallet.getWallet_id() });
