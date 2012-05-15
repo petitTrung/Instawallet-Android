@@ -70,6 +70,10 @@
     <string name="about">A propos d\'Instawallet</string>
     
     <string name="send_coins">Envoyer vos bitcoins</string>
+    <string name="sending_options">Vos options</string>
+    <string name="send_qr">Scanner un code QR</string>
+    <string name="send_paste">Coller une adresse BTC</string>
+    <string name="no_address">Aucune adresse BTC trouvée dans le presse-papier</string>
     <string name="change_name">Renommer ce wallet</string>
     <string name="remove_wallet">Supprimer ce wallet</string>
     <string name="title_address">Adresse Bitcoin</string>

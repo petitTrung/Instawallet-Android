@@ -70,6 +70,10 @@
     <string name="about">About</string>
     
     <string name="send_coins">Send your bitcoins</string>
+    <string name="sending_options">Sending options</string>
+    <string name="send_qr">Scan an QR code</string>
+    <string name="send_paste">Paste a BTC address</string>
+    <string name="no_address">There isn\'t any BTC address found on the clipboard</string>
     <string name="change_name">Change Wallet Name</string>
     <string name="remove_wallet">Remove this wallet</string>
     <string name="title_address">Bitcoin Address</string>

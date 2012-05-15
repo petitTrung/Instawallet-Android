@@ -71,7 +71,7 @@ public class WalletsAdapter extends BaseAdapter
 		{
 			this.walletsList.set(index, wallet);
 			
-			System.out.println("update : " + wallet);
+			//System.out.println("update : " + wallet);
 			
 			this.notifyDataSetChanged();
 			this.db.updateWallet(wallet);

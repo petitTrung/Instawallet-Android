@@ -166,6 +166,7 @@ public class Connection
 					}
 					//System.out.println("Return post ( <= 2.2 ) : " + response.getStatusLine().getStatusCode() + " "  + responseBuilder.toString());
 				
+					System.out.println(responseBuilder.toString());
 					return (responseBuilder.toString());
 				}
 			}
@@ -313,7 +314,7 @@ public class Connection
 		
 		
 		JsonElement addressJson = this.gson.toJsonTree(address);
-		JsonElement amountJson = this.gson.toJsonTree(decimalFormat.format(amountSatoshis));
+		JsonElement amountJson = this.gson.toJsonTree(this.decimalFormat.format(amountSatoshis));
 		
 		
 		JsonObject jsonData = new JsonObject();

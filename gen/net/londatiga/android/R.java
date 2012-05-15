@@ -868,16 +868,17 @@ containing a value of this type.
         public static final int send=0x7f02007d;
         public static final int send_background=0x7f02007e;
         public static final int send_background_small=0x7f02007f;
-        public static final int share=0x7f020080;
-        public static final int share_bitcoin_address=0x7f020081;
-        public static final int share_via_barcode=0x7f020082;
-        public static final int shopper_icon=0x7f020083;
-        public static final int textfield_default=0x7f020084;
-        public static final int toolbar_add=0x7f020085;
-        public static final int toolbar_export=0x7f020086;
-        public static final int toolbar_share=0x7f020087;
-        public static final int wallet=0x7f020088;
-        public static final int warning=0x7f020089;
+        public static final int sending_options=0x7f020080;
+        public static final int share=0x7f020081;
+        public static final int share_bitcoin_address=0x7f020082;
+        public static final int share_via_barcode=0x7f020083;
+        public static final int shopper_icon=0x7f020084;
+        public static final int textfield_default=0x7f020085;
+        public static final int toolbar_add=0x7f020086;
+        public static final int toolbar_export=0x7f020087;
+        public static final int toolbar_share=0x7f020088;
+        public static final int wallet=0x7f020089;
+        public static final int warning=0x7f02008a;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f09002e;
@@ -1071,7 +1072,7 @@ containing a value of this type.
     }
     public static final class string {
         public static final int about=0x7f0a00b1;
-        public static final int about_instawallet=0x7f0a00cf;
+        public static final int about_instawallet=0x7f0a00d3;
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abs__action_bar_home_description=0x7f0a0079;
@@ -1102,11 +1103,11 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f0a0082;
-        public static final int add=0x7f0a00b7;
+        public static final int add=0x7f0a00bb;
         public static final int add_wallet=0x7f0a0097;
         public static final int add_wallet_loading=0x7f0a00ab;
         public static final int all_wallets_updated=0x7f0a008d;
-        public static final int amount=0x7f0a00bd;
+        public static final int amount=0x7f0a00c1;
         public static final int app_name=0x7f0a0000;
         public static final int app_picker_name=0x7f0a0001;
         public static final int balance=0x7f0a008a;
@@ -1139,9 +1140,9 @@ containing a value of this type.
         public static final int button_web_search=0x7f0a001c;
         public static final int button_wifi=0x7f0a001d;
         public static final int cancel=0x7f0a0098;
-        public static final int change_name=0x7f0a00b3;
-        public static final int confirm=0x7f0a00d0;
-        public static final int confirming=0x7f0a00d5;
+        public static final int change_name=0x7f0a00b7;
+        public static final int confirm=0x7f0a00d4;
+        public static final int confirming=0x7f0a00d9;
         public static final int contents_contact=0x7f0a001e;
         public static final int contents_email=0x7f0a001f;
         public static final int contents_location=0x7f0a0020;
@@ -1151,12 +1152,12 @@ containing a value of this type.
         public static final int copy_to_clipboard=0x7f0a00a1;
         public static final int create_wallet=0x7f0a0095;
         public static final int detail=0x7f0a0083;
-        public static final int discard=0x7f0a00bf;
-        public static final int eight=0x7f0a00cc;
-        public static final int export=0x7f0a00b8;
+        public static final int discard=0x7f0a00c3;
+        public static final int eight=0x7f0a00d0;
+        public static final int export=0x7f0a00bc;
         public static final int fail=0x7f0a008b;
-        public static final int five=0x7f0a00c9;
-        public static final int four=0x7f0a00c8;
+        public static final int five=0x7f0a00cd;
+        public static final int four=0x7f0a00cc;
         public static final int hello=0x7f0a0078;
         public static final int history_clear_one_history_text=0x7f0a0025;
         public static final int history_clear_text=0x7f0a0024;
@@ -1175,8 +1176,8 @@ containing a value of this type.
         public static final int menu_history=0x7f0a002f;
         public static final int menu_settings=0x7f0a0030;
         public static final int menu_share=0x7f0a0031;
-        public static final int minus_four=0x7f0a00cd;
-        public static final int minus_six=0x7f0a00ce;
+        public static final int minus_four=0x7f0a00d1;
+        public static final int minus_six=0x7f0a00d2;
         public static final int more_than_one_address=0x7f0a00a9;
         public static final int more_than_one_id=0x7f0a00a6;
         public static final int msg_about=0x7f0a0032;
@@ -1207,15 +1208,16 @@ containing a value of this type.
         public static final int msg_share_text=0x7f0a004b;
         public static final int msg_sure=0x7f0a004c;
         public static final int msg_unmount_usb=0x7f0a004d;
-        public static final int name_empty=0x7f0a00d3;
+        public static final int name_empty=0x7f0a00d7;
+        public static final int no_address=0x7f0a00b6;
         public static final int no_address_found=0x7f0a00a8;
-        public static final int no_connection_no_sending=0x7f0a00c1;
+        public static final int no_connection_no_sending=0x7f0a00c5;
         public static final int no_connection_no_update_all_wallets=0x7f0a0093;
         public static final int no_connection_no_update_wallet=0x7f0a0091;
         public static final int no_connection_no_wallet=0x7f0a00ad;
         public static final int no_id_found=0x7f0a00a5;
-        public static final int no_wallet=0x7f0a00d4;
-        public static final int one=0x7f0a00c5;
+        public static final int no_wallet=0x7f0a00d8;
+        public static final int one=0x7f0a00c9;
         public static final int please_select_wallet=0x7f0a009e;
         public static final int please_send_to_address=0x7f0a00a3;
         public static final int please_wait=0x7f0a0088;
@@ -1248,8 +1250,8 @@ containing a value of this type.
         public static final int refresh_all=0x7f0a008f;
         public static final int refresh_one=0x7f0a0090;
         public static final int remove=0x7f0a0084;
-        public static final int remove_wallet=0x7f0a00b4;
-        public static final int rename=0x7f0a00d2;
+        public static final int remove_wallet=0x7f0a00b8;
+        public static final int rename=0x7f0a00d6;
         public static final int result_address_book=0x7f0a0066;
         public static final int result_calendar=0x7f0a0067;
         public static final int result_email_address=0x7f0a0068;
@@ -1268,29 +1270,32 @@ containing a value of this type.
         public static final int scan_id=0x7f0a0096;
         public static final int send_btc_address=0x7f0a00a2;
         public static final int send_coins=0x7f0a00b2;
-        public static final int send_to=0x7f0a00bc;
+        public static final int send_paste=0x7f0a00b5;
+        public static final int send_qr=0x7f0a00b4;
+        public static final int send_to=0x7f0a00c0;
         public static final int send_via_email=0x7f0a009f;
         public static final int send_via_sms=0x7f0a00a0;
-        public static final int sending=0x7f0a00c0;
-        public static final int seven=0x7f0a00cb;
-        public static final int share=0x7f0a00b9;
+        public static final int sending=0x7f0a00c4;
+        public static final int sending_options=0x7f0a00b3;
+        public static final int seven=0x7f0a00cf;
+        public static final int share=0x7f0a00bd;
         public static final int share_item=0x7f0a0086;
         public static final int share_name=0x7f0a0072;
-        public static final int six=0x7f0a00ca;
-        public static final int slow_connection_no_sending=0x7f0a00c2;
+        public static final int six=0x7f0a00ce;
+        public static final int slow_connection_no_sending=0x7f0a00c6;
         public static final int slow_connection_no_update_all_wallets=0x7f0a0094;
         public static final int slow_connection_no_update_wallet=0x7f0a0092;
         public static final int slow_connection_no_wallet=0x7f0a00ae;
         public static final int successful=0x7f0a008c;
-        public static final int three=0x7f0a00c7;
+        public static final int three=0x7f0a00cb;
         public static final int title_about=0x7f0a0073;
-        public static final int title_address=0x7f0a00b5;
-        public static final int title_id=0x7f0a00b6;
-        public static final int to=0x7f0a00c4;
-        public static final int two=0x7f0a00c6;
-        public static final int united=0x7f0a00d1;
+        public static final int title_address=0x7f0a00b9;
+        public static final int title_id=0x7f0a00ba;
+        public static final int to=0x7f0a00c8;
+        public static final int two=0x7f0a00ca;
+        public static final int united=0x7f0a00d5;
         public static final int unknown_problem=0x7f0a00af;
-        public static final int validate=0x7f0a00be;
+        public static final int validate=0x7f0a00c2;
         public static final int wallet_added=0x7f0a00ac;
         public static final int wallet_existed=0x7f0a00a7;
         public static final int wallet_updated=0x7f0a008e;
@@ -1298,11 +1303,11 @@ containing a value of this type.
         public static final int wifi_changing_network=0x7f0a0074;
         public static final int wifi_ssid_label=0x7f0a0075;
         public static final int wifi_type_label=0x7f0a0076;
-        public static final int your_wallet=0x7f0a00bb;
+        public static final int your_wallet=0x7f0a00bf;
         public static final int your_wallet_id=0x7f0a009a;
-        public static final int your_wallets=0x7f0a00ba;
+        public static final int your_wallets=0x7f0a00be;
         public static final int your_wallets_ids=0x7f0a0099;
-        public static final int zero=0x7f0a00c3;
+        public static final int zero=0x7f0a00c7;
         public static final int zxing_url=0x7f0a0077;
     }
     public static final class style {

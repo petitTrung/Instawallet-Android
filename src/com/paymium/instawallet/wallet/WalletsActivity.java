@@ -262,7 +262,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
 			{
 				wl = (Wallet) walletsAdapter.getItem(position);
-				System.out.println(wl);
+				//System.out.println(wl);
 				flipToQrCode(wl);
 			}
 		});
@@ -543,10 +543,86 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		}
 		else if (view.getId() == R.id.send_coins)
 		{
-			Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-			intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+			final CharSequence[] items = { getResources().getString(R.string.send_qr), 
+										getResources().getString(R.string.send_paste)};
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(getResources().getString(R.string.sending_options));
+			builder.setIcon(R.drawable.sending_options);
+			builder.setItems(items, new DialogInterface.OnClickListener() 
+			{
+				@Override
+				public void onClick(DialogInterface dialog, int item) 
+				{
+					if (item == 0)
+					{
+						Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+						intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
 
-			startActivityForResult(intent, REQUEST_SEND);
+						startActivityForResult(intent, REQUEST_SEND);
+					}
+					else if (item == 1)
+					{
+						
+						ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+						boolean isData = clipboard.hasText();
+						
+						if (!isData)
+						{
+							Toast.makeText(getBaseContext(), getResources().getString(R.string.no_address), Toast.LENGTH_LONG).show();
+						}
+						else
+						{
+							ExtractAddressBitcoin extractAddressBitcoin = new ExtractAddressBitcoin();
+							
+							String address = (String) clipboard.getText();
+							
+							addressBitcoin = new ArrayList<String>();
+
+							addressBitcoin = extractAddressBitcoin.extract(address);
+							
+							
+							if (addressBitcoin.size() == 0)
+							{
+								alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.warning), 
+										"No bitcoin address found", 
+										R.drawable.warning);
+								alertingDialogOneButton.show(getSupportFragmentManager(), "No bitcoin address found");
+							}
+							else if (addressBitcoin.size() > 1)
+							{
+								alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.warning), 
+										getResources().getString(R.string.more_than_one_address), 
+										R.drawable.warning);
+								alertingDialogOneButton.show(getSupportFragmentManager(), "More than one btc address found");
+							}
+							else
+							{
+								Intent send  = new Intent(WalletsActivity.this, SendActivity.class);
+								send.putExtra("address", addressBitcoin.get(0));
+								send.putExtra("wallet_id", wl.getWallet_id());
+								
+								addressBitcoin = null;
+								
+								startActivity(send); 
+							}	
+						}
+					}
+					
+				}
+				
+			});
+			
+			builder.setNeutralButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) 
+				{
+					
+				}
+			});	
+			
+			AlertDialog alert = builder.create();
+			alert.show();
+
 		}
 		else if (view.getId() == R.id.change_name)
 		{
