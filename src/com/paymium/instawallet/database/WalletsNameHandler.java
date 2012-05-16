@@ -158,8 +158,6 @@ public class WalletsNameHandler
 	    
 	    String wallet_name = cursor.getString(1);
 	    
-	    System.out.println("donnee : " + wallet_name);
-	    
 	    cursor.close();
 	    
 	    

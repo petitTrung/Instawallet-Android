@@ -505,7 +505,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			{
 				walletsAdapter.updateItem(wallet);
 				
-				qr.setImageBitmap(QrCode.generateQrCode(wallet.getWallet_address(), 270, 270));
+				qr.setImageBitmap(QrCode.generateQrCode(wallet.getWallet_address(), 230, 230));
 				balance.setText(getResources().getString(R.string.balance) + " : " + wallet.getWallet_balance().toString() + " BTC");
 		    	if ((wallet.getWallet_balance().floatValue() - wallet.getWallet_spendable_balance().floatValue()) > 0)
 		    	{
@@ -921,9 +921,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			if (resultCode == RESULT_OK) 
 			{
 				String link = intent.getStringExtra("SCAN_RESULT");
-				//String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-				
-				//System.out.println("String result : " + link);
 				
 				this.walletsIdList = new LinkedList<String>();
 				
@@ -937,9 +934,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			if (resultCode == RESULT_OK) 
 			{
 				String address = intent.getStringExtra("SCAN_RESULT");
-				//String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-
-				//System.out.println("Bitcoin Address : " + address);
 				
 				this.addressBitcoin = new ArrayList<String>();
 
@@ -987,7 +981,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 				}
 				
 			}
-			walletsIdList = null;
+			this.walletsIdList = null;
 		}
 		
 		if (this.addressBitcoin != null)
@@ -1029,7 +1023,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 					this.alertingDialogOneButton.show(getSupportFragmentManager(), "Invalid btc address");
 				}
 			}
-			addressBitcoin = null;
+			this.addressBitcoin = null;
 		}
 				
 	}
@@ -1285,7 +1279,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	{
 		public MenuWalletsList() 
 		{
-			
+			super();
 		}
 		@Override
 		public void onCreate(Bundle savedInstanceState) 
@@ -1344,7 +1338,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	{
 		public MenuSingleWallet() 
 		{
-			
+			super();
 		}
 		
 		@Override
@@ -1498,7 +1492,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	protected void onDestroy() 
 	{
 		super.onDestroy();
-		unregisterReceiver(intentReceiver);
+		unregisterReceiver(this.intentReceiver);
 	}
 	
 	public boolean notEmpty(String s) 
