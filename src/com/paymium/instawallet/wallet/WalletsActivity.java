@@ -458,6 +458,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			try 
 			{
 				wallet = connection.getWallet(wallet_id);
+				
+				//System.out.println(wallet);
 			} 
 			catch (IOException e) 
 			{
@@ -585,15 +587,15 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 							if (addressBitcoin.size() == 0)
 							{
 								alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.warning), 
-										"No bitcoin address found", 
-										R.drawable.warning);
+																							getResources().getString(R.string.no_address_found), 
+																							R.drawable.warning);
 								alertingDialogOneButton.show(getSupportFragmentManager(), "No bitcoin address found");
 							}
 							else if (addressBitcoin.size() > 1)
 							{
 								alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.warning), 
-										getResources().getString(R.string.more_than_one_address), 
-										R.drawable.warning);
+																							getResources().getString(R.string.more_than_one_address), 
+																							R.drawable.warning);
 								alertingDialogOneButton.show(getSupportFragmentManager(), "More than one btc address found");
 							}
 							else
@@ -993,7 +995,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			if (this.addressBitcoin.size() == 0)
 			{
 				this.alertingDialogOneButton = AlertingDialogOneButton.newInstance(getResources().getString(R.string.warning), 
-																				"No bitcoin address found", 
+																				getResources().getString(R.string.no_address_found), 
 																				R.drawable.warning);
 				this.alertingDialogOneButton.show(getSupportFragmentManager(), "No bitcoin address found");
 			}
