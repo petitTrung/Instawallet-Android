@@ -229,9 +229,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         mQuickAction.addActionItem(send);
         mQuickAction.addActionItem(delete);
         
-
-         
-        //setup the action item click listener
         mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
         	
         	@Override
@@ -262,7 +259,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
 			{
 				wl = (Wallet) walletsAdapter.getItem(position);
-				//System.out.println(wl);
+
 				flipToQrCode(wl);
 			}
 		});
@@ -288,7 +285,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
     
     public void flipToQrCode(Wallet wallet)
     {
-    	//System.out.println(wallet);
+
     	AnimationFactory.flipTransition(viewAnimator, FlipDirection.LEFT_RIGHT);
 
     	this.qr.setImageBitmap(QrCode.generateQrCode(wallet.getWallet_address(), 230, 230));
@@ -459,7 +456,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			{
 				wallet = connection.getWallet(wallet_id);
 				
-				//System.out.println(wallet);
 			} 
 			catch (IOException e) 
 			{
@@ -805,7 +801,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		builder.setNeutralButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) 
 			{
-				//Toast.makeText(getActivity(), "click on Cancel", Toast.LENGTH_LONG);
+				
 			}
 		});	
 		
@@ -840,7 +836,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) 
 			{
-				//Toast.makeText(getActivity(), "click on OK", Toast.LENGTH_LONG);
 				walletsAdapter.removeItem(wl);
 				
 				if (currentView() == R.id.flip2)
@@ -855,7 +850,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         dlgAlert.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) 
 			{
-				//Toast.makeText(getActivity(), "click on Cancel", Toast.LENGTH_LONG);
+				
 			}
 		});	
         
@@ -882,7 +877,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) 
 			{
-				//Toast.makeText(getActivity(), "click on OK", Toast.LENGTH_LONG);
 				if (notEmpty(et.getText().toString()))
 				{
 					wallets_names_db.updateWallet(wl,et.getText().toString());
@@ -901,7 +895,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
         dlgAlert.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) 
 			{
-				//Toast.makeText(getActivity(), "click on Cancel", Toast.LENGTH_LONG);
+				
 			}
 		});	
         
@@ -1056,7 +1050,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 		{
 			Wallet wallet = null;
 			
-			//System.out.println("data : " + data[0]);
 			try 
 			{
 				String wallet_id = data[0];
@@ -1417,7 +1410,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			getSupportActionBar().setDisplayHomeAsUpEnabled(false);	
 			
 			this.walletName.setText(getResources().getString(R.string.your_wallets));		
-			//this.title.setText(getResources().getString(R.string.your_wallets));
 		}
 		else
 		{
@@ -1437,7 +1429,6 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	    	{
 	    		this.walletName.setText(this.wallets_names_db.getWalletName(wl.getWallet_id()));
 	    	}
-			//this.title.setText(getResources().getString(R.string.your_wallet));
 		}
 		else
 		{
@@ -1453,11 +1444,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	    {
 	    	String action = intent.getAction();
 
-	    	//System.out.println("ACTION : " + action);
-
 	    	if (action.equals("SENT"))
 	    	{  		
-	    		//System.out.println("Begin to refresh the wallet !!!!");
 	    		
 	    		try 
 	    		{
@@ -1498,6 +1486,5 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	public boolean notEmpty(String s) 
 	{
 		return (s != null && s.length() > 0);
-	}
-    
+	}    
 }
