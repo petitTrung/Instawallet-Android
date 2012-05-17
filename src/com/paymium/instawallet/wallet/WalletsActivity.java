@@ -1004,7 +1004,7 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 			{
 				AddressBitcoinValidator addressBitcoinValidator = new AddressBitcoinValidator();
 				
-				if (addressBitcoinValidator.validate(addressBitcoin.get(0)))
+				if (addressBitcoinValidator.validate(this.addressBitcoin.get(0)))
 				{
 					Intent send  = new Intent(this, SendActivity.class);
 					send.putExtra("address", addressBitcoin.get(0));

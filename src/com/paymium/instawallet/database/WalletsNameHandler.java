@@ -88,14 +88,14 @@ public class WalletsNameHandler
 	//---opens the database---
     public WalletsNameHandler open() throws SQLException 
     {
-        db = DBHelper.getWritableDatabase();
+        this.db = this.DBHelper.getWritableDatabase();
         return this;
     }
 
     //---closes the database---
     public void close() 
     {
-        DBHelper.close();
+        this.DBHelper.close();
     }
    
     
@@ -113,7 +113,7 @@ public class WalletsNameHandler
     		
     		value.put(KEY_NAME, "");
     		
-    		db.insert(TABLE_WALLETS_NAME, null, value);
+    		this.db.insert(TABLE_WALLETS_NAME, null, value);
     		
     		this.close();
     		
@@ -136,7 +136,7 @@ public class WalletsNameHandler
     		value.put(KEY_ID, wallet.getWallet_id());
     		value.put(KEY_NAME, wallet_name);
     		
-    		db.insert(TABLE_WALLETS_NAME, null, value);
+    		this.db.insert(TABLE_WALLETS_NAME, null, value);
     		
     		this.close();
     		
@@ -243,7 +243,7 @@ public class WalletsNameHandler
 		value.put(KEY_NAME, wallet_name);
 	 
 	    // updating row
-	    db.update(TABLE_WALLETS_NAME, value, KEY_ID + " = ?", new String[] { wallet.getWallet_id() });
+	    this.db.update(TABLE_WALLETS_NAME, value, KEY_ID + " = ?", new String[] { wallet.getWallet_id() });
 	    
 	    this.close();
 	}
@@ -253,7 +253,7 @@ public class WalletsNameHandler
 	{
 		this.open();
 		
-	    db.delete(TABLE_WALLETS_NAME, KEY_ID + " = ?", new String[] { wallet.getWallet_id() });
+	    this.db.delete(TABLE_WALLETS_NAME, KEY_ID + " = ?", new String[] { wallet.getWallet_id() });
 	    
 	    this.close();
 	}
