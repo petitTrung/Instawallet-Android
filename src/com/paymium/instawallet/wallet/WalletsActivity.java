@@ -62,6 +62,7 @@ import com.paymium.instawallet.qrcode.QrCode;
 import com.paymium.instawallet.send.SendActivity;
 
 
+@SuppressWarnings("deprecation")
 public class WalletsActivity extends SherlockFragmentActivity implements OnClickListener 
 {
 	private ListView walletsList;
@@ -1475,6 +1476,8 @@ public class WalletsActivity extends SherlockFragmentActivity implements OnClick
 	    	
 	    }
 	};
+	
+	
 	
 	@Override
 	protected void onDestroy() 
